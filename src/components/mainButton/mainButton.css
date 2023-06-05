@@ -1,0 +1,19 @@
+.mainButton {
+    background-color: #006BE5;
+    width: 304px;
+    height: 24px;
+    border-radius: 8px;
+    margin: 12px 16px 0 16px;
+    color: #FFFFFF;
+    padding: 12px;
+}
+
+.mainButton > * {
+    display: block;
+    padding-top: 3px;
+    height: 24px;
+    font-size: 16px;
+    text-align: center;
+    color: #FFFFFF;
+    text-decoration: none;
+}

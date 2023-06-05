@@ -1,0 +1,37 @@
+.MainPage {
+    min-height: 800px;
+    background: linear-gradient(218.06deg, #4D7FFE 11.54%, #8DDEF8 90.64%);
+
+}
+
+.mainLogo {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 16px 44px 16px;
+}
+
+.CloseCross {
+    background-color: #FFFFFF;
+    width: 40px;
+    height: 32px;
+    padding-top: 8px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+}
+
+.mainBlock {
+    background-color: #FFFFFF;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    min-height: 600px;
+}
+
+.mainButtonSet {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 24px 16px 0 16px;
+}
