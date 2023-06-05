@@ -1,0 +1,43 @@
+.DiscountPage {
+    background-color: #F5F5F5;
+    min-height: 800px;
+}
+
+.AdBanner{
+    width: 312px;
+    height: 168px;
+    border-radius: 8px;
+    background: linear-gradient(106.76deg, #006BE5 0%, #1CD6FF 100%);
+    margin: 24px 16px 0 16px;
+    padding-top: 12px;
+    padding-left: 16px;
+}
+
+.AdTitle{
+    color: #FFFFFF;
+    font-size: 20px;
+    line-height: 30px;
+    margin: 0;
+}
+
+.AdArticle{
+    color: #FFFFFF;
+    font-size: 16px;
+    line-height: 24px;
+    margin: 16px 0 12px 0;
+}
+
+.AdLink{
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.DiscountListTitle{
+    font-size: 20px;
+    margin: 40px auto 16px 16px;
+}
+
+
+
+

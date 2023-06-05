@@ -1,0 +1,80 @@
+.Carousel {
+    overflow: hidden;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    height: 120px;
+    min-width: 330px;
+}
+
+
+.CarouselElement {
+    display: inline-block;
+    width: 297px;
+    height: 96px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 24px 0px #7E899A24;
+    margin: 16px 0 0 16px;
+}
+
+.CarouselInto{
+    display: flex;
+}
+
+.circleflex{
+    display: flex;
+}
+.CompletedCircle{
+    border-top-right-radius: 100%;
+    border: #006BE5 solid 8px;
+    width: 28px;
+    height: 28px;
+    margin-top: 12px;
+    margin-left: -58px;
+}
+
+.CompletedCircle a {
+    display: block;
+    width: 56px;
+    height: 36px;
+    background-color: #FFFFFF;
+    margin-left: -30px;
+    border-radius: 100%;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.CarouselCircle {
+    width: 56px;
+    height: 56px;
+    margin: 12px 16px 12px 12px;
+    border: #F6F7F8 solid 8px;
+    border-radius: 100%;
+}
+
+.CarouselInfo {
+    width: 185px;
+    margin: 12px 14px 12px 16px;
+}
+
+.Options > a {
+    color: #006BE5;
+    font-size: 16px;
+    line-height: 24px;
+    vertical-align: top;
+}
+
+.WhichOption {
+    font-size: 14px;
+    max-width: 185px;
+    hyphens: auto;
+    margin: 0;
+    height: 40px;
+}
+
+.DiscountCarouselTitle {
+    font-size: 20px;
+    line-height: 24px;
+    margin-left: 16px;
+}

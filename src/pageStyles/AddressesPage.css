@@ -1,0 +1,17 @@
+.AddressPage {
+    background-color: #F5F5F5;
+    min-height: 800px;
+}
+
+.addressTitle {
+    font-size: 20px;
+    line-height: 24px;
+    margin-top: 24px;
+    margin-left: 16px;
+}
+
+.mapPict {
+    width: 328px;
+    height: 134px;
+    margin: 16px 16px 0 16px;
+}

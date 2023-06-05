@@ -1,0 +1,58 @@
+.TipsPage {
+    background-color: #F6F7F8;
+    min-height: 800px;
+}
+
+.SumInput {
+    width: 328px;
+    height: 40px;
+    border-radius: 6px;
+    background-color: #F5F5F5;
+    border: none;
+    margin: 12px 16px 0 16px;
+}
+
+.finalSum {
+    display: flex;
+    justify-content: space-between;
+    margin: 62px 16px 4px 16px;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.anotherSumTitle {
+    font-size: 16px;
+    line-height: 24px;
+    margin: 16px auto 0 16px;
+}
+
+.tipsButtonset{
+    display: flex;
+    justify-content: space-between;
+    width: 276px;
+    height: 40px;
+    margin: 16px auto 0 16px;
+}
+
+.tipsButtonset > a {
+    display: block;
+    width: 60px;
+    height: 32px;
+    padding-top: 8px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 24px;
+    background-color: #E5F1FF;
+    border-radius: 6px;
+}
+
+.tipsAmount {
+    margin: 40px auto 0 16px;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+a.activeTip {
+    background-color: #006BE5;
+    color: #FFFFFF;
+}

@@ -1,0 +1,27 @@
+.ServicesPage {
+    background-color: #F5F5F5;
+    min-height: 800px;
+}
+
+.ServiceButtonSet {
+    width: 307px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    margin: 24px 26px 18px 26px;
+}
+
+.ServiceButtonSet a {
+    display: block;
+    height: 24px;
+    background-color: #F6F7F8;
+    border-radius: 6px;
+    padding: 8px 12px 8px 12px;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+a.active {
+    background-color: #E5F1FF;
+    color: #006BE5;
+}

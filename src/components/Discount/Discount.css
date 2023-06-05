@@ -1,0 +1,46 @@
+.Discount{
+    width: 328px;
+    height: 120px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    margin: 12px 16px 0 16px;
+    padding-top: 12px;
+}
+
+.DiscountTitle{
+    font-size: 16px;
+    line-height: 24px;
+    margin: 0 auto 0 16px;
+}
+
+.DiscountOptions{
+    color: #006BE5;
+    font-size: 16px;
+    line-height: 24px;
+    margin: 16px auto 0 16px;
+}
+
+.ProgressLine{
+    display: flex;
+    width: 296px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: #E5F1FF;
+    margin: 8px 16px 0 16px;
+}
+
+.ProgressComplete{
+    background-color: #006BE5;
+    height: 8px;
+    width: 192px;
+    border-radius: 26px;
+}
+
+.DiscountTable{
+    width: 296px;
+    height: 24px;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 16px 12px 16px;
+}
