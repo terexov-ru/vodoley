@@ -1,12 +1,11 @@
 import React from 'react'
 import { Header } from '../components/Header/Header';
 import {NavLink} from 'react-router-dom'
-import {TipsCheck} from '../components/TipsCheck/TipsCheck'
 import {MainButton} from '../components/mainButton/MainButton'
 import '../pageStyles/MyOrdersPage.css'
 
 export const MyOrdersPage = () => {
-  return (
+/* return (
     <div>
         <Header title="Мои записи" gobackto="/"/>
         <div className='mover'>
@@ -25,5 +24,5 @@ export const MyOrdersPage = () => {
         </div>
         <MainButton goto="/" title="Записаться" />
     </div>
-  )
+ )*/ 
 }

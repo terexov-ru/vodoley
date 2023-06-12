@@ -19,6 +19,7 @@
     font-size: 16px;
     text-align: left;
     vertical-align: bottom;
+    font-weight: bold;
 }
 
 .registerInput {
@@ -35,12 +36,24 @@
 }
 
 
+.tgHelpBlock {
+    display: flex;
+    text-decoration: none;
+}
+
 .helpLink {
     display: block;
     margin-left: 16px;
     margin-top: 8px;
     text-decoration: none;
     color: #006BE5;
+    font-size: 14px;
+}
+
+.BlueArrowRight {
+    width: 24px;
+    height: 24px;
+    margin-top: 4px;
 }
 
 .RegisterPoint2 {
@@ -54,6 +67,7 @@
     font-size: 16px;
     text-align: left;
     vertical-align: bottom;
+    font-weight: bold;
 }
 
 .registerInput2 {

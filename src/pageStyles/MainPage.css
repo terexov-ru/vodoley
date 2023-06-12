@@ -1,7 +1,6 @@
 .MainPage {
     min-height: 800px;
-    background: linear-gradient(218.06deg, #4D7FFE 11.54%, #8DDEF8 90.64%);
-
+    background-color: #25282E;
 }
 
 .mainLogo {
@@ -13,8 +12,7 @@
 .CloseCross {
     background-color: #FFFFFF;
     width: 40px;
-    height: 32px;
-    padding-top: 8px;
+    height: 40px;
     border-radius: 6px;
     display: flex;
     justify-content: center;
@@ -34,4 +32,8 @@
     flex-wrap: wrap;
     justify-content: space-between;
     margin: 24px 16px 0 16px;
+}
+
+.mainPageUser {
+    text-decoration: none;
 }

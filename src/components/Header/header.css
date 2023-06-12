@@ -15,16 +15,17 @@
 }
 
 .headerImg {
-    width: 5px;
-    height: 10px;
-    margin: 26px 0px 16px 43px;
+    width: 24px;
+    height: 24px;
+    margin: 19px 0px 19px 16px;
 }
 
 .headerTitle {
+    width: 280px;
     height: 24px;
-    margin: 19px 0 19px 74px;
+    margin: 19px 0 19px 0;
     font-size: 20px;
-    font-weight: 99%;
-    text-align: Left;
+    text-align: center;
     vertical-align: Bottom;
+    font-weight: bold;
 }

@@ -5,11 +5,12 @@ import MainLogo from '../media/MainLogo.png'
 import CloseCross from '../media/CloseCross.png'
 import { MainUserInfo } from '../components/MainUserInfo/MainUserInfo';
 import { MainPageButtons } from '../components/MainPageButtons/MainPageButtons';
-import MyOrders from '../media/MyOrders.png'
-import Services from '../media/Services.png'
+import MyOrders from '../media/Edit_Line.png'
+import Services from '../media/Tag.png'
 import Locate from '../media/Locate.png'
 import Percent from '../media/percent.png'
 import { DiscountCarousel } from '../components/DiscountCarousel/DiscountCarousel';
+import { NavLink } from 'react-router-dom';
 
 export const MainPage = () => {
   return (
@@ -18,12 +19,12 @@ export const MainPage = () => {
             <div className='mainLogo'>
                 <img src={MainLogo} />
                 <div className='CloseCross'>
-                    <img src={CloseCross} width={24} height={24} />
+                    <img src={CloseCross} />
                 </div>
             </div>
-            <div className='mainPageUser'>
+            <NavLink to='/profile' className='mainPageUser'>
                 <MainUserInfo userName="Александр" userNumber="+7 (921) 789-01-23"/>
-            </div>
+            </NavLink>
         </div>
         <div className='mainBlock'>
             <DiscountCarousel />

@@ -33,13 +33,30 @@
     height: 48px;
     border: none;
     border-radius: 8px;
-    color: #C6CBD2;
+    color: #25282E;
+    font-size: 20px;
+    font-weight: bold;
     background-color: #F6F7F8;
     text-align: center;
+    padding: 0;
+}
+
+.buttonset input[type="number"]:active {
+    outline: solid 1px #40444F;
+}
+
+.buttonset input[type="number"]:focus {
+    outline: solid 1px #40444F;
+}
+
+.buttonset input[type="number"]::-webkit-outer-spin-button,
+.buttonset input[type="number"]::-webkit-inner-spin-button {
+	display: none;
 }
 
 .VerifyButton {
-    background-color: #80BBFF;
+    background-color: #9DA2AF;
+    border: none;
     width: 328px;
     height: 48px;
     border-radius: 8px;

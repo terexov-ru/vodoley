@@ -1,5 +1,4 @@
 .DiscountPage {
-    background-color: #F5F5F5;
     min-height: 800px;
 }
 
@@ -7,7 +6,7 @@
     width: 312px;
     height: 168px;
     border-radius: 8px;
-    background: linear-gradient(106.76deg, #006BE5 0%, #1CD6FF 100%);
+    background: linear-gradient(225.19deg, #A7C1DE 1.22%, #5789C1 100%);
     margin: 24px 16px 0 16px;
     padding-top: 12px;
     padding-left: 16px;
@@ -18,6 +17,7 @@
     font-size: 20px;
     line-height: 30px;
     margin: 0;
+    font-weight: bold;
 }
 
 .AdArticle{
@@ -36,6 +36,7 @@
 .DiscountListTitle{
     font-size: 20px;
     margin: 40px auto 16px 16px;
+    font-weight: bold;
 }
 
 
