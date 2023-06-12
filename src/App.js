@@ -20,20 +20,21 @@ function App() {
     <HashRouter>
       <main>
         <Routes>
-          <Route path='/info' element={<DiscountInfoPage />} />
-          <Route path='/auth' element={<AuthPage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/login/verify' element={<LoginVerificationPage />} />
-          <Route path='/register' element={<RegisterPage />} />
-          <Route path='/pay' element={<PaymentPage />} />
-          <Route path='/profile' element={<ProfilePage />} />
-          <Route path='/address' element={<AddressesPage />} />
-          <Route path='/services' element={<ServicesPage />} />
-          <Route path='/discounts' element={<DiscountPage />} />
-          <Route path='/tips' element={<TipsPage />} />
-          <Route path='/' element={<MainPage />} />
-          <Route path='/myorders' element={<MyOrdersPage />} />
-          <Route path='/myorder/past' element={<MyPastOrdersPage />} />
+          <Route path='/' element={<MainPage />} /> {/* Главная  страница */}
+          <Route path='/address' element={<AddressesPage />} /> {/* Список адресов */}
+          <Route path='/services' element={<ServicesPage />} /> {/* Услуги */}
+          <Route path='/discounts' element={<DiscountPage />} /> {/* Список скидок */}
+          <Route path='/auth' element={<AuthPage />} /> {/* Страница перехода на логин или регистрацию */}
+          <Route path='/info' element={<DiscountInfoPage />} /> {/* Программа скидок */}
+          <Route path='/login' element={<LoginPage />} /> {/* Страница логининга */}
+          <Route path='/login/verify' element={<LoginVerificationPage />} /> {/* Код авторизации */}
+          <Route path='/register' element={<RegisterPage />} /> {/* Страница регистрации */}
+          <Route path='/pay' element={<PaymentPage />} /> {/* Страница оплаты */}
+          
+          <Route path='/profile' element={<ProfilePage />} /> {/* Профиль */}
+          <Route path='/tips' element={<TipsPage />} /> {/*  */}
+          <Route path='/myorders' element={<MyOrdersPage />} /> {/* Мои записи  */}
+          <Route path='/myorder/past' element={<MyPastOrdersPage />} /> {/* завершенные записи */}
         </Routes>
       </main>
     </HashRouter>

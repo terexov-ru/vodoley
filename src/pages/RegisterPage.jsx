@@ -1,7 +1,9 @@
 import React from 'react'
 import {MainButton} from '../components/mainButton/MainButton'
 import { Header } from '../components/Header/Header';
+import BlueArrowRight from '../media/Arrow_Left_S.png'
 import '../pageStyles/RegisterPage.css'
+import { NavLink } from 'react-router-dom';
 
 export const RegisterPage = () => {
   return (
@@ -20,7 +22,10 @@ export const RegisterPage = () => {
             <h1 className='formPoint'>Ник Telegram</h1>
             <input className='registerInput' placeholder='@tg'></input>
         </div>
-        <a className='helpLink' href='/'>Как узнать свой ник в Телеграме?</a>
+        <NavLink className='tgHelpBlock' to='/'>
+            <a className='helpLink' href='/'>Как узнать свой ник в Телеграме?</a>
+            <img className='BlueArrowRight' src={BlueArrowRight} />
+        </NavLink>
         <div className='RegisterPoint'>
             <h1 className='formPoint'>Марка автомобиля</h1>
             <input className='registerInput' placeholder='Марка'></input>
