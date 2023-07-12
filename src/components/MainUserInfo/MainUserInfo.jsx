@@ -2,13 +2,13 @@ import React from 'react'
 import './MainUserInfo.css'
 import Avatar from '../../media/UserAvatar.png'
 
-export const MainUserInfo = (props) => {
+export const MainUserInfo = (userData) => {
   return (
     <div className='MainUserInfo'>
-        <img className='userAvatar' src={props.userPhoto || Avatar}/>
+        <img className='userAvatar' src={Avatar}/>
         <div className='userMainInfo'>
-            <p>{props.userName}</p>
-            <a>{props.userNumber}</a>
+            <p>{userData.userName}</p>
+            <a>{userData.userNumber}</a>
         </div>
     </div>
   )

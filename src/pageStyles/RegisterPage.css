@@ -84,3 +84,20 @@
     justify-content: space-between;
     margin: 16px 16px 40px 16px;
 }
+
+.submiMainButton {
+    background-color: #40444F;
+    border: none;
+    width: 328px;
+    height: 48px;
+    border-radius: 8px;
+    margin: 12px 16px 0 16px;
+    color: #FFFFFF;
+    padding: 12px 16px 12px 16px;
+    font-family: "InterNormal";
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #FFFFFF;
+    text-decoration: none;
+}

@@ -59,3 +59,11 @@ a.active {
     position: fixed;
     bottom: 16px;
 }
+
+.hiddenServiceList {
+    display: none;
+}
+
+.activeServiceList {
+    display: block;
+}

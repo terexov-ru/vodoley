@@ -4,7 +4,7 @@ import "./mainButton.css"
 
 export const MainButton = (props) => {
   return (
-    <div className='mainButton'>
+    <div className='mainButton' onClick={props.onClick}>
       <NavLink to={props.goto}>
         {props.title}
       </NavLink>

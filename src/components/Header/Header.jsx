@@ -7,7 +7,7 @@ export const Header = (props) => {
     <div className='header'>
         <NavLink to={props.gobackto}>
           <img className='headerImg' src={back} alt="back" />
-          </NavLink>
+        </NavLink>
         <h1 className='headerTitle'>{props.title}</h1>
     </div>
     

@@ -19,6 +19,7 @@
 
 .mapBlock {
     display: flex;
+    display: none;
 }
 
 .zoombar {
@@ -29,6 +30,7 @@
     height: 40px;
     border-radius: 6px;
     background-color: #40444F;
-    margin-left: -68px;
-    margin-top: 98px;
+    margin-left: 288px;
+    margin-top: -48px;
+    z-index: 2;
 }

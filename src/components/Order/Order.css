@@ -1,0 +1,181 @@
+.orderActive {
+    display: block !important; 
+}
+
+.orderHidden {
+    display: none !important;
+}
+
+.Order {
+    box-shadow: 0px 0px 24px 0px #7E899A24;
+    width: 328px;
+    border-radius: 8px;
+    margin: 12px 16px 4px 16px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.OrderAdress {
+    font-size: 16px;
+    line-height: 24px;
+    margin: 11px 16px 0 16px;
+}
+
+.OrderDate {
+    margin: 12px auto 0 16px;
+    font-size: 16px;
+    height: 24px;
+}
+
+.OrderDate > span {
+    vertical-align: top;
+    margin-top: 0;
+    padding-top: 0;
+    height: 24px;
+    line-height: 24px;
+}
+
+#NewOrder{
+    color: #3DBC01;
+    padding-left: 8px;
+}
+#OldOrder{
+    color: #9DA2AF;
+    padding-left: 8px;
+}
+
+#clockSimbol{
+    margin-right: 8px;
+}
+
+.OrderStatusSign{
+    margin: 12px auto 0 16px;
+    padding: 4px 8px 4px 8px;
+    height: 20px;
+    width: fit-content;
+    border-radius: 3px;
+}
+
+#NewOrderSign{
+    background-color: #EEFFE6;
+    color: #3DBC01;
+}
+#OldOrderSign{
+    background-color: #F6F7F8;
+    color: #9DA2AF;
+}
+
+.OrderButtonSet {
+    width: 296px;
+    margin: 12px 16px 11px 16px;
+}
+
+#shortbuttonset{
+    display: flex;
+    justify-content: space-between;
+}
+
+#moreButton{
+    background-color: #F6F7F8;
+    width: 171px;
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+#shortAddFifteen{
+    width: 113px;
+    height: 40px;
+    background-color: #FEEEE7;
+    color: #F16225;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.closeDetails {
+    width: 296px;
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    background-color: #F6F7F8;
+    font-size: 16px;
+    margin-top: 12px;
+}
+
+.bottomButtons{
+    margin-bottom: 100px;
+}
+
+
+
+.bottomButtons button {
+    width: 328px;
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    margin: 12px 16px 0 16px;
+    background-color: #F6F7F8;
+}
+
+.bottomLate{
+    background-color: #FEEEE7 !important;
+    color: #F16225;
+}
+
+
+.hiddenOrderButton{
+    position: fixed;
+    bottom: 16px;
+}
+
+.positionElement{
+    display: flex;
+}
+
+.positionName{
+    display: block;
+    width: 224px;
+    line-height: 24px;
+    margin: 12px 16px 0 0;
+}
+
+.positionPrice{
+    display: block;
+    width: 50px;
+    line-height: 24px;
+    margin-top: 12px;
+    text-align: right;
+}
+
+.orderTable {
+    margin-left: 16px;
+    border-top: 1px solid #F6F7F8;
+    border-bottom:  1px solid #F6F7F8;
+}
+
+.positionElementName{
+    display: block;
+    width: 150px;
+    line-height: 24px;
+    margin: 12px 16px 6px 16px;
+}
+
+.positionElementPrice{
+    display: block;
+    width: 130px;
+    line-height: 24px;
+    margin-top: 12px;
+    text-align: right;
+}
+
+#tipsButton, #rewiesButton {
+    width: 40px;
+    height: 40px;
+    background-color: #F6F7F8;
+    margin-left: 12px;
+    border: none;
+    border-radius: 6px;
+}
