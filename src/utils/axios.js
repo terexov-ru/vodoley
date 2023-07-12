@@ -3,6 +3,7 @@ import axios from "axios"
 
 // стандартный путь для отправки запросов 
 const instance = axios.create({
+    //url
     baseURL: "http://localhost:5000/api/"
 })
 
