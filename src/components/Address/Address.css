@@ -1,0 +1,76 @@
+.Address {
+    width: 328px;
+    height: 148px;
+    padding-top: 12px;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    margin: 6px 16px 16px 16px;
+    box-shadow: 0px 0px 24px 0px #7E899A24;
+
+}
+
+.location {
+    margin: 0px 16px 0 16px;
+    display: flex;
+    height: 48px;
+    font-size: 16px;
+}
+
+#MapPin {
+    width: 24px;
+    height: 24px;
+}
+
+
+#markspan {
+    margin-left: 8px;
+}
+
+.time {
+    height: 24px;
+    margin: 12px auto 0 16px;
+    display: flex;
+    font-size: 16px;
+}
+
+#Clock {
+    width: 24px;
+    height: 24px;
+}
+
+#clockspan {
+    margin-left: 8px;
+}
+
+.serviceButtonSet {
+    display: flex;
+    justify-content: space-between;
+    width: 296px;
+    height: 40px;
+    margin: 12px 16px 12px 16px;
+}
+
+.booking{
+    width: 244px;
+    height: 40px;
+    border-radius: 6px;
+    border: none;
+    color: #FFFFFF;
+    background-color: #40444F;
+}
+
+.showOnMap{
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    background-color: #40444F;
+}
+
+.showOnMap > img {
+    width: 24px;
+    height: 24px;
+}

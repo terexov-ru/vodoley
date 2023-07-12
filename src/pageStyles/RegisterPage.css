@@ -1,0 +1,103 @@
+.registerTitle {
+    width: 328px;
+    height: 24px;
+    color: #24282E;
+    font-size: 16px;
+    text-align: left;
+    vertical-align: bottom;
+    margin: 26px 16px 0 16px;
+}
+
+.RegisterPoint {
+    width: 328px;
+    margin: 24px 16px 0 16px;
+}
+
+.formPoint {
+    height: 24px;
+    color: #24282E;
+    font-size: 16px;
+    text-align: left;
+    vertical-align: bottom;
+    font-weight: bold;
+}
+
+.registerInput {
+    padding-left: 16px;
+    width: 312px;
+    height: 48px;
+    border-radius: 8px;
+    background-color: #F6F7F8;
+    border: none;
+}
+
+::placeholder{
+    color: #C6CBD2;
+}
+
+
+.tgHelpBlock {
+    display: flex;
+    text-decoration: none;
+}
+
+.helpLink {
+    display: block;
+    margin-left: 16px;
+    margin-top: 8px;
+    text-decoration: none;
+    color: #006BE5;
+    font-size: 14px;
+}
+
+.BlueArrowRight {
+    width: 24px;
+    height: 24px;
+    margin-top: 4px;
+}
+
+.RegisterPoint2 {
+    width: 156px;
+    height: 84px;
+}
+
+.formPoint2 {
+    height: 24px;
+    color: #24282E;
+    font-size: 16px;
+    text-align: left;
+    vertical-align: bottom;
+    font-weight: bold;
+}
+
+.registerInput2 {
+    padding-left: 16px;
+    width: 140px;
+    height: 48px;
+    border-radius: 8px;
+    background-color: #F6F7F8;
+    border: none;
+}
+
+.extraPoint {
+    display: flex;
+    justify-content: space-between;
+    margin: 16px 16px 40px 16px;
+}
+
+.submiMainButton {
+    background-color: #40444F;
+    border: none;
+    width: 328px;
+    height: 48px;
+    border-radius: 8px;
+    margin: 12px 16px 0 16px;
+    color: #FFFFFF;
+    padding: 12px 16px 12px 16px;
+    font-family: "InterNormal";
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #FFFFFF;
+    text-decoration: none;
+}

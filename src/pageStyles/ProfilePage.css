@@ -1,0 +1,189 @@
+.ProfilePage{
+    min-height: 800px;
+}
+
+/*классы открытия и сое=крытия блоков*/
+.hiddenProfileBlock {
+    display: none !important;
+}
+.activeProfileBlock {
+    display: block !important;
+}
+
+.ProfileUserData {
+    width: 328px;
+    background-color: #FFFFFF;
+    margin: 24px 16px 0 16px;
+    border-radius: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    box-shadow: 0px 0px 24px 0px #7E899A24;
+}
+
+.DataTitle {
+    height: 24px;
+    font-size: 20px;
+    text-align: left;
+    margin: 0 auto 0 16px;
+    font-weight: bold;
+}
+
+
+.PersonNameInfoTitle{
+    height: 24px;
+    font-size: 14px;
+    margin: 16px auto 0 16px;
+}
+.EditPersonNameInfoTitle{
+    height: 24px;
+    font-size: 16px;
+    margin: 16px auto 0 16px;
+    font-weight: bold;
+}
+
+
+.PersonNameInfoData{
+    height: 24px;
+    font-size: 16px;
+    margin: 4px auto 0 16px;
+    font-weight: bold;
+}
+.EditPersonNameInfoData {
+    width: 296px;
+    height: 48px;
+    border-radius: 8px;
+    margin: 4px auto 0 16px;
+    background-color: #F6F7F8;
+    border: none;
+    text-indent: 16px;
+}
+.EditPersonNameInfoData::placeholder{
+    color: #25282E;
+    font-size: 16px;
+}
+
+.PersonNumberInfoTitle{
+    font-size: 14px;
+    margin: 16px auto 0 16px;
+}
+.EditPersonNumberInfoTitle{
+    font-size: 16px;
+    margin: 16px auto 0 16px;
+    font-weight: bold;
+}
+
+.PersonNumberInfoData{
+    color: #006BE5;
+    font-size: 16px;
+    margin: 16px auto 0 16px;
+}
+.EditPersonNumberInfoData{
+    width: 296px;
+    height: 48px;
+    border-radius: 8px;
+    margin: 4px auto 0 16px;
+    background-color: #F6F7F8;
+    border: none;
+    text-indent: 16px;
+}
+.EditPersonNumberInfoData::placeholder{
+    color: #25282E;
+    font-size: 16px;
+}
+
+.PersonTG{
+    height: 48px;
+    margin-left: 16px;
+    padding-bottom: 12px;
+}
+.PersonTGInfoTitle{
+    font-size: 14px;
+}
+.PersonTGInfoData{
+    color: #006BE5;
+    font-size: 16px;
+}
+
+
+
+.ProfileCarData {
+    width: 328px;
+    background-color: #FFFFFF;
+    margin: 24px 16px 0 16px;
+    border-radius: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    box-shadow: 0px 0px 24px 0px #7E899A24;
+}
+
+#CarInfo{
+    margin: 16px auto 0 16px;
+}
+#EditCarInfo{
+    margin: 16px auto 0 16px;
+}
+
+
+#CarInfoTitle{
+    font-size: 14px;
+}
+.EditCarInfoTitle{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+#CarInfoData{
+    font-size: 16px;
+}
+.EditCarInfoData{
+    width: 296px;
+    height: 48px;
+    border-radius: 8px;
+    background-color: #F6F7F8;
+    border: none;
+    text-indent: 16px;
+}
+.EditCarInfoData::placeholder{
+    color: #25282E;
+    font-size: 16px;
+}
+
+#CarConfirm {
+    display: block;
+    width: 196px;
+    height: 20px;
+    background-color: #F6F7F8;
+    color: #40444F;
+    text-align: center;
+    line-height: 20px;
+    font-size: 14px;
+    padding: 4px 8px 4px 8px;
+    margin: 20px 108px 16px 24px;
+}
+
+#DataChangeInfo{
+    width: 328px;
+    height: 48px;
+    border: none;
+    border-radius: 8px;
+    margin: 21px 16px 0 16px;
+    background-color: #F6F7F8;
+    color: #25282E;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+#SaveDataChangeInfo {
+    width: 328px;
+    height: 48px;
+    border: none;
+    border-radius: 8px;
+    margin: 21px 16px 0 16px;
+    background-color: #40444F;
+    color: #FFFFFF;
+    font-size: 16px;
+    line-height: 24px;
+    position: fixed;
+    bottom: 16px;
+}

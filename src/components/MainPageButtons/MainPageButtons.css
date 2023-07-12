@@ -1,0 +1,37 @@
+.MainPageButtons {
+    width: 158px;
+    height: 130px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    margin: 0 auto 12px auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    text-decoration: none;
+    color: #40444F;
+    box-shadow: 0px 0px 24px 0px #7E899A24;
+}
+
+.MainPageButtons h1 {
+    font-size: 20px;
+    line-height: 24px;
+    margin: 14px auto 12px 12px;
+    font-weight: bold;
+}
+
+.circul {
+    background-color: #40444F;
+    border-radius: 100%;
+    width: 96px;
+    height: 73px;
+    margin-left: -12px;
+    margin-top: -16px;
+    display: flex;
+    justify-content: center;
+    padding-top: 23px;
+}
+
+.mainPict {
+    width: 50px;
+    height: 50px;
+}

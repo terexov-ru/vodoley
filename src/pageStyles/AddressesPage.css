@@ -1,0 +1,36 @@
+.AddressPage {
+    background-color: #F5F5F5;
+    min-height: 800px;
+}
+
+.addressTitle {
+    font-size: 20px;
+    line-height: 24px;
+    margin-top: 24px;
+    margin-left: 16px;
+    font-weight: bold;
+}
+
+.mapPict {
+    width: 328px;
+    height: 134px;
+    margin: 16px 16px 0 16px;
+}
+
+.mapBlock {
+    display: flex;
+    display: none;
+}
+
+.zoombar {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background-color: #40444F;
+    margin-left: 288px;
+    margin-top: -48px;
+    z-index: 2;
+}

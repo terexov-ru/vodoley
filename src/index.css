@@ -1,0 +1,22 @@
+@font-face {
+    font-family: "Inter";
+    src: url(./fonts/Inter-Regular.ttf)
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url(./fonts/Inter-SemiBold.ttf);
+    font-weight: bold;
+}
+
+body {
+    margin: auto;
+    margin-top: 0px;
+    width: 360px;
+    min-height: 800px;
+}
+
+body * {
+    font-family: 'Inter';
+    font-weight: 500;
+}

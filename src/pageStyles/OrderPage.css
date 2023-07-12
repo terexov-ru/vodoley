@@ -1,0 +1,102 @@
+.OrderPage{
+    padding: 25px 16px 16px 16px;
+}
+
+.OrderPage > button, input[type=submit] {
+    width: 328px;
+    height: 48px;
+    border-radius: 8px;
+    border: none;
+    padding: 12px 16px 12px 16px;
+    background-color: #40444F;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    margin-bottom: 40px;
+}
+
+.OrderPage > select {
+    width: 328px;
+    height: 48px;
+    padding: 12px 16px 12px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #F6F7F8;
+    color: #9DA2AF;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.OrderPage > div > select {
+    width: 328px;
+    height: 48px;
+    padding: 12px 16px 12px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #F6F7F8;
+    color: #25282E;
+    font-size: 16px;
+}
+
+.OrderFormTitle{
+    color: #25282E;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+input[type=date] {
+    width: 164px;
+    height: 24px;
+    border-radius: 8px;
+    border: none;
+    background-color: #F6F7F8;
+    padding: 12px 16px 12px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    margin-bottom: 40px;
+}
+input[type=date]::-webkit-calendar-picker-indicator { 
+    background: url('../media/Calendar_Days.png') no-repeat; 
+    width: 24px;
+    height: 24px;
+}
+
+input[type=time]{
+    margin-left: 12px;
+    width: 88px;
+    height: 24px;
+    border-radius: 8px;
+    border: none;
+    background-color: #F6F7F8;
+    padding: 12px 16px 12px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+}
+input[type=time]::-webkit-progress-inner-element{
+    width: 54px;
+    height: 24px;
+}
+input[type=time]::-webkit-calendar-picker-indicator { 
+    background: url('../media/Arrow.png') no-repeat; 
+    width: 24px;
+    height: 24px;
+    margin-top: 6px;
+}
+
+#discountNotification {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #9DA2AF;
+}
+
+#paymentNotification{
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    margin-bottom: 40px;
+}

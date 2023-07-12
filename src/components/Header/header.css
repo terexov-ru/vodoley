@@ -1,0 +1,31 @@
+.header {
+    display: flex;
+    height: 62px;
+    background-color: #FFFFFF;
+    box-shadow: 0px 10px 10px 0px #7E899A24
+}
+
+.header > a {
+    text-decoration: none;
+    background-color: #FFFFFF;
+}
+.header > a:visited {
+    text-decoration: none;
+    background-color: #FFFFFF;
+}
+
+.headerImg {
+    width: 24px;
+    height: 24px;
+    margin: 19px 0px 19px 16px;
+}
+
+.headerTitle {
+    width: 280px;
+    height: 24px;
+    margin: 19px 0 19px 0;
+    font-size: 20px;
+    text-align: center;
+    vertical-align: Bottom;
+    font-weight: bold;
+}

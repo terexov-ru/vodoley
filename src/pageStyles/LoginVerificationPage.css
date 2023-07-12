@@ -1,0 +1,87 @@
+.VerifyTitle {
+    width: 328px;
+    height: 24px;
+    font-size: 16px;
+    text-align: left;
+    vertical-align: bottom;
+    line-height: 24px;
+    margin: 154px 16px 0 16px;
+}
+
+.VerifyHelp {
+    width: 328px;
+    height: 20px;
+    font-size: 14px;
+    text-align: left;
+    vertical-align: bottom;
+    line-height: 20px;
+    margin: 8px 16px 0 16px;
+    color: #7E899A;
+}
+
+.buttonset {
+    width: 196px;
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    margin: 28px 82px 16px 82px;
+}
+
+
+.VerifyInput {
+    width: 40px;
+    height: 48px;
+    border: none;
+    border-radius: 8px;
+    color: #25282E;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #F6F7F8;
+    text-align: center;
+    padding: 0;
+}
+
+.buttonset input[type="number"]:active {
+    outline: solid 1px #40444F;
+}
+
+.buttonset input[type="number"]:focus {
+    outline: solid 1px #40444F;
+}
+
+.buttonset input[type="number"]::-webkit-outer-spin-button,
+.buttonset input[type="number"]::-webkit-inner-spin-button {
+	display: none;
+}
+
+div#VerifyButtonDiv{
+    background-color: #9DA2AF;
+    border: none;
+    width: 304px;
+    height: 24px;
+    border-radius: 8px;
+    margin: 12px 16px 0 16px;
+    color: #FFFFFF;
+    padding: 12px;
+    line-height: 24px;
+    font-size: 16px; 
+    text-align: center;
+}
+
+button#VerifyButton {
+    display: block;
+    background-color: #40444F;
+    border: none;
+    width: 328px;
+    height: 48px;
+    border-radius: 8px;
+    margin: 12px 16px 0 16px;
+    color: #FFFFFF;
+    padding: 12px;
+    line-height: 24px;
+    font-size: 16px;
+}
+
+.disactive {
+    display: none !important;
+}
