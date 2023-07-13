@@ -77,7 +77,7 @@ export const ProfilePage = () => {
     }
 
     //создание нового объекта данных юзера
-    let updatedPersonData = personData
+    let updatedPersonData = data
     updatedPersonData.userName = userName
     updatedPersonData.userNumber = userNumber
     updatedPersonData.userCar = userCar

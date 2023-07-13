@@ -39,7 +39,7 @@ export const DiscountPage = () => {
         <h1 className='DiscountListTitle'>Мои скидки</h1>
         <div className='DiscountList'>
           {data.forEach((discounts) => (
-            <Discount discounts={discounts} key={ind} />
+            <Discount discounts={discounts} />
           ))}
         </div>
     </div>

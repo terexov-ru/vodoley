@@ -10,7 +10,7 @@ import Services from '../media/Tag.png'
 import Locate from '../media/Locate.png'
 import Percent from '../media/percent.png'
 import { DiscountCarousel } from '../components/DiscountCarousel/DiscountCarousel';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Navigate } from 'react-router-dom';
 import axios from '../utils/axios'
 import {useQuery} from 'react-query'
 

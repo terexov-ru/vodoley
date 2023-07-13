@@ -35,7 +35,7 @@ export const AddressesPage = () => {
         <div className='list'>
           <h1 className='addressTitle'>Список</h1>
           {data.forEach((address) => (
-            <Address adresses={address} key={ind} />
+            <Address adresses={address} />
           ))}
         </div>
     </div>

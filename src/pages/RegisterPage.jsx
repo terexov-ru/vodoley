@@ -7,7 +7,7 @@ import axios from '../utils/axios';
 import { QueryClient, useMutation } from 'react-query';
 
 
-let navigateToMain = useNavigate()
+
 
 async function registrationUser(data) {
     await axios.post('auth-register/', data)
@@ -23,7 +23,7 @@ async function registrationUser(data) {
 }
 
 export const RegisterPage = () => {
-    const queryClien = new QueryClient()
+    const queryClient = new QueryClient()
 
     //изменение переметров
     const[userName, setUserName] = useState('')
@@ -32,6 +32,8 @@ export const RegisterPage = () => {
     const[carNumber, setCarNumber] = useState('')
     const[userCar, setUserCar] = useState('')
     const[userCarModel, setUserCarModel] = useState('')
+
+    let navigateToMain = useNavigate()
 
     const newUser = useMutation(newData => registrationUser(newData), {
         onSuccess: () => queryClient.invalideteQueries(['profile']) 
