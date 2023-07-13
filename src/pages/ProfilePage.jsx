@@ -18,6 +18,18 @@ async function updateUser(data) {
 export const ProfilePage = () => {
   const queryClient = new QueryClient
   const{data, isLoading, isError} = useQuery('profile', getUser)
+
+  //изменение переметров
+  const[userName, setUserName] = useState(data.userName)
+  const[userNumber, setUserNumber] = useState(data.userNumber)
+  const[carNumber, setCarNumber] = useState(data.carNumber)
+  const[userCar, setUserCar] = useState(data.userCar)
+
+  const updateData = useMutation(newData => updateUser(newData), {
+    onSuccess: () => queryClient.invalideteQueries(['profile'])
+  })
+
+
   if(isLoading) {
     return <h1>Идет загрузка...</h1>
   }
@@ -29,16 +41,6 @@ export const ProfilePage = () => {
   if(!data) {
     return <h1>no data</h1>
   }
-
-  //изменение переметров
-  const[userName, setUserName] = useState(data.userName)
-  const[userNumber, setUserNumber] = useState(data.userNumber)
-  const[carNumber, setCarNumber] = useState(data.carNumber)
-  const[userCar, setUserCar] = useState(data.userCar)
-
-  const updateData = useMutation(newData => updateUser(newData), {
-    onSuccess: () => queryClient.invalideteQueries(['profile'])
-  })
 
 
   const editProfileHandler = async () => {
@@ -101,7 +103,7 @@ export const ProfilePage = () => {
               className='EditPersonNameInfoData' 
               value={userName} 
               onChange={(e) => setUserName(e.target.value)} 
-              placeholder={personData.userName} 
+              placeholder={data.userName} 
             />
           </form>
 
@@ -117,7 +119,7 @@ export const ProfilePage = () => {
               className='EditPersonNumberInfoData' 
               value={userNumber} 
               onChange={(e) => setUserNumber(e.target.value)} 
-              placeholder={personData.userNumber} />
+              placeholder={data.userNumber} />
           </form>
 
           <div className='PersonTG'>
