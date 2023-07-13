@@ -13,7 +13,7 @@ async function registrationUser(data) {
     await axios.post('auth-register/', data)
     .than((res) => {
         if(res.token) {
-            localStorage.setItem('token', token)
+            localStorage.setItem('token', res.token)
             navigateToMain('/')
         } else {
             return <h1>{res.message}</h1>

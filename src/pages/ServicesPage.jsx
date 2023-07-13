@@ -67,8 +67,8 @@ export const ServicesPage = () => {
     <div className='ServicesPage'>
         <Header title="Услуги" gobackto="/"/>
         <div className='ServiceButtonSet'>
-           <a className='active' onClick={handleClick}>Основные {dataServices.base.length}</a>
-           <a className='' onClick={handleClick}>Специальные {dataServices.special.length}</a>
+           <a className='active' onClick={handleClick}>Основные {data.length}</a>
+           <a className='' onClick={handleClick}>Специальные {data.length}</a>
         </div>
         <div id='ServiceHelp' style={{display: 'block',}}>
           <div className='ServiceHelp' >
