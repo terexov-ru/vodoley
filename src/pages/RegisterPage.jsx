@@ -32,9 +32,9 @@ export const RegisterPage = () => {
         newUserData.userName =data.userName
         newUserData.userNumber =data.userNumber
         newUserData.userTG =data.userTG
-        newUserData.userCar =data.userCar
-        newUserData.carData = data.userCarModel + data.userCarNumber
-        newUser.mutate(newUserData)
+        newUserData.userCar =data.userCar + data.userCarModel
+        newUserData.userCarNumber = data.userCarNumber
+        newUser.mutate(data)
         reset()
     }
     const queryClient = new QueryClient()
