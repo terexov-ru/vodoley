@@ -1,6 +1,6 @@
 import React from 'react'
 import './MainUserInfo.css'
-import Avatar from '../../media/UserAvatar.png'
+import Avatar from '../../media/userAvatar.png'
 
 export const MainUserInfo = (userData) => {
   return (

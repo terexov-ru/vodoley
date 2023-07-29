@@ -13,6 +13,7 @@ import { ProfilePage } from './pages/ProfilePage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ServicesPage } from './pages/ServicesPage';
 import { TipsPage } from './pages/TipsPage';
+import Redirect from "./pages/Redirect";
 
 
 function App() {
@@ -20,7 +21,8 @@ function App() {
     <HashRouter>
       <main>
         <Routes>
-          <Route path='/' element={<MainPage />} /> {/* Главная  страница */}
+          <Route path='/' element={<Redirect />} />
+          <Route path='/main' element={<MainPage />} /> {/* Главная  страница */}
           <Route path='/address' element={<AddressesPage />} /> {/* Список адресов */}
           <Route path='/services' element={<ServicesPage />} /> {/* Услуги */} 
           <Route path='/discounts' element={<DiscountPage />} /> {/* Список скидок */}

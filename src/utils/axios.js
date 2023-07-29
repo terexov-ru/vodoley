@@ -4,12 +4,12 @@ import axios from "axios"
 // стандартный путь для отправки запросов 
 const instance = axios.create({
     //url
-    baseURL: "http://localhost:5000/api/"
+    baseURL: "https://admin-vodoley.terexov.ru/api/"
 })
 
 // добавляет токен в хедер запросов 
 instance.interceptors.request.use(config => {
-    config.headers.Authorization = window.localStorage.getItem('token')
+    config.headers.Authorization = window.localStorage.getItem('VodoleyToken')
     return config;
 })
 

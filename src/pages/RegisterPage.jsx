@@ -2,20 +2,20 @@ import React, { useState } from 'react'
 import { Header } from '../components/Header/Header';
 import BlueArrowRight from '../media/Arrow_Left_S.png'
 import '../pageStyles/RegisterPage.css'
-import { NavLink, Navigate, useNavigate } from 'react-router-dom';
+import {Navigate, NavLink} from 'react-router-dom';
 import axios from '../utils/axios';
 import { QueryClient, useMutation } from 'react-query';
-
-
-
+import {useForm} from "react-hook-form";
 
 async function registrationUser(data) {
     await axios.post('auth-register/', data)
-    .than((res) => {
+    .then((res) => {
         if(res.token) {
             const token = res.token
-            localStorage.setItem('token', token)
-            navigateToMain('/')
+            localStorage.setItem('VodoleyToken', token)
+            return (
+                <Navigate to='/' />
+            )
         } else {
             return <h1>{res.message}</h1>
         }
@@ -23,72 +23,64 @@ async function registrationUser(data) {
 }
 
 export const RegisterPage = () => {
+    const{ register, handleSubmit, reset } = useForm()
+    const newUser = useMutation(newUserData => registrationUser(newUserData), {
+        onSuccess: () => queryClient.invalideteQueries(['profile'])
+    })
+    const onSave = async (data) => {
+        const newUserData = {}
+        newUserData.userName =data.userName
+        newUserData.userNumber =data.userNumber
+        newUserData.userTG =data.userTG
+        newUserData.userCar =data.userCar
+        newUserData.carData = data.userCarModel + data.userCarNumber
+        newUser.mutate(newUserData)
+        reset()
+    }
     const queryClient = new QueryClient()
 
-    //изменение переметров
-    const[userName, setUserName] = useState('')
-    const[userNumber, setUserNumber] = useState('')
-    const[userTG, setUserTG] = useState('')
-    const[carNumber, setCarNumber] = useState('')
-    const[userCar, setUserCar] = useState('')
-    const[userCarModel, setUserCarModel] = useState('')
-
-    let navigateToMain = useNavigate()
-
-    const newUser = useMutation(newData => registrationUser(newData), {
-        onSuccess: () => queryClient.invalideteQueries(['profile']) 
-    })
-
-    let newUserData = new Object()
-    newUserData.userName = userName;
-    newUserData.userNumber = userNumber;
-    newUserData.userTG = userTG;
-    newUserData.carNumber = carNumber;
-    newUserData.userCar = userCar + ' ' + userCarModel;
-
-    const registerUser = async () => {
-        if((newUserData.userName !== '') && (newUserData.userNumber !== '') && (newUserData.userTG !== '') && (newUserData.carNumber !== '') && (newUserData.userCar !== '')) {
-            newUser.mutate(newUserData)
-        }
-    }
-        
-    if(localStorage.getItem('token') !== null) {
-        return(navigateToMain('/'))
-    } else {
-        return (
+    //const registerUser = async () => {
+    //    if((newUserData.userName !== '') && (newUserData.userNumber !== '') && (newUserData.userTG !== '') && (newUserData.carNumber !== '') && (newUserData.userCar !== '')) {
+    //        newUser.mutate(newUserData)
+    //    }
+    //}
+    return (
             <>
                 <Header title="Профиль" gobackto="/auth"/>
-                <form>
+                <form onSubmit={handleSubmit(onSave)}>
                     <p className='registerTitle'>Заполните поля для регистрации</p>
                     <div className='RegisterPoint'>
                         <h1 className='formPoint'>Имя</h1>
                         <input 
                             type='text'
                             required
-                            value={userName}
-                            onChange={(e) => setUserName(e.target.value)}  
                             className='registerInput' 
-                            placeholder='ФИО' />
+                            placeholder='ФИО'
+                            {...register('userName')}
+                            name='userName'
+                        />
                     </div>
                     <div className='RegisterPoint'>
                         <h1 className='formPoint'>Номер телефона</h1>
                         <input 
                             type='text'
                             required
-                            value={userNumber}
-                            onChange={(e) => setUserNumber(e.target.value)}  
                             className='registerInput' 
-                            placeholder='+7-(___)-___-__-__' />
+                            placeholder='+7-(___)-___-__-__'
+                            {...register('userNumber')}
+                            name='userNumber'
+                        />
                     </div>
                     <div className='RegisterPoint'>
                         <h1 className='formPoint'>Ник Telegram</h1>
                         <input 
                             type='text'
                             required
-                            value={userTG}
-                            onChange={(e) => setUserTG(e.target.value)}  
                             className='registerInput' 
-                            placeholder='@tg' />
+                            placeholder='@tg'
+                            {...register('userTG')}
+                            name='userTG'
+                        />
                     </div>
                     <NavLink className='tgHelpBlock' to='/'>
                         <a className='helpLink' href='/'>Как узнать свой ник в Телеграме?</a>
@@ -99,10 +91,11 @@ export const RegisterPage = () => {
                         <input 
                             type='text'
                             required
-                            value={userCar}
-                            onChange={(e) => setUserCar(e.target.value)}  
                             className='registerInput' 
-                            placeholder='Марка' />
+                            placeholder='Марка'
+                            {...register('userCar')}
+                            name='userCar'
+                        />
                     </div>
                     <div className='extraPoint'>
                         <div className='RegisterPoint2'>
@@ -110,28 +103,29 @@ export const RegisterPage = () => {
                             <input 
                                 type='text'
                                 required
-                                value={userCarModel}
-                                onChange={(e) => setUserCarModel(e.target.value)}  
                                 className='registerInput2' 
-                                placeholder='Модель' />
+                                placeholder='Модель'
+                                {...register('userCarModel')}
+                                name='userCarModel'
+                            />
                         </div>
                         <div className='RegisterPoint2'>
                             <h1 className='formPoint2'>Гос. номер</h1>
                             <input 
                                 type='text'
                                 required
-                                value={carNumber}
-                                onChange={(e) => setCarNumber(e.target.value)}  
                                 className='registerInput2' 
-                                placeholder='Номер' />
+                                placeholder='Номер'
+                                {...register('userCarNumber')}
+                                name='userCarNumber'
+                            />
                         </div>
                     </div>    
                     <div>
-                        <input className='submiMainButton' type='submit' value="Зарегистрироваться" onClick={registerUser} />
+                        <input className='submiMainButton' type='submit' value="Зарегистрироваться" />
                     </div>
             </form>
         </>
-        ) 
-    }
+    )
 }
    
