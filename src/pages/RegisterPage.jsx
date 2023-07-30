@@ -33,7 +33,7 @@ export const RegisterPage = () => {
         newUserData.userNumber =data.userNumber
         newUserData.userTG =data.userTG
         newUserData.userCar =data.userCar + data.userCarModel
-        newUserData.userCarNumber = data.userCarNumber
+        newUserData.сarNumber = data.сarNumber
         newUser.mutate(data)
         reset()
     }
@@ -93,8 +93,8 @@ export const RegisterPage = () => {
                             required
                             className='registerInput' 
                             placeholder='Марка'
-                            {...register('userCar')}
-                            name='userCar'
+                            {...register('сarNumber')}
+                            name='сarNumber'
                         />
                     </div>
                     <div className='extraPoint'>
