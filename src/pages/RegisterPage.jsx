@@ -10,7 +10,7 @@ import {useForm} from "react-hook-form";
 async function registrationUser(data) {
     await axios.post('auth-register/', data)
         .then((res) => {
-            if(res.token) {
+            if(res.status === 200) {
                 const token = res.token
                 localStorage.setItem('VodoleyToken', token)
                 return (

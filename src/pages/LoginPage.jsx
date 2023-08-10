@@ -14,9 +14,9 @@ export const LoginPage = () => {
         const { data } = await axios.post('auth-login/', {username})
         // если в запросе есть токен то записывает его в сторадж
         if(data.token) {
-          window.localStorage.setItem('token', data.token)
+          window.localStorage.setItem('VodoleyToken', data.token)
         }
-        if(data.status === 2) {
+        if(data.status === 200) {
             return (<Navigate to='/login/verify'/>)
         }
       } catch (error) {
