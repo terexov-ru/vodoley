@@ -33,7 +33,7 @@ export const MainPage = () => {
 
 
     const logout = () => {
-        localStorage.removeItem('token')
+        localStorage.removeItem('VodoleyToken')
     }
 
     return (
@@ -46,11 +46,11 @@ export const MainPage = () => {
                     </NavLink>
                 </div>
                 <NavLink to='/profile' className='mainPageUser'>
-                    <MainUserInfo userName={data.user.userName} userNumber={data.user.userNumber} />
+                    <MainUserInfo userName={data.userName} userNumber={data.userNumber} />
                 </NavLink>
             </div>
             <div className='mainBlock'>
-                <DiscountCarousel discount={data.discounts.discounts} />
+                <DiscountCarousel discount={data.discounts} />
                 <div className='mainButtonSet'>
                     <MainPageButtons pict={MyOrders} title="Мои записи" goto="/myorders"/>
                     <MainPageButtons id="servicesMainButton" pict={Services} title="Услуги" goto="/services" />
