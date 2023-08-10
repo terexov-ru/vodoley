@@ -24,7 +24,7 @@
 
 .SumInput::-webkit-outer-spin-button,
 .SumInput::-webkit-inner-spin-button {
-	display: none;
+    display: none;
 }
 
 .finalSum {

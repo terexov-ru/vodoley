@@ -2,7 +2,7 @@
     padding: 25px 16px 16px 16px;
 }
 
-.OrderPage > button, input[type=submit] {
+.OrderPage_button, input[type=submit]{
     width: 328px;
     height: 48px;
     border-radius: 8px;
@@ -23,15 +23,20 @@
     border: none;
     border-radius: 8px;
     background-color: #F6F7F8;
-    color: #9DA2AF;
     margin-bottom: 12px;
+    color: #25282E;
     font-size: 16px;
 }
 
+.placeholder-option {
+    color: red;
+}
+
 .OrderPage > div > select {
-    width: 328px;
+    width: 120px;
     height: 48px;
-    padding: 12px 16px 12px 16px;
+    margin-left: 12px;
+    padding: 12px 16px;
     border: none;
     border-radius: 8px;
     background-color: #F6F7F8;
@@ -58,14 +63,16 @@ input[type=date] {
     line-height: 24px;
     margin-bottom: 40px;
 }
-input[type=date]::-webkit-calendar-picker-indicator { 
-    background: url('../media/Calendar_Days.png') no-repeat; 
+input[type=date]::-webkit-calendar-picker-indicator {
+    background: url('../media/Calendar_Days.png') no-repeat;
     width: 24px;
     height: 24px;
 }
 
-input[type=time]{
-    margin-left: 12px;
+select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     width: 88px;
     height: 24px;
     border-radius: 8px;
@@ -75,16 +82,48 @@ input[type=time]{
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
+    background: url('../media/Arrow.png') no-repeat;
+    background-position: calc(100% - 10px) center; /* Adjust the offset */
 }
-input[type=time]::-webkit-progress-inner-element{
-    width: 54px;
-    height: 24px;
+
+table {
+    width: 328px;
+    /*border-collapse: collapse;*/
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #FFF;
+    margin-bottom: 40px;
+    /* Тень */
+    box-shadow: 0px 0px 24px 0px rgba(126, 137, 154, 0.14);
+    /*border-spacing: 0 10px;*/
 }
-input[type=time]::-webkit-calendar-picker-indicator { 
-    background: url('../media/Arrow.png') no-repeat; 
-    width: 24px;
-    height: 24px;
-    margin-top: 6px;
+
+tbody {
+    color: #25282E;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; /* 150% */
+}
+tbody > tr > td {
+    padding: 0 0 12px;
+}
+
+tr td:last-child {
+    text-align: end;
+}
+
+tbody > tr:last-child td:nth-last-child(-n + 2) {
+    padding: 0 0 16px;
+}
+
+tfoot > tr:first-child td:nth-child(-n + 2) {
+    padding: 16px 0 0;
+}
+
+tfoot {
+    box-shadow: 0 1px 0 #F6F7F8 inset;
 }
 
 #discountNotification {

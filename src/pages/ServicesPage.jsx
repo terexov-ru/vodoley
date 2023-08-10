@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import '../pageStyles/ServicesPage.css'
 import { Header } from '../components/Header/Header';
 import { Service } from '../components/Services/Service';
@@ -8,94 +8,123 @@ import axios from '../utils/axios'
 import { useQuery } from 'react-query';
 
 async function getAllServices(id) {
-  const{data} = await axios.get(`get-services-for-address/${id}`)
-  return data
+    const{data} = await axios.get(`get-services-for-address/${id}`)
+    //const{data} = await axios.get(`services/`)
+    return data
 }
 
-export const ServicesPage = () => {
-  const[id, setId] = useState(0)  
-  const {data, isLoading, isError} = useQuery(['services', id], () => 
-    getAllServices(id)
-  )
+export const ServicesPage = ({showHeader, showButton}) => {
+    const[id, setId] = useState(0);
+    const [activeTab, setActiveTab] = useState('base');
+    const handleTabClick = (tab) => {
+        setActiveTab(tab);
+        const tabLists = document.querySelectorAll('[id$="ServiceList"]');
 
-  if(isLoading) {
-    return <h1>Идет загрузка...</h1>
-  }
+        tabLists.forEach(list => {
+            if (list.id === `${tab}ServiceList`) {
+                list.classList.add("activeServiceList");
+                list.classList.remove("hiddenServiceList");
+            } else {
+                list.classList.remove("activeServiceList");
+                list.classList.add("hiddenServiceList");
+            }
+        });
+    };
+    const [selectedServices, setSelectedServices] = useState(() => {
+        const storedServices = JSON.parse(localStorage.getItem('selectedServices')) || [];
+        return storedServices;
+    });
+    const {data, isLoading, isError} = useQuery(['services', id], () =>
+        getAllServices(id)
+    )
+    useEffect(() => {
+        localStorage.setItem('selectedServices', JSON.stringify(selectedServices));
+    }, [selectedServices]);
 
-  if(isError) {
-    return <h1>error</h1>
-  }
-
-  if(!data) {
-    return <h1>no data</h1>
-  }
-
-  //скрыть подсказку
-  const closeHelp = () => {
-    let el = document.getElementById('ServiceHelp')
-    el.style.display = (el.style.display === 'none') ? 'block' : 'none'
-  }
-
-  //переключение разделов
-  const handleClick = (e) => {
-    let foo = document.querySelectorAll("a");
-    for (let i = 0; i < foo.length; i++) {
-      foo[i].classList.remove("active");
+    if(isLoading) {
+        return <h1>Идет загрузка...</h1>
     }
-    e.currentTarget.classList.add("active");
 
-    let lists = document.querySelectorAll('[id$="\\ServiceList"]')
-    console.log(lists)
-    for (let j = 0; j < lists.length; j++) {
-      if(lists[j].classList.contains('activeServiceList')){
-        lists[j].classList.remove("activeServiceList")
-        lists[j].classList.add("hiddenServiceList")
-        lists[j+1].classList.remove("hiddenServiceList")
-        lists[j+1].classList.add("activeServiceList")
-        break
-      } else if(lists[j].classList.contains('hiddenServiceList')) {
-        lists[j].classList.remove("hiddenServiceList")
-        lists[j].classList.add("activeServiceList")
-        lists[j+1].classList.remove("activeServiceList")
-        lists[j+1].classList.add("hiddenServiceList")
-        break
-      }
+    if(isError) {
+        return <h1>error</h1>
     }
-  };
 
-  return (
-    <div className='ServicesPage'>
-        <Header title="Услуги" gobackto="/"/>
-        <div className='ServiceButtonSet'>
-           <a className='active' onClick={handleClick}>Основные {data.length}</a>
-           <a className='' onClick={handleClick}>Специальные {data.length}</a>
+    if(!data) {
+        return <h1>no data</h1>
+    }
+
+    console.log(data)
+
+    const mainServices = data.services.services.filter(service => service.type === 'base');
+    const specialServices = data.services.services.filter(service => service.type === 'special');
+
+    //скрыть подсказку
+    const closeHelp = () => {
+        let el = document.getElementById('ServiceHelp')
+        el.style.display = (el.style.display === 'none') ? 'block' : 'none'
+    }
+
+    //переключение разделов
+
+    const handleServiceChange = (updatedServices) => {
+        console.log('Updated services in ServicesPage:', updatedServices);
+        setSelectedServices(updatedServices); // Обновите tempSelectedServices
+    };
+
+
+
+    return (
+        <div className='ServicesPage'>
+            {showHeader && <Header title="Услуги" gobackto="/"/>}
+            <div className='ServiceButtonSet'>
+                <a
+                    className={activeTab === 'base' ? 'active' : ''}
+                    onClick={() => handleTabClick('base')}
+                >
+                    Основные {data.length}
+                </a>
+                <a
+                    className={activeTab === 'special' ? 'active' : ''}
+                    onClick={() => handleTabClick('special')}
+                >
+                    Специальные {data.length}
+                </a>
+            </div>
+            <div id='ServiceHelp' style={{display: 'block',}}>
+                <div className='ServiceHelp' >
+                    <p>Выберете интересующие вас услуги.</p>
+                    <button className='ServiceCloseCross' onClick={closeHelp}>
+                        <img src={CloseCross} />
+                    </button>
+                </div>
+            </div>
+
+            <div id='baseServiceList' className='activeServiceList'>
+                {mainServices.map((service, ind) => (
+                    <Service service={service}
+                             selectedServices={selectedServices}
+                             setSelectedServices={setSelectedServices}
+                             key={ind}
+                    />
+                ))}
+            </div>
+
+
+            <div id='specialServiceList' className='hiddenServiceList'>
+                {specialServices.map((service, ind) => (
+                    <Service service={service}
+                             selectedServices={selectedServices}
+                             setSelectedServices={setSelectedServices}
+                             key={ind}
+                    />
+                ))}
+            </div>
+            {showButton &&
+                <div className='hiddenButton'>
+                    <MainButton title='Записаться' goto='/makeorder' />
+                </div>
+            }
+
         </div>
-        <div id='ServiceHelp' style={{display: 'block',}}>
-          <div className='ServiceHelp' >
-            <p>Выберете интересующие вас услуги.</p>
-            <button className='ServiceCloseCross' onClick={closeHelp}>
-              <img src={CloseCross} />
-            </button>
-          </div>
-        </div>
-
-        <div id='baseServiceList' className='activeServiceList'>
-            {data.forEach((service, ind) => (
-                <Service service={service} key={ind} />
-            ))}
-        </div>
-
-
-        <div id='specialServiceList' className='hiddenServiceList'>
-            {data.forEach((service, ind) => (
-            <Service service={service} key={ind} />
-            ))}
-        </div>
-
-
-        <div className='hiddenButton'>
-          <MainButton title='Записаться' goto='/makeorder' />
-        </div>
-    </div>
-  )
+    )
 }

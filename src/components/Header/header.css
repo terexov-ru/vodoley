@@ -29,3 +29,9 @@
     vertical-align: Bottom;
     font-weight: bold;
 }
+
+.headerButton {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}

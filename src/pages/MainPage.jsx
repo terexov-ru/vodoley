@@ -16,10 +16,13 @@ import {useQuery} from 'react-query'
 
 async function getMain() {
     const {data} = await axios.get('get-main-page/')
+    //const {data} = await axios.get('')
     return data
 }
+// discounts
 
 export const MainPage = () => {
+
     const{data, isLoading, isError} = useQuery('Main', getMain)
     if(isLoading) {
         return <h1>Идет загрузка...</h1>
@@ -27,13 +30,10 @@ export const MainPage = () => {
     if(isError) {
         return <h1>Ошибка</h1>
     }
-    if(!data) {
-        return <Navigate to="/auth" replace />
-    }
 
 
     const logout = () => {
-      localStorage.removeItem('token')
+        localStorage.removeItem('token')
     }
 
     return (
@@ -46,11 +46,11 @@ export const MainPage = () => {
                     </NavLink>
                 </div>
                 <NavLink to='/profile' className='mainPageUser'>
-                    <MainUserInfo userName={data.userName} userNumber={data.userNumber} />
+                    <MainUserInfo userName={data.user.userName} userNumber={data.user.userNumber} />
                 </NavLink>
             </div>
             <div className='mainBlock'>
-                    <DiscountCarousel discounts={data.discountsList}/>
+                <DiscountCarousel discount={data.discounts.discounts} />
                 <div className='mainButtonSet'>
                     <MainPageButtons pict={MyOrders} title="Мои записи" goto="/myorders"/>
                     <MainPageButtons id="servicesMainButton" pict={Services} title="Услуги" goto="/services" />

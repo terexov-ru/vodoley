@@ -20,41 +20,41 @@ export const Order = ({data}) => {
     }
 
 
-  return (
-    <>
-        <div className='Order'>
-            <div>
-                <h1 className='OrderAdress'>{data.address}</h1>
-                <div className='OrderDate' id='NewOrder'>
-                    <img id='clockSimbol' src={ClockGreen} width={24} height={24}/><span>{data.time}</span>
+    return (
+        <>
+            <div className='Order'>
+                <div>
+                    <h1 className='OrderAdress'>{data.address}</h1>
+                    <div className='OrderDate' id='NewOrder'>
+                        <img id='clockSimbol' src={ClockGreen} width={24} height={24}/><span>{data.time}</span>
+                    </div>
+                    <div className='OrderStatusSign' id='NewOrderSign'>Ожидается</div>
                 </div>
-                <div className='OrderStatusSign' id='NewOrderSign'>Ожидается</div>
-            </div>
 
-            <div className='OrderButtonSet'>
-                <div className='orderActive' id='interactiveOrder'>
-                    <div id='shortbuttonset'>
-                        <button id='moreButton' onClick={showMoreHandler}>Подробнее</button>
-                        <div>
-                            <button id='shortAddFifteen'>+15 минут</button>
+                <div className='OrderButtonSet'>
+                    <div className='orderActive' id='interactiveOrder'>
+                        <div id='shortbuttonset'>
+                            <button id='moreButton' onClick={showMoreHandler}>Подробнее</button>
+                            <div>
+                                <button id='shortAddFifteen'>+15 минут</button>
+                            </div>
                         </div>
                     </div>
+                    <div className='orderHidden' id='interactiveOrder'>
+                        <button className='closeDetails' onClick={showMoreHandler}>Скрыть</button>
+                    </div>
                 </div>
-                <div className='orderHidden' id='interactiveOrder'>
-                    <button className='closeDetails' onClick={showMoreHandler}>Скрыть</button>
-                </div>
-            </div>
 
-            <div className='orderHidden' id='interactiveOrder'>
-                <table className='orderTable'>
-                    <tbody>
+                <div className='orderHidden' id='interactiveOrder'>
+                    <table className='orderTable'>
+                        <tbody>
                         {data.servicesList.map((positions, ind) => (
                             <OrderPosition positions={positions} key={ind} />
                         ))}
-                    </tbody>
-                </table>
-                <table className='orderInfo'>
-                    <tbody>
+                        </tbody>
+                    </table>
+                    <table className='orderInfo'>
+                        <tbody>
                         <tr className='positionElement'>
                             <td className='positionElementName'>Сумма</td>
                             <td className='positionElementPrice'>1400 ₽</td>
@@ -63,25 +63,25 @@ export const Order = ({data}) => {
                             <td className='positionElementName'>Оплата</td>
                             <td className='positionElementPrice'>При посещении</td>
                         </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div className='bottomButtons'>
-            <div className='orderHidden' id='interactiveOrder'>
-                <div>
-                    <button className='bottomLate'>Опоздаю на 15 минут</button>
-                </div>
-                <div className='bottonChangeOrder'>
-                    <button>изменить запись</button>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
+            <div className='bottomButtons'>
+                <div className='orderHidden' id='interactiveOrder'>
+                    <div>
+                        <button className='bottomLate'>Опоздаю на 15 минут</button>
+                    </div>
+                    <div className='bottonChangeOrder'>
+                        <button>изменить запись</button>
+                    </div>
+                </div>
+            </div>
 
-        <div className='hiddenOrderButton'>
-          <MainButton title='Записаться' />
-        </div>
-    </>
+            <div className='hiddenOrderButton'>
+                <MainButton title='Записаться' />
+            </div>
+        </>
 
-  )
+    )
 }

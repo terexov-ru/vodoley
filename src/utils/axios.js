@@ -5,6 +5,7 @@ import axios from "axios"
 const instance = axios.create({
     //url
     baseURL: "https://admin-vodoley.terexov.ru/api/"
+    // baseURL: "http://localhost:4000/api/"
 })
 
 // добавляет токен в хедер запросов 

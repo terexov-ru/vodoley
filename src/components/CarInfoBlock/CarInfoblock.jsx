@@ -8,9 +8,9 @@ export const CarInfoblock = (props) => {
     } else {
         Registration = "Регистрация подтверждена"
     }
-  return (
-    <div className='Data'>
-        <h1 className='DataTitle'>Данные автомобиля</h1>
+    return (
+        <div className='Data'>
+            <h1 className='DataTitle'>Данные автомобиля</h1>
             <div className='CarInfo'>
                 <p className='CarInfoTitle'>марка и модель</p>
                 <p className='CarInfoData'>{props.mark} {props.model}</p>
@@ -19,8 +19,8 @@ export const CarInfoblock = (props) => {
                 <p className='CarInfoTitle'>номер</p>
                 <p className='CarInfoData'>{props.carNumber}</p>
             </div>
-            <div className='CarConfirm'>{Registration}</div> 
+            <div className='CarConfirm'>{Registration}</div>
         </div>
-  )
+    )
 
 }

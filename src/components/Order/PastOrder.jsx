@@ -23,42 +23,42 @@ export const PastOrder = ({data}) => {
     }
 
 
-  return (
-    <>
-        <div className='Order'>
-            <div>
-                <h1 className='OrderAdress'>{data.address}</h1>
-                <div className='OrderDate' id='OldOrder'>
-                    <img id='clockSimbol' src={GrayGreen} /><span>{data.time}</span>
+    return (
+        <>
+            <div className='Order'>
+                <div>
+                    <h1 className='OrderAdress'>{data.address}</h1>
+                    <div className='OrderDate' id='OldOrder'>
+                        <img id='clockSimbol' src={GrayGreen} /><span>{data.time}</span>
+                    </div>
+                    <div className='OrderStatusSign' id='OldOrderSign'>Завершена</div>
                 </div>
-                <div className='OrderStatusSign' id='OldOrderSign'>Завершена</div>
-            </div>
 
-            <div className='OrderButtonSet'>
-                <div className='orderActive' id='interactiveOrder'>
-                    <div id='shortbuttonset'>
-                        <button id='moreButton' onClick={showMoreHandler}>Подробнее</button>
-                        <button id='tipsButton'>
-                            <NavLink to="/tips"><img src={Coins} /></NavLink>
-                        </button>
-                        <button id='rewiesButton'><img src={Reviews} /></button>
+                <div className='OrderButtonSet'>
+                    <div className='orderActive' id='interactiveOrder'>
+                        <div id='shortbuttonset'>
+                            <button id='moreButton' onClick={showMoreHandler}>Подробнее</button>
+                            <button id='tipsButton'>
+                                <NavLink to="/tips"><img src={Coins} /></NavLink>
+                            </button>
+                            <button id='rewiesButton'><img src={Reviews} /></button>
+                        </div>
+                    </div>
+                    <div className='orderHidden' id='interactiveOrder'>
+                        <button className='closeDetails' onClick={showMoreHandler}>Скрыть</button>
                     </div>
                 </div>
-                <div className='orderHidden' id='interactiveOrder'>
-                    <button className='closeDetails' onClick={showMoreHandler}>Скрыть</button>
-                </div>
-            </div>
 
-            <div className='orderHidden' id='interactiveOrder'>
-                <table className='orderTable'>
-                    <tbody>
+                <div className='orderHidden' id='interactiveOrder'>
+                    <table className='orderTable'>
+                        <tbody>
                         {data.servicesList.map((positions, ind) => (
                             <OrderPosition positions={positions} key={ind} />
                         ))}
-                    </tbody>
-                </table>
-                <table className='orderInfo'>
-                    <tbody>
+                        </tbody>
+                    </table>
+                    <table className='orderInfo'>
+                        <tbody>
                         <tr className='positionElement'>
                             <td className='positionElementName'>Сумма</td>
                             <td className='positionElementPrice'>1400 ₽</td>
@@ -67,27 +67,27 @@ export const PastOrder = ({data}) => {
                             <td className='positionElementName'>Оплата</td>
                             <td className='positionElementPrice'>При посещении</td>
                         </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-
-        <div className='bottomButtons'>
-            <div className='orderHidden' id='interactiveOrder'>
-                <NavLink to="/tips">
-                    <button>Оставить чаевые</button>
-                </NavLink>
-                <div>
-                    <button>Оставить отзыв</button>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
 
-        <div className='hiddenOrderButton'>
-          <MainButton title='Записаться' />
-        </div>
-    </>
 
-  )
+            <div className='bottomButtons'>
+                <div className='orderHidden' id='interactiveOrder'>
+                    <NavLink to="/tips">
+                        <button>Оставить чаевые</button>
+                    </NavLink>
+                    <div>
+                        <button>Оставить отзыв</button>
+                    </div>
+                </div>
+            </div>
+
+            <div className='hiddenOrderButton'>
+                <MainButton title='Записаться' />
+            </div>
+        </>
+
+    )
 }

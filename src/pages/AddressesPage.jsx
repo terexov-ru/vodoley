@@ -9,35 +9,36 @@ import axios from '../utils/axios'
 import {useQuery} from 'react-query'
 
 async function getAllAddresses() {
-  const {data} = await axios.get('get-addresses-list/')
-  return data
+    //const {data} = await axios.get('addresses/')
+    const {data} = await axios.get('get-addresses-list/')
+    return data
 }
 
 export const AddressesPage = () => {
-  const {data, isLoading, isError} = useQuery('addresses', getAllAddresses)
+    const {data, isLoading, isError} = useQuery('addresses', getAllAddresses)
 
-  if(isLoading) {
-    return <h1>Идет загрузка...</h1>
-  }
+    if(isLoading) {
+        return <h1>Идет загрузка...</h1>
+    }
 
-  if(isError) {
-    return <h1>error</h1>
-  }
+    if(isError) {
+        return <h1>error</h1>
+    }
 
-  if(!data) {
-    return <h1>Нет доступных адрессов</h1>
-  }
+    if(!data) {
+        return <h1>Нет доступных адрессов</h1>
+    }
 
-  return (
-    <div className='AddressPage'>
-        <Header title="Адреса моек" gobackto="/"/>
-        <SimpleMap />
-        <div className='list'>
-          <h1 className='addressTitle'>Список</h1>
-          {data.forEach((address) => (
-            <Address adresses={address} />
-          ))}
+    return (
+        <div className='AddressPage'>
+            <Header title="Адреса моек" gobackto="/"/>
+            <SimpleMap />
+            <div className='list'>
+                <h1 className='addressTitle'>Список</h1>
+                {data.addresses.map((address) => (
+                    <Address key={address.id} adresses={address} />
+                ))}
+            </div>
         </div>
-    </div>
-  )
+    )
 }

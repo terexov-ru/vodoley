@@ -3,13 +3,13 @@ import './MainUserInfo.css'
 import Avatar from '../../media/userAvatar.png'
 
 export const MainUserInfo = (userData) => {
-  return (
-    <div className='MainUserInfo'>
-        <img className='userAvatar' src={Avatar}/>
-        <div className='userMainInfo'>
-            <p>{userData.userName}</p>
-            <a>{userData.userNumber}</a>
+    return (
+        <div className='MainUserInfo'>
+            <img className='userAvatar' src={Avatar}/>
+            <div className='userMainInfo'>
+                <p>{userData.userName}</p>
+                <a>{userData.userNumber}</a>
+            </div>
         </div>
-    </div>
-  )
+    )
 }
