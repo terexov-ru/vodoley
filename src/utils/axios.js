@@ -10,9 +10,10 @@ const instance = axios.create({
 
 // добавляет токен в хедер запросов 
 instance.interceptors.request.use(config => {
-    const myToken = window.localStorage.getItem('VodoleyToken')
-    config.headers.Authorization = `token ${myToken}`
-    return config;
+    const myToken = window.localStorage.getItem('VodoleyToken');
+    if (myToken) {
+        config.headers.Authorization = `token ${myToken}`;
+    }
 })
 
 export default instance

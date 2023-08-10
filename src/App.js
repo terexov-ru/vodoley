@@ -23,10 +23,14 @@ function App() {
 
   const loginUserName = async (code) => {
     try {
-      const { data } = await axios.post('auth-login/', {code})
+      const { data } = await axios.post('auth-login/', code)
       // если в запросе есть токен то записывает его в сторадж
       if(data.token) {
-        window.localStorage.setItem('token', data.token)
+        window.localStorage.setItem('VodoleyToken', data.token)
+        const mytoken = window.localStorage.getItem('VodoleyToken')
+        if(mytoken !== null) {
+          navigate('/');
+        }
       }
       return data
     } catch (error) {

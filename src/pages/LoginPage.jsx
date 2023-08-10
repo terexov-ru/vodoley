@@ -19,7 +19,7 @@ export const LoginPage = () => {
             window.localStorage.setItem('VodoleyToken', token)
             const mytoken = window.localStorage.getItem('VodoleyToken')
             if(mytoken !== null) {
-                navigate('/');
+                navigate('/login/verify');
             }
         }
         if(data.status === 200) {
@@ -27,7 +27,7 @@ export const LoginPage = () => {
             window.localStorage.setItem('VodoleyToken', token)
             const mytoken = window.localStorage.getItem('VodoleyToken')
             if(mytoken !== null) {
-                navigate('/');
+                navigate('/login/verify');
             }
         }
       } catch (error) {
