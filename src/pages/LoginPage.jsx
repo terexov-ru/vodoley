@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Header } from '../components/Header/Header';
 import { MainButton } from '../components/mainButton/MainButton';
 import '../pageStyles/LoginPage.css'
@@ -17,11 +17,18 @@ export const LoginPage = () => {
         if(data.token) {
             const token = data.token
             window.localStorage.setItem('VodoleyToken', token)
+            const mytoken = window.localStorage.getItem('VodoleyToken')
+            if(mytoken !== null) {
+                navigate('/');
+            }
         }
         if(data.status === 200) {
             const token = data.token
             window.localStorage.setItem('VodoleyToken', token)
-            navigate('/');
+            const mytoken = window.localStorage.getItem('VodoleyToken')
+            if(mytoken !== null) {
+                navigate('/');
+            }
         }
       } catch (error) {
         console.log(error)

@@ -9,15 +9,20 @@ import {useForm} from "react-hook-form";
 
 export const RegisterPage = () => {
     const navigate = useNavigate();
+    const [message, setMessage] = useState('')
     async function registrationUser(data) {
         await axios.post('auth-register/', data)
             .then((res) => {
                 if(res.status === 200) {
                     const token = res.data.token
                     localStorage.setItem('VodoleyToken', token)
-                    navigate('/');
+                    const mytoken = window.localStorage.getItem('VodoleyToken')
+                    if(mytoken !== null) {
+                        navigate('/');
+                    }
                 } else {
-                    return <h1>{res.message}</h1>
+                    setMessage(res.message)
+                    console.log('error: ', message)
                 }
             })
     }
