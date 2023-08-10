@@ -106,7 +106,7 @@ export const RegisterPage = () => {
                             required
                             className='registerInput2'
                             placeholder='Номер'
-                            {...register('сarNumber')}
+                            {...register('userCarNumber')}
                             name='userCarNumber'
                         />
                     </div>

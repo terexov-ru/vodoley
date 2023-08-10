@@ -11,7 +11,7 @@ export const LoginPage = () => {
     const{ register, handleSubmit, reset } = useForm()
     const loginUserName = async (username) => {
       try {
-        const { data } = await axios.post('auth-login/', {username})
+        const { data } = await axios.post('auth-login/', username)
         // если в запросе есть токен то записывает его в сторадж
         if(data.token) {
           window.localStorage.setItem('VodoleyToken', data.token)
