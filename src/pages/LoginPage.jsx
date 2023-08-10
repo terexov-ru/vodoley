@@ -2,23 +2,26 @@ import React from 'react'
 import { Header } from '../components/Header/Header';
 import { MainButton } from '../components/mainButton/MainButton';
 import '../pageStyles/LoginPage.css'
-import {Navigate, NavLink} from 'react-router-dom';
+import {Navigate, NavLink, useNavigate} from 'react-router-dom';
 import axios from "../utils/axios";
 import {QueryClient, useMutation} from "react-query";
 import {useForm} from "react-hook-form";
 
 export const LoginPage = () => {
     const{ register, handleSubmit, reset } = useForm()
+    const navigate = useNavigate();
     const loginUserName = async (username) => {
       try {
         const { data } = await axios.post('auth-login/', username)
         // если в запросе есть токен то записывает его в сторадж
         if(data.token) {
             const token = data.token
-          window.localStorage.setItem('VodoleyToken', token)
+            window.localStorage.setItem('VodoleyToken', token)
         }
         if(data.status === 200) {
-            return (<Navigate to='/login/verify'/>)
+            const token = data.token
+            window.localStorage.setItem('VodoleyToken', token)
+            navigate('/');
         }
       } catch (error) {
         console.log(error)
