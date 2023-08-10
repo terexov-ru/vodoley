@@ -36,9 +36,7 @@ export const LoginPage = () => {
     }
 
     const queryClient = new QueryClient()
-    const user = useMutation(user => loginUserName(user), {
-        onSuccess: () => queryClient.invalideteQueries(['user'])
-    })
+    const user = useMutation(user => loginUserName(user))
     const onSave = async (data) => {
         user.mutate(data)
         reset()
