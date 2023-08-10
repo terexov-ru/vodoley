@@ -1,4 +1,4 @@
-import {HashRouter, Routes, Route, Navigate} from 'react-router-dom';
+import {HashRouter, Routes, Route, Navigate, useNavigate} from 'react-router-dom';
 import { AddressesPage } from './pages/AddressesPage';
 import { AuthPage } from './pages/AuthPage';
 import { DiscountInfoPage } from './pages/DiscountInfoPage';
@@ -22,6 +22,7 @@ import Redirect from "./pages/Redirect";
 function App() {
 
   const loginUserName = async (code) => {
+    const navigate = useNavigate()
     try {
       const { data } = await axios.post('auth-login/', code)
       // если в запросе есть токен то записывает его в сторадж
@@ -29,9 +30,7 @@ function App() {
         window.localStorage.setItem('VodoleyToken', data.token)
         const mytoken = window.localStorage.getItem('VodoleyToken')
         if(mytoken !== null) {
-          return(
-              <Navigate to={'/'} />
-          )
+          navigate('/');
         }
       }
       return data
