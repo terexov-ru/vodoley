@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import {HashRouter, Routes, Route, Navigate} from 'react-router-dom';
 import { AddressesPage } from './pages/AddressesPage';
 import { AuthPage } from './pages/AuthPage';
 import { DiscountInfoPage } from './pages/DiscountInfoPage';
@@ -29,7 +29,9 @@ function App() {
         window.localStorage.setItem('VodoleyToken', data.token)
         const mytoken = window.localStorage.getItem('VodoleyToken')
         if(mytoken !== null) {
-          navigate('/');
+          return(
+              <Navigate to={'/'} />
+          )
         }
       }
       return data
