@@ -46,7 +46,6 @@ export const LoginPage = () => {
                     className='LoginInput'
                     placeholder='Телефон/ник tg'
                     {...register('username')}
-                    name='username'
                 />
                 <div>
                     <input className='verifyButtonSubmit' type='submit' title="Продолжить" />
