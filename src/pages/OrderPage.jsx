@@ -3,13 +3,32 @@ import '../pageStyles/OrderPage.css'
 import { Header } from '../components/Header/Header'
 import axios from "../utils/axios";
 import queryString from 'query-string';
-import {NavLink, useLocation} from "react-router-dom";
+import {Navigate, NavLink, useLocation} from "react-router-dom";
 import {Service} from "../components/Services/Service";
 import { OrderPosition } from "../components/Order/OrderPosition";
 import {ServicePopup} from "../components/Services/ServicePopup";
 import {DiscountCarousel} from "../components/DiscountCarousel/DiscountCarousel";
+import {QueryClient, useMutation} from "react-query";
+
+
+async function newOrder(data) {
+    await axios.post('create-checkout/', data)
+        .then((res) => {
+            if(res.status === 200) {
+                return (
+                    <Navigate to='/' />
+                )
+            } else {
+                return <h1>{res.message}</h1>
+            }
+        })
+}
 
 export const OrderPage = (   ) => {
+    const queryClient = new QueryClient()
+    const order = useMutation(order => newOrder(order), {
+        onSuccess: () => queryClient.invalideteQueries(['order'])
+    })
 
     const location = useLocation();
     const [addresses, setAddresses] = useState([]);
@@ -90,7 +109,7 @@ export const OrderPage = (   ) => {
 
         // Check if the form is fully filled before submitting
         if (isFormFilled) {
-            const finalResult = assembleFinalResult();;
+            const finalResult = assembleFinalResult();
             console.log(finalResult);
             // You can proceed with submitting or performing further actions
         } else {
@@ -125,7 +144,7 @@ export const OrderPage = (   ) => {
         />
     ));
 
-    const assembleFinalResult = () => {
+    const assembleFinalResult = async () => {
         const finalResult = {
             address: selectedAddress,
             time: `${selectedDate} ${selectedTime}`,
@@ -137,7 +156,8 @@ export const OrderPage = (   ) => {
             })),
             // Add other properties as needed
         };
-
+        order.mutate(finalResult);
+        console.log('newOrder: ', finalResult)
         return finalResult;
     };
 

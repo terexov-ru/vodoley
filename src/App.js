@@ -15,6 +15,7 @@ import { ServicesPage } from './pages/ServicesPage';
 import { TipsPage } from './pages/TipsPage';
 import axios from "./utils/axios";
 import { useMutation} from "react-query";
+import Redirect from "./pages/Redirect";
 
 
 
@@ -46,7 +47,7 @@ function App() {
       <HashRouter>
         <main>
           <Routes>
-            <Route path='/' element={<MainPage />} />
+            <Route path='/' element={<Redirect />} />
             <Route path='/main' element={<MainPage />} /> {/* Главная  страница */}
             <Route path='/address' element={<AddressesPage />} /> {/* Список адресов */}
             <Route path='/services' element={<ServicesPage showButton={true} showHeader={true} />} /> {/* Услуги */}
