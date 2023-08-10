@@ -27,7 +27,8 @@ function App() {
       const { data } = await axios.post('auth-login/', code)
       // если в запросе есть токен то записывает его в сторадж
       if(data.token) {
-        window.localStorage.setItem('VodoleyToken', data.token)
+        const token = data.token
+        window.localStorage.setItem('VodoleyToken', token)
         const mytoken = window.localStorage.getItem('VodoleyToken')
         if(mytoken !== null) {
           navigate('/');

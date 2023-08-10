@@ -11,9 +11,8 @@ const instance = axios.create({
 // добавляет токен в хедер запросов 
 instance.interceptors.request.use(config => {
     const myToken = window.localStorage.getItem('VodoleyToken');
-    const token = `token ${myToken}`
     if (myToken) {
-        config.headers.Authorization = token;
+        config.headers.Authorization = `token ${myToken}`;
     }
 })
 
