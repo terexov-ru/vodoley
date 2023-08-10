@@ -2,27 +2,25 @@ import React, { useState } from 'react'
 import { Header } from '../components/Header/Header';
 import BlueArrowRight from '../media/Arrow_Left_S.png'
 import '../pageStyles/RegisterPage.css'
-import {Navigate, NavLink} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import axios from '../utils/axios';
 import { QueryClient, useMutation } from 'react-query';
 import {useForm} from "react-hook-form";
 
-async function registrationUser(data) {
-    await axios.post('auth-register/', data)
-        .then((res) => {
-            if(res.status === 200) {
-                const token = res.token
-                localStorage.setItem('VodoleyToken', token)
-                return (
-                    <Navigate to='/' />
-                )
-            } else {
-                return <h1>{res.message}</h1>
-            }
-        })
-}
-
 export const RegisterPage = () => {
+    const navigate = useNavigate();
+    async function registrationUser(data) {
+        await axios.post('auth-register/', data)
+            .then((res) => {
+                if(res.status === 200) {
+                    const token = res.data.token
+                    localStorage.setItem('VodoleyToken', token)
+                    navigate('/');
+                } else {
+                    return <h1>{res.message}</h1>
+                }
+            })
+    }
     const{ register, handleSubmit, reset } = useForm()
     const newUser = useMutation(newUserData => registrationUser(newUserData), {
         onSuccess: () => queryClient.invalideteQueries(['profile'])
