@@ -16,7 +16,9 @@ export const LoginPage = () => {
         if(data.token) {
           window.localStorage.setItem('token', data.token)
         }
-        return data
+        if(data.status === 2) {
+            return (<Navigate to='/login/verify'/>)
+        }
       } catch (error) {
         console.log(error)
       }
@@ -47,9 +49,7 @@ export const LoginPage = () => {
                     name='username'
                 />
                 <div>
-                    <NavLink to='/login/verify'>
-                        <input className='verifyButtonSubmit' type='submit' title="Продолжить" />
-                    </NavLink>
+                    <input className='verifyButtonSubmit' type='submit' title="Продолжить" />
                 </div>
             </form>
         </>
