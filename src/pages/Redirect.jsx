@@ -11,7 +11,13 @@ const Redirect = () => {
         return(<Navigate to='/main' />)
     }
     return(
-        <></>
+        //костыль
+        <>
+
+            <h1>Страница работает</h1>
+            <a href={`/auth`}>логины</a>
+            <a href={`/main`}>на главную</a>
+        </>
     )
 }
 
