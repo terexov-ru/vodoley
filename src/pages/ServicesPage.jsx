@@ -8,7 +8,8 @@ import axios from '../utils/axios'
 import { useQuery } from 'react-query';
 
 async function getAllServices(id) {
-    const{data} = await axios.get(`get-services-for-address/${id}`)
+    //const{data} = await axios.get(`get-services-for-address/${id}`)
+    const{data} = await axios.get(`get-services-for-address/`)
     //const{data} = await axios.get(`services/`)
     return data
 }

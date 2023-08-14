@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import '../pageStyles/AddressesPage.css'
 import { Header } from '../components/Header/Header';
 import { Address } from '../components/Address/Address';
@@ -16,6 +16,7 @@ async function getAllAddresses() {
 
 export const AddressesPage = () => {
     const {data, isLoading, isError} = useQuery('addresses', getAllAddresses)
+    const [selectedAddress, setSelectedAddress] = useState(null);
 
     if(isLoading) {
         return <h1>Идет загрузка...</h1>
@@ -29,16 +30,26 @@ export const AddressesPage = () => {
         return <h1>Нет доступных адрессов</h1>
     }
 
+    const handleShowOnMap = (address) => {
+        setSelectedAddress(address);
+    };
+
     return (
         <div className='AddressPage'>
             <Header title="Адреса моек" gobackto="/"/>
-            <SimpleMap />
+            <SimpleMap addresses={data} selectedAddress={selectedAddress} onShowOnMap={handleShowOnMap} /> {/* Измените эту строку */}
             <div className='list'>
                 <h1 className='addressTitle'>Список</h1>
-                {data.addresses.map((address) => (
-                    <Address key={address.id} adresses={address} />
+                {data.map((address) => (
+                    <Address
+                        key={address.id}
+                        addresses={address}
+                        selectedAddress={selectedAddress}
+                        onShowOnMap={() => handleShowOnMap(address)}
+                    />
                 ))}
             </div>
         </div>
     )
 }
+

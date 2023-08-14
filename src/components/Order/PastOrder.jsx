@@ -7,20 +7,24 @@ import Coins from "../../media/Coins.png"
 import Reviews from "../../media/Reviews.png"
 import { NavLink } from 'react-router-dom'
 
-export const PastOrder = ({data}) => {
-
-    const showMoreHandler = async () => {
-        let profileBlocks = document.querySelectorAll('[id="interactiveOrder"]')
-        for (let j = 0; j < profileBlocks.length; j=j+1) {
-            if(profileBlocks[j].classList.contains('orderActive')){
-                profileBlocks[j].classList.remove("orderActive")
-                profileBlocks[j].classList.add("orderHidden")
-            } else if(profileBlocks[j].classList.contains('orderHidden')) {
-                profileBlocks[j].classList.remove("orderHidden")
-                profileBlocks[j].classList.add("orderActive")
-            }
-        }
+export const PastOrder = ({ data, showDetails, toggleDetails }) => {
+    if (!data || !data.servicesList) {
+        // Return some fallback UI or message here
+        return <div>Нет прошедших заказов</div>;
     }
+
+    // const showMoreHandler = async () => {
+    //     let profileBlocks = document.querySelectorAll('[id="interactiveOrder"]')
+    //     for (let j = 0; j < profileBlocks.length; j=j+1) {
+    //         if(profileBlocks[j].classList.contains('orderActive')){
+    //             profileBlocks[j].classList.remove("orderActive")
+    //             profileBlocks[j].classList.add("orderHidden")
+    //         } else if(profileBlocks[j].classList.contains('orderHidden')) {
+    //             profileBlocks[j].classList.remove("orderHidden")
+    //             profileBlocks[j].classList.add("orderActive")
+    //         }
+    //     }
+    // }
 
 
     return (
@@ -35,21 +39,21 @@ export const PastOrder = ({data}) => {
                 </div>
 
                 <div className='OrderButtonSet'>
-                    <div className='orderActive' id='interactiveOrder'>
+                    <div className={showDetails ? 'orderActive' : 'orderHidden'} id='interactiveOrder'>
                         <div id='shortbuttonset'>
-                            <button id='moreButton' onClick={showMoreHandler}>Подробнее</button>
+                            <button id='moreButton' onClick={toggleDetails}>Подробнее</button>
                             <button id='tipsButton'>
                                 <NavLink to="/tips"><img src={Coins} /></NavLink>
                             </button>
                             <button id='rewiesButton'><img src={Reviews} /></button>
                         </div>
                     </div>
-                    <div className='orderHidden' id='interactiveOrder'>
-                        <button className='closeDetails' onClick={showMoreHandler}>Скрыть</button>
+                    <div className={!showDetails ? 'orderActive' : 'orderHidden'} id='interactiveOrder'>
+                        <button className='closeDetails' onClick={toggleDetails}>Скрыть</button>
                     </div>
                 </div>
 
-                <div className='orderHidden' id='interactiveOrder'>
+                <div className={showDetails ? 'orderHidden' : 'orderActive'} id='interactiveOrder'>
                     <table className='orderTable'>
                         <tbody>
                         {data.servicesList.map((positions, ind) => (

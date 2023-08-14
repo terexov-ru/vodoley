@@ -37,7 +37,7 @@ export const DiscountPage = () => {
             </div>
             <h1 className='DiscountListTitle'>Мои скидки</h1>
             <div className='DiscountList'>
-                {data.discounts.discounts.map((discount) => (
+                {data.map((discount) => (
                     <Discount discount={discount} key={discount.id} />
                 ))}
             </div>

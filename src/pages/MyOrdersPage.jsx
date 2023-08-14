@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Header } from '../components/Header/Header';
 import '../pageStyles/MyOrdersPage.css'
 import CloseCross from '../media/ServiceCloseCross.png'
@@ -17,6 +17,9 @@ async function getMyOrders() {
 export const MyOrdersPage = () => {
 
     const{data, isLoading, isError} = useQuery('MyOrders', getMyOrders)
+    const [selectedOrderType, setSelectedOrderType] = useState('current');
+    const [orderDetailsVisible, setOrderDetailsVisible] = useState(false);
+
     if(isLoading) {
         return <h1>Идет загрузка...</h1>
     }
@@ -26,6 +29,14 @@ export const MyOrdersPage = () => {
     if(!data) {
         return <h1>Нет заказов</h1>
     }
+    // if(data.length === 0) {
+    //     return (
+    //         <div>
+    //             <Header title="Мои записи" gobackto='/'/>
+    //             <h1>Нет заказов</h1>
+    //         </div>
+    //     )
+    // }
 
     //скрыть подсказку
     const closeHelp = () => {
@@ -34,54 +45,43 @@ export const MyOrdersPage = () => {
     }
 
     //переключение разделов
-    const handleClick = (e) => {
-        let foo = document.querySelectorAll("a");
-        for (let i = 0; i < foo.length; i++) {
-            foo[i].classList.remove("active");
-        }
-        e.currentTarget.classList.add("active");
-
-        let lists = document.querySelectorAll('[id$="\\OrderList"]')
-        console.log(lists)
-        for (let j = 0; j < lists.length; j++) {
-            if(lists[j].classList.contains('ActiveOrderList')){
-                lists[j].classList.remove("ActiveOrderList")
-                lists[j].classList.add("HiddenOrderList")
-                lists[j+1].classList.remove("HiddenOrderList")
-                lists[j+1].classList.add("ActiveOrderList")
-                break
-            } else if(lists[j].classList.contains('HiddenOrderList')) {
-                lists[j].classList.remove("HiddenOrderList")
-                lists[j].classList.add("ActiveOrderList")
-                lists[j+1].classList.remove("ActiveOrderList")
-                lists[j+1].classList.add("HiddenOrderList")
-                break
-            }
-        }
+    // Update the handleClick function to set the selectedOrderType
+    const handleClick = (type) => {
+        setSelectedOrderType(type);
     };
+
+    const toggleOrderDetails = () => {
+        setOrderDetailsVisible(!orderDetailsVisible);
+    };
+
+    const currentOrderCount = data.filter(order => order.status === 'current').length;
+    const pastOrderCount = data.filter(order => order.status === 'past').length;
 
 
     return (
         <div>
             <Header title="Мои записи" gobackto='/'/>
             <div className='OrdersButtonSet'>
-                <a className='active' onClick={handleClick}>Текущие 12</a>
-                <a className='' onClick={handleClick}>Прошедшие 12</a>
+                <a
+                    className={selectedOrderType === 'current' ? 'active' : ''}
+                    onClick={() => handleClick('current')}
+                >
+                    Текущие {currentOrderCount}
+                </a>
+                <a
+                    className={selectedOrderType === 'past' ? 'active' : ''}
+                    onClick={() => handleClick('past')}
+                >
+                    Прошедшие {pastOrderCount}
+                </a>
             </div>
-            <div id='OrdersHelp' style={{display: 'block',}}>
-                <div className='OrdersHelp' >
-                    <p>Если вы задерживаетесь на запись, предупредите нас об этом, нажав на кнопку “+15 минут”</p>
-                    <button className='OrdersCloseCross' onClick={closeHelp}>
-                        <img src={CloseCross} />
-                    </button>
-                </div>
+            <div id='currentOrderList' className={selectedOrderType === 'current' ? 'ActiveOrderList' : 'HiddenOrderList'}>
+                <Order data={data} showDetails={orderDetailsVisible} toggleDetails={toggleOrderDetails} />
             </div>
-            <div id='currentOrderList' className='ActiveOrderList'>
-                <Order data={data} />
-            </div>
-            <div id='pastOrderList' className='HiddenOrderList'>
-                <PastOrder data={data} />
+            <div id='pastOrderList' className={selectedOrderType === 'past' ? 'ActiveOrderList' : 'HiddenOrderList'}>
+                <PastOrder data={data} showDetails={orderDetailsVisible} toggleDetails={toggleOrderDetails} />
             </div>
         </div>
     )
 }
+

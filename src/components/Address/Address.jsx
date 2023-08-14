@@ -3,24 +3,25 @@ import './Address.css'
 import MapPin from '../../media/Map_Pin.png'
 import Clock from '../../media/ClockBlue.png'
 import Map from '../../media/Map.png'
+import {NavLink} from "react-router-dom";
 
-export const Address = ({adresses}) => {
-    const handleBookingClick = (addressId) => {
-        window.location.href = `/#/makeorder?address=${addressId}`;
-    };
+export const Address = ({ addresses, onShowOnMap, selectedAddress} ) => {
+
     return (
-        <div className='Address' id={adresses.id}>
+        <div className='Address' id={addresses.id}>
             <div className='location'>
                 <img id='MapPin' src={MapPin} />
-                <span id='markspan'>{adresses.address}</span>
+                <span id='markspan'>{addresses.address}</span>
             </div>
             <div className='time'>
                 <img id='Clock' src={Clock} />
-                <span id='clockspan'>{adresses.times}</span>
+                <span id='clockspan'>{addresses.time}</span>
             </div>
             <div className='serviceButtonSet'>
-                <button className='booking' onClick={() => handleBookingClick(adresses.id)}>Записаться</button>
-                <button className='showOnMap'>
+                <NavLink to={{ pathname: "/makeorder", search: `?address=${encodeURIComponent(addresses.id)}` }}>
+                    <button className='booking'>Записаться</button>
+                </NavLink>
+                <button className='showOnMap' onClick={() => onShowOnMap(addresses)}>
                     <img src={Map}/>
                 </button>
             </div>

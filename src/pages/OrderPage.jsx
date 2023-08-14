@@ -9,9 +9,16 @@ import { OrderPosition } from "../components/Order/OrderPosition";
 import {ServicePopup} from "../components/Services/ServicePopup";
 import {DiscountCarousel} from "../components/DiscountCarousel/DiscountCarousel";
 import {QueryClient, useMutation} from "react-query";
+import Select from "react-select";
+import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker, {registerLocale} from 'react-datepicker';
+import '../components/Order/React-select.scss'
+import ru from 'date-fns/locale/ru';
+
 
 
 async function newOrder(data) {
+
     await axios.post('create-checkout/', data)
         .then((res) => {
             if(res.status === 200) {
@@ -26,11 +33,11 @@ async function newOrder(data) {
 
 export const OrderPage = (   ) => {
     const queryClient = new QueryClient()
+    const location = useLocation();
     const order = useMutation(order => newOrder(order), {
         onSuccess: () => queryClient.invalideteQueries(['order'])
     })
 
-    const location = useLocation();
     const [addresses, setAddresses] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
@@ -45,25 +52,24 @@ export const OrderPage = (   ) => {
 
     useEffect(() => {
         setIsLoading(true);
-        const queryParams = queryString.parse(location.search);
-        const selectedAddressId = queryParams.address;
-
-        // Проверяем, есть ли переданный адрес в параметрах
-        if (selectedAddressId) {
-            setSelectedAddress(selectedAddressId);
-        }
+        const parsed = queryString.parse(location.search);
+        const queryAddressId = parsed.address;
         // Fetch addresses and services from your API
-        axios.get('get-addresses-list').then(response => {
-            setAddresses(response.data.addresses);
-        });
+
         axios.get('get-user-discounts/').then(response => {
-            console.log("Discounts response:", response.data.discounts); // Check the structure of the response
-            setDiscountList(response.data.discounts);
-            setIsLoading(false);
+            console.log("Discounts response:", response.data); // Check the structure of the response
+            setDiscountList(response.data);
+        });
+        axios.get('get-addresses-list').then(response => {
+            setAddresses(response.data);
+            if (queryAddressId) {
+                setSelectedAddress(parseInt(queryAddressId));
+            }
         });
         const storedServices = JSON.parse(localStorage.getItem('selectedServices')) || [];
         setSelectedServices(storedServices);
-    }, [location.search]);
+        setIsLoading(false);
+    }, [useLocation]);
 
 
     useEffect(() => {
@@ -78,30 +84,14 @@ export const OrderPage = (   ) => {
     }, [selectedAddress, selectedDate, selectedTime, selectedServices]);
 
 
+
+
     const openPopup = () => {
         setShowPopup(true);
     };
 
     const closePopup = () => {
         setShowPopup(false);
-    };
-
-
-    const handleAddressChange = event => {
-        const newAddress = event.target.value;
-        setSelectedAddress(newAddress);
-
-        // Update the URL with the selected address ID
-        const queryParams = `#/makeorder?address=${newAddress}`;
-        window.history.pushState({}, '', queryParams);
-    };
-
-    const handleDateChange = event => {
-        setSelectedDate(event.target.value);
-    };
-
-    const handleTimeChange = event => {
-        setSelectedTime(event.target.value);
     };
 
     const handleSubmit = event => {
@@ -115,10 +105,6 @@ export const OrderPage = (   ) => {
         } else {
             console.log("Please fill in all required fields.");
         }
-    };
-
-    const handlePaymentOptionChange = event => {
-        setSelectedPaymentOption(event.target.value);
     };
 
     const timeIntervals = [];
@@ -144,10 +130,10 @@ export const OrderPage = (   ) => {
         />
     ));
 
-    const assembleFinalResult = async () => {
+    const assembleFinalResult =  () => {
         const finalResult = {
             address: selectedAddress,
-            time: `${selectedDate} ${selectedTime}`,
+            time: `${selectedDate} ${selectedTime.value}`,
             paymentType: selectedPaymentOption,
             servicesList: selectedServices.map(service => ({
                 id: service.id,
@@ -161,20 +147,40 @@ export const OrderPage = (   ) => {
         return finalResult;
     };
 
+    const paymentOptions = [
+        { value: 'discount', label: 'Онлайн со скидкой 5%' },
+        { value: 'regular', label: 'Оплатить позже онлайн или при посещении' },
+    ];
+
+    const options = (addresses) => (
+        addresses.map(address => ({ value: address.id, label: address.address }))
+    );
+
+    const customStyles = {
+        dropdownIndicator: (provided, state) => ({
+            ...provided,
+            transform: state.selectProps.menuIsOpen && 'rotate(180deg)'
+        })
+    }
+    registerLocale('ru', ru)
+
+    console.log('ешьу: ', selectedTime)
 
     return (
         <>
             <Header gobackto='/' title='Записаться'/>
             <form className='OrderPage' onSubmit={handleSubmit}>
                 <h1 className='OrderFormTitle'>Адрес</h1>
-                <select value={selectedAddress} onChange={handleAddressChange}>
-                    <option value='' disabled className="placeholder-option" >Выберите адрес</option>
-                    {addresses.map(address => (
-                        <option key={address.id} value={address.id}>
-                            {address.address}
-                        </option>
-                    ))}
-                </select>
+                <Select
+                    classNamePrefix='custom-select'
+                    value={selectedAddress ? { value: selectedAddress, label: addresses.find(address => address.id === selectedAddress)?.address } : selectedAddress}
+                    options={options(addresses)}
+                    onChange={option => setSelectedAddress(option.value)}
+                    placeholder='Выберите адрес'
+                    isSearchable={false}
+                    styles={customStyles}
+
+                />
                 <NavLink to="/address"><button className='OrderPage_button'>Выбрать на карте</button></NavLink>
                 <h1 className='OrderFormTitle'>Услуги</h1>
                 <div>
@@ -182,31 +188,49 @@ export const OrderPage = (   ) => {
                 </div>
                 <button className='OrderPage_button' onClick={openPopup}>Перейти в каталог</button>
                 <h1 className='OrderFormTitle'>Дата и время</h1>
-                <div>
-                    <input type='date' value={selectedDate} onChange={handleDateChange} />
-                    <select value={selectedTime} onChange={handleTimeChange} >
-                        {timeIntervals.map((time, index) => (
-                            <option key={index} value={time}>
-                                {time}
-                            </option>
-                        ))}
-                    </select>
+                <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                    <DatePicker
+                        locale="ru"
+                        className='custom-date-input'
+                        dateFormat='dd.MM.yyyy'
+                        selected={selectedDate} // Pass the selected date
+                        onChange={date => setSelectedDate(date)} // Handle date change
+                        placeholderText='Выберите дату'
+
+                    />
+                    <Select
+                        classNamePrefix='custom-select_time'
+                        value={selectedTime}
+                        label={selectedTime}
+                        onChange={option => setSelectedTime(option)} // Изменено здесь
+                        options={timeIntervals.map(time => ({ value: time, label: time }))}
+                        placeholder={timeIntervals[0]}
+                        styles={customStyles}
+                        isSearchable={false}
+                    />
                 </div>
                 <h1 className='OrderFormTitle'>Скидки</h1>
                 {isLoading ? (
                     <p>Loading...</p>
-                ) : (<div>
-                        {console.log(discountList.discounts)}
-                        <DiscountCarousel discount={discountList.discounts}/>
-                    </div>
+                ) : (
+                    discountList.length > 0 ? (
+                        <div>
+                            <DiscountCarousel discount={discountList} />
+                        </div>
+                    ) : (
+                        <p id='discountNotification'>Скидок пока нет</p>
+                    )
                 )}
-                {/*<p id='discountNotification'>Скидок пока нет</p>*/}
-                {/*<div></div>*/}
                 <h1 className='OrderFormTitle'>Способ оплаты</h1>
-                <select className="selectPayment" value={selectedPaymentOption} onChange={handlePaymentOptionChange}>
-                    <option value="discount">Онлайн со скидкой 5%</option>
-                    <option valeu="regular">Оплатить позже онлайн или при посещении</option>
-                </select>
+                <Select
+                    classNamePrefix='custom-select'
+                    value={{ value: selectedPaymentOption, label: paymentOptions.find(option => option.value === selectedPaymentOption)?.label }}
+                    options={paymentOptions.map(option => ({ value: option.value, label: option.label }))}
+                    onChange={option => setSelectedPaymentOption(option.value)}
+                    placeholder='Выберите способ оплаты'
+                    styles={customStyles}
+                    isSearchable={false}
+                />
                 <p id='paymentNotification'>При неявке по записи оплата не возвращается</p>
                 <div>
                     <OrderPosition selectedServices={selectedServices} selectedPaymentOption={selectedPaymentOption}/>
