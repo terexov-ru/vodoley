@@ -1,4 +1,4 @@
-import {HashRouter, Routes, Route, Navigate, useNavigate} from 'react-router-dom';
+import {HashRouter, Routes, Route, useNavigate} from 'react-router-dom';
 import { AddressesPage } from './pages/AddressesPage';
 import { AuthPage } from './pages/AuthPage';
 import { DiscountInfoPage } from './pages/DiscountInfoPage';
@@ -21,7 +21,7 @@ import Redirect from "./pages/Redirect";
 
 function App() {
 
-  const loginUserName = async (code) => {
+  const LoginUserName = async (code) => {
     const navigate = useNavigate()
     try {
       const { data } = await axios.post('auth-login/', code)
@@ -40,7 +40,7 @@ function App() {
     }
   }
 
-  const user = useMutation(user => loginUserName(user), {
+  const user = useMutation(user => LoginUserName(user), {
     onSuccess: () => console.log('loged in')
   })
 
@@ -75,3 +75,4 @@ function App() {
 }
 
 export default App;
+
