@@ -9,7 +9,6 @@ import axios from '../utils/axios'
 import {useQuery} from 'react-query'
 
 async function getAllAddresses() {
-    //const {data} = await axios.get('addresses/')
     const {data} = await axios.get('get-addresses-list/')
     return data
 }

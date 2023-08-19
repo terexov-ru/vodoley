@@ -24,7 +24,7 @@ export const Service = ({ service, selectedServices, setSelectedServices }) => {
         <div className='Service'>
             <div className={service.type}>
                 <div className='ServiceTitle'>{service.title}</div>
-                <div className='ServicePrice'>{service.price}</div>
+                <div className='ServicePrice'>{service.price}₽</div>
             </div>
             <div className='ServiceButton'>
                 <button className={buttonClassName} id={service.id} onClick={handleAddToFavorite} />

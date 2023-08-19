@@ -69,19 +69,28 @@ import fullScreenIcon from '../media/Frame10.png'
 
 const SimpleMap = ({ addresses, selectedAddress }) => {
     const mapState = {
-        center: [56.845364, 60.608283], // Координаты центра карты (Москва, например)
+        center: [60.09178132652299, 30.39640071114599],
         zoom: 10,
     };
 
     const [isFullScreen, setIsFullScreen] = useState(false);
     const mapContainerRef = useRef(null);
 
+    let tempLat = 60.11948495663695; // Temporary latitude value
+    let tempLng = 30.403222492525114; // Temporary longitude value
+
 
     useEffect(() => {
         if (selectedAddress) {
-            // mapRef && mapRef.setCenter([selectedAddress.latitude, selectedAddress.longitude], mapState.zoom);
-            mapRef && mapRef.setCenter([56.860654, 60.661982], mapState.zoom);
-            mapRef && mapRef.setZoom(15); // Устанавливаем зум
+            let newCenter = [60.09178132652299, 30.39640071114599]; // Default center
+
+            // Check if the selected address has a specific ID
+            if (selectedAddress.id === 2) {
+                newCenter = [60.07013481794439, 30.395003216876574]; // Replace with the desired coordinates
+            }
+
+            mapRef && mapRef.setCenter(newCenter, mapState.zoom);
+            mapRef && mapRef.setZoom(15);
         }
     }, [selectedAddress]);
 
@@ -106,21 +115,43 @@ const SimpleMap = ({ addresses, selectedAddress }) => {
                 <Map state={mapState} width='100%'  height={isFullScreen ? '100vh' : '134px'} // Растягиваем на весь экран или возвращаем обычную высоту
                      instanceRef={(ref) => (mapRef = ref)} // Сохраняем ссылку на объект карты
                 >
+                    {/*{addresses.map((address) => (*/}
+                    {/*    <Placemark*/}
+                    {/*        key={address.id}*/}
+                    {/*        geometry={[*/}
+                    {/*            parseFloat(address.latitude) || 0,*/}
+                    {/*            parseFloat(address.longitude) || 0,*/}
+                    {/*        ]}*/}
+                    {/*        properties={{*/}
+                    {/*            balloonContent: address.address,*/}
+                    {/*        }}*/}
+                    {/*        options={{*/}
+                    {/*            preset: selectedAddress === address ? 'islands#redCircleDotIcon' : 'islands#blueCircleDotIcon',*/}
+                    {/*        }}*/}
+                    {/*        modules={['geoObject.addon.balloon']}*/}
+                    {/*    />*/}
+                    {/*))}*/}
                     {addresses.map((address) => (
                         <Placemark
                             key={address.id}
-                            geometry={[
-                                56.860654, // Используем временно заданные координаты или 0, если нет координат
-                                60.661982,
-
-                                // parseFloat(address.latitude) || 56.860654, // Используем временно заданные координаты или 0, если нет координат
-                                // parseFloat(address.longitude) || 60.661982,
-                            ]}
+                            geometry={[60.09178132652299, 30.39640071114599]} // Replace with desired latitude and longitude for the first Placemark
                             properties={{
-                                balloonContent: address.address,
+                                balloonContent: 'First Placemark',
                             }}
                             options={{
-                                preset: selectedAddress === address ? 'islands#redCircleDotIcon' : 'islands#blueCircleDotIcon', // Измените эту строку
+                                preset: selectedAddress === address ? 'islands#redCircleDotIcon' : 'islands#blueCircleDotIcon',
+                            }}
+                            modules={['geoObject.addon.balloon']}
+                        />           ))}
+                    {addresses.map((address) => (
+                        <Placemark
+                            key={address.id}
+                            geometry={[60.07013481794439, 30.395003216876574]} // Replace with desired latitude and longitude for the second Placemark
+                            properties={{
+                                balloonContent: 'Second Placemark',
+                            }}
+                            options={{
+                                preset: selectedAddress === address ? 'islands#redCircleDotIcon' : 'islands#blueCircleDotIcon',
                             }}
                             modules={['geoObject.addon.balloon']}
                         />

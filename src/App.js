@@ -56,7 +56,7 @@ function App() {
             <Route path='/' element={<Redirect />} />
             <Route path='/main' element={<MainPage />} /> {/* Главная  страница */}
             <Route path='/address' element={<AddressesPage />} /> {/* Список адресов */}
-            <Route path='/services' element={<ServicesPage showButton={true} showHeader={true} />} /> {/* Услуги */}
+            <Route path='/services' element={<ServicesPage showAddress={true} showButton={true} showHeader={true} />} /> {/* Услуги */}
             <Route path='/discounts' element={<DiscountPage />} /> {/* Список скидок */}
             <Route path='/auth' element={<AuthPage />} /> {/* Страница перехода на логин или регистрацию */}
             <Route path='/info' element={<DiscountInfoPage />} /> {/* Программа скидок */}

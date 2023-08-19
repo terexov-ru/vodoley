@@ -2,37 +2,38 @@ import React, {useState} from 'react'
 import { Header } from '../components/Header/Header';
 import { MainButton } from '../components/mainButton/MainButton';
 import '../pageStyles/LoginPage.css'
-import {Navigate, NavLink, useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import axios from "../utils/axios";
 import {QueryClient, useMutation} from "react-query";
 import {useForm} from "react-hook-form";
+
 
 export const LoginPage = () => {
     const{ register, handleSubmit, reset } = useForm()
     const navigate = useNavigate();
     const loginUserName = async (username) => {
-      try {
-        const { data } = await axios.post('auth-login/', username)
-        // если в запросе есть токен то записывает его в сторадж
-        if(data.token) {
-            const token = data.token
-            window.localStorage.setItem('VodoleyToken', token)
-            const mytoken = window.localStorage.getItem('VodoleyToken')
-            if(mytoken !== null) {
-                navigate('/login/verify');
+        try {
+            const { data } = await axios.post('auth-login/', username)
+            // если в запросе есть токен то записывает его в сторадж
+            if(data.token) {
+                const token = data.token
+                window.localStorage.setItem('VodoleyToken', token)
+                const mytoken = window.localStorage.getItem('VodoleyToken')
+                if(mytoken !== null) {
+                    navigate('/');
+                }
             }
-        }
-        if(data.status === 200) {
-            const token = data.token
-            window.localStorage.setItem('VodoleyToken', token)
-            const mytoken = window.localStorage.getItem('VodoleyToken')
-            if(mytoken !== null) {
-                navigate('/login/verify');
+            if(data.status === 200) {
+                const token = data.token
+                window.localStorage.setItem('VodoleyToken', token)
+                const mytoken = window.localStorage.getItem('VodoleyToken')
+                if(mytoken !== null) {
+                    navigate('/login/verify');
+                }
             }
+        } catch (error) {
+            console.log(error)
         }
-      } catch (error) {
-        console.log(error)
-      }
     }
 
     const queryClient = new QueryClient()

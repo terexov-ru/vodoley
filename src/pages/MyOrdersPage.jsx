@@ -44,8 +44,6 @@ export const MyOrdersPage = () => {
         el.style.display = (el.style.display === 'none') ? 'block' : 'none'
     }
 
-    //переключение разделов
-    // Update the handleClick function to set the selectedOrderType
     const handleClick = (type) => {
         setSelectedOrderType(type);
     };
@@ -84,4 +82,3 @@ export const MyOrdersPage = () => {
         </div>
     )
 }
-

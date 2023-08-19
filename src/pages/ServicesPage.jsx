@@ -6,16 +6,26 @@ import CloseCross from '../media/ServiceCloseCross.png'
 import { MainButton } from '../components/mainButton/MainButton';
 import axios from '../utils/axios'
 import { useQuery } from 'react-query';
+import Select from "react-select";
 
-async function getAllServices(id) {
-    //const{data} = await axios.get(`get-services-for-address/${id}`)
-    const{data} = await axios.get(`get-services-for-address/`)
-    //const{data} = await axios.get(`services/`)
-    return data
+async function fetchServicesForAddress(addressID) {
+    const { data } = await axios.post('get-services-for-address/', { addressID: addressID });
+    return data;
 }
 
-export const ServicesPage = ({showHeader, showButton}) => {
-    const[id, setId] = useState(0);
+const options = (addresses) =>
+    addresses.map((address) => ({ value: address.id, label: address.address }));
+const customStyles = {
+    dropdownIndicator: (provided, state) => ({
+        ...provided,
+        transform: state.selectProps.menuIsOpen && 'rotate(180deg)',
+    }),
+};
+
+export const ServicesPage = ({ showHeader, selectedAddressId, showButton, showAddress }) => {
+    const [addressID, setAddressID] = useState(null);
+    const [selectedAddress, setSelectedAddress] = useState(null);
+    const [addresses, setAddresses] = useState([]);
     const [activeTab, setActiveTab] = useState('base');
     const handleTabClick = (tab) => {
         setActiveTab(tab);
@@ -30,34 +40,49 @@ export const ServicesPage = ({showHeader, showButton}) => {
                 list.classList.add("hiddenServiceList");
             }
         });
+        console.log('actvieTab',activeTab)
     };
     const [selectedServices, setSelectedServices] = useState(() => {
         const storedServices = JSON.parse(localStorage.getItem('selectedServices')) || [];
         return storedServices;
     });
-    const {data, isLoading, isError} = useQuery(['services', id], () =>
-        getAllServices(id)
-    )
+    const { data: servicesData } = useQuery(['services', addressID], () =>
+        fetchServicesForAddress(addressID)
+    );
+
+    useEffect(() => {
+        console.log('selAddId', selectedAddressId);
+        setAddressID(selectedAddressId); // Set addressID for fetching services
+        console.log('setAddressId', addressID);
+    }, [selectedAddressId]);
+
+
+
+    useEffect(() => {
+        if (addressID !== null) {
+            localStorage.setItem('selectedServices', JSON.stringify([]));
+        }
+    }, [addressID]);
+
     useEffect(() => {
         localStorage.setItem('selectedServices', JSON.stringify(selectedServices));
     }, [selectedServices]);
 
-    if(isLoading) {
-        return <h1>Идет загрузка...</h1>
-    }
+    useEffect(() => {
+        async function fetchAddresses() {
+            const { data: addressData } = await axios.get('get-addresses-list');
+            setAddresses(addressData);
+        }
+        fetchAddresses();
+    }, []);
 
-    if(isError) {
-        return <h1>error</h1>
-    }
 
-    if(!data) {
-        return <h1>no data</h1>
-    }
+    // console.log(data)
 
-    console.log(data)
+    const mainServices = servicesData && servicesData.filter(service => service.type === false);
+    const specialServices = servicesData && servicesData.filter(service => service.type === true);
 
-    const mainServices = data.services.services.filter(service => service.type === 'base');
-    const specialServices = data.services.services.filter(service => service.type === 'special');
+
 
     //скрыть подсказку
     const closeHelp = () => {
@@ -65,30 +90,42 @@ export const ServicesPage = ({showHeader, showButton}) => {
         el.style.display = (el.style.display === 'none') ? 'block' : 'none'
     }
 
-    //переключение разделов
 
-    const handleServiceChange = (updatedServices) => {
-        console.log('Updated services in ServicesPage:', updatedServices);
-        setSelectedServices(updatedServices); // Обновите tempSelectedServices
+    const handleAddressChange = (selectedOption) => {
+        setSelectedAddress(selectedOption);
+        setAddressID(selectedOption.value);
     };
+
 
 
 
     return (
         <div className='ServicesPage'>
             {showHeader && <Header title="Услуги" gobackto="/"/>}
+            {showAddress &&    <div className='AddressSelector'>
+                <Select
+                    classNamePrefix='custom-select'
+                    value={selectedAddress ? { value: selectedAddress.value, label: selectedAddress.label } : null}
+                    options={options(addresses)} // Use the 'options' function here
+                    onChange={handleAddressChange}
+                    placeholder='Выберите адрес'
+                    isSearchable={false}
+                    styles={customStyles} // Use the 'customStyles' object here
+                />
+            </div>}
+
             <div className='ServiceButtonSet'>
                 <a
                     className={activeTab === 'base' ? 'active' : ''}
                     onClick={() => handleTabClick('base')}
                 >
-                    Основные {data.length}
+                    Основные {servicesData ? mainServices.length : 0}
                 </a>
                 <a
                     className={activeTab === 'special' ? 'active' : ''}
                     onClick={() => handleTabClick('special')}
                 >
-                    Специальные {data.length}
+                    Специальные {servicesData ? specialServices.length : 0}
                 </a>
             </div>
             <div id='ServiceHelp' style={{display: 'block',}}>
@@ -100,32 +137,35 @@ export const ServicesPage = ({showHeader, showButton}) => {
                 </div>
             </div>
 
-            <div id='baseServiceList' className='activeServiceList'>
-                {mainServices.map((service, ind) => (
-                    <Service service={service}
-                             selectedServices={selectedServices}
-                             setSelectedServices={setSelectedServices}
-                             key={ind}
-                    />
-                ))}
-            </div>
+            {servicesData && (
 
-
-            <div id='specialServiceList' className='hiddenServiceList'>
-                {specialServices.map((service, ind) => (
-                    <Service service={service}
-                             selectedServices={selectedServices}
-                             setSelectedServices={setSelectedServices}
-                             key={ind}
-                    />
-                ))}
-            </div>
+                <div id='baseServiceList' className='activeServiceList'>
+                    {mainServices.map((service, ind) => (
+                        <Service service={service}
+                                 selectedServices={selectedServices}
+                                 setSelectedServices={setSelectedServices}
+                                 key={ind}
+                        />
+                    ))}
+                </div>
+            )}
+            {console.log(servicesData)}
+            {servicesData && (
+                <div id='specialServiceList' className='hiddenServiceList'>
+                    {specialServices.map((service, ind) => (
+                        <Service service={service}
+                                 selectedServices={selectedServices}
+                                 setSelectedServices={setSelectedServices}
+                                 key={ind}
+                        />
+                    ))}
+                </div>
+            )}
             {showButton &&
                 <div className='hiddenButton'>
                     <MainButton title='Записаться' goto='/makeorder' />
                 </div>
             }
-
         </div>
     )
 }

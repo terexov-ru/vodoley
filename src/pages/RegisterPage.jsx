@@ -86,8 +86,8 @@ export const RegisterPage = () => {
                         required
                         className='registerInput'
                         placeholder='Марка'
-                        {...register('carNumber')}
-                        name='carNumber'
+                        {...register('mark')}
+                        name='mark'
                     />
                 </div>
                 <div className='extraPoint'>
@@ -98,8 +98,8 @@ export const RegisterPage = () => {
                             required
                             className='registerInput2'
                             placeholder='Модель'
-                            {...register('userCarModel')}
-                            name='userCarModel'
+                            {...register('model')}
+                            name='model'
                         />
                     </div>
                     <div className='RegisterPoint2'>
@@ -109,8 +109,8 @@ export const RegisterPage = () => {
                             required
                             className='registerInput2'
                             placeholder='Номер'
-                            {...register('userCarNumber')}
-                            name='userCarNumber'
+                            {...register('carNumber')}
+                            name='carNumber'
                         />
                     </div>
                 </div>

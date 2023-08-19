@@ -5,7 +5,7 @@ import {Header} from "../Header/Header";
 import {NavLink} from "react-router-dom";
 import check from '../../media/Check.png'
 
-export const ServicePopup = ({ selectedServices, setSelectedServices, onClose }) => {
+export const ServicePopup = ({ selectedAddressId, selectedServices, setSelectedServices, onClose }) => {
 
 
 
@@ -20,6 +20,7 @@ export const ServicePopup = ({ selectedServices, setSelectedServices, onClose })
         window.location.reload(); // Перезагрузка страницы
     };
 
+
     return (
         <div className='ServicePopup'>
             <div className='ServicePopupContent'>
@@ -28,10 +29,15 @@ export const ServicePopup = ({ selectedServices, setSelectedServices, onClose })
                     <h1 className='headerTitle'>Услуги</h1>
                     <button className='close-button' onClick={handleSave}><img src={check}/></button>
                 </div>
-                <ServicesPage
-                    showHeader={false}
-                    showButton={false}
-                />
+                {console.log("address", selectedAddressId)}
+                <div className="service-list-container"> {/* Add a scrollable container */}
+                    <ServicesPage
+                        showHeader={false}
+                        showButton={false}
+                        showAddress={false}
+                        selectedAddressId={selectedAddressId}
+                    />
+                </div>
             </div>
         </div>
     );
