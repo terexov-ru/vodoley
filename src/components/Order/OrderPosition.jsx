@@ -2,24 +2,14 @@ import './Order.css'
 
 import React from 'react'
 
-export const OrderPosition = ({ selectedServices, selectedPaymentOption }) => {
-    const calculateTotalPrice = () => {
-        let totalPrice = selectedServices.reduce((total, service) => total + parseFloat(service.price), 0);
-
-        if (selectedPaymentOption === 'discount') {
-            totalPrice -= totalPrice * 0.05;
-        }
-
-        return totalPrice;
-    };
-
+export const OrderPosition = ({selectedServices, selectedPaymentOption, calculateTotalPrice}) => {
     return (
         <table className='totalPrice'>
             <tbody>
             {selectedServices.map((service, index) => (
                 <tr key={index}>
                     <td>{service.title}</td>
-                    <td>{service.price}</td>
+                    <td>{service.price}₽</td>
                 </tr>
             ))}
             {selectedPaymentOption === 'discount' && (
@@ -32,7 +22,7 @@ export const OrderPosition = ({ selectedServices, selectedPaymentOption }) => {
             <tfoot>
             <tr>
                 <td>Сумма</td>
-                <td>{calculateTotalPrice()} ₽</td>
+                <td>{calculateTotalPrice()}₽</td>
             </tr>
             </tfoot>
         </table>

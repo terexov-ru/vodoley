@@ -2,12 +2,13 @@ import './Service.css'
 
 import React, {useEffect, useState} from 'react'
 
-export const Service = ({ service, selectedServices, setSelectedServices }) => {
+export const Service = ({service, selectedServices, setSelectedServices, addressChangeCounter}) => {
     const [addedToBasket, setAddedToBasket] = useState(false);
 
     useEffect(() => {
         setAddedToBasket(selectedServices.some(selectedService => selectedService.id === service.id));
-    }, [selectedServices, service.id]);
+    }, [selectedServices, service.id, addressChangeCounter]);
+
 
     const handleAddToFavorite = () => {
         const updatedSelectedServices = addedToBasket
@@ -27,8 +28,8 @@ export const Service = ({ service, selectedServices, setSelectedServices }) => {
                 <div className='ServicePrice'>{service.price}₽</div>
             </div>
             <div className='ServiceButton'>
-                <button className={buttonClassName} id={service.id} onClick={handleAddToFavorite} />
-                <label className='labelServices' htmlFor={service.id} />
+                <button className={buttonClassName} id={service.id} onClick={handleAddToFavorite}/>
+                <label className='labelServices' htmlFor={service.id}/>
             </div>
 
         </div>

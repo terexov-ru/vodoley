@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import '../pageStyles/OrderPage.css'
-import { Header } from '../components/Header/Header'
+import {Header} from '../components/Header/Header'
 import axios from "../utils/axios";
 import queryString from 'query-string';
 import {Navigate, NavLink, useLocation, useNavigate} from "react-router-dom";
 import {Service} from "../components/Services/Service";
-import { OrderPosition } from "../components/Order/OrderPosition";
+import {OrderPosition} from "../components/Order/OrderPosition";
 import {ServicePopup} from "../components/Services/ServicePopup";
 import {DiscountCarousel} from "../components/DiscountCarousel/DiscountCarousel";
 import {QueryClient, useMutation} from "react-query";
@@ -17,14 +17,13 @@ import ru from 'date-fns/locale/ru';
 import {format} from "date-fns";
 
 
-
 async function newOrder(data) {
 
     await axios.post('create-checkout/', data)
         .then((res) => {
-            if(res.status === 200) {
+            if (res.status === 200) {
                 return (
-                    <Navigate to='/' />
+                    <Navigate to='/'/>
                 )
             } else {
                 return <h1>{res.message}</h1>
@@ -32,7 +31,8 @@ async function newOrder(data) {
         })
 }
 
-export const OrderPage = ( ) => {
+export const OrderPage = () => {
+    console.log('OrderPage rendering');
     const queryClient = new QueryClient()
     const location = useLocation();
     const order = useMutation(order => newOrder(order), {
@@ -46,45 +46,84 @@ export const OrderPage = ( ) => {
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
     const [selectedServices, setSelectedServices] = useState([]);
-    const [selectedPaymentOption, setSelectedPaymentOption] = useState('discount');
+    const [selectedPaymentOption, setSelectedPaymentOption] = useState('');
     const [paymentOptions, setPaymentOptions] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
     const [discountList, setDiscountList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isFormFilled, setIsFormFilled] = useState(false);
-    const [buttonClicked, setButtonClicked] = useState(false); // Step 1
+    const [buttonClicked, setButtonClicked] = useState(false);
+    const [addressChangeCounter, setAddressChangeCounter] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
+
+
+    const fetchAndFilterSelectedServices = async (addressID) => {
+        if (addressID) {
+            try {
+                const response = await axios.post('get-services-for-address/', {addressID});
+                const servicesForSelectedAddress = response.data;
+                setSelectedServices(prevSelectedServices => {
+                    const updatedSelectedServices = prevSelectedServices.filter(service =>
+                        servicesForSelectedAddress.some(selectedService => selectedService.id === service.id)
+                    );
+                    return updatedSelectedServices;
+                });
+            } catch (error) {
+                console.error('Error fetching services for the address:', error);
+            }
+        }
+    };
+
+
+    useEffect(() => {
+    }, [selectedAddress, selectedServices]);
 
 
     useEffect(() => {
         setIsLoading(true);
         const parsed = queryString.parse(location.search);
         const queryAddressId = parsed.address;
-        // Fetch addresses and services from your API
 
         axios.get('get-user-discounts/').then(response => {
-            console.log("Discounts response:", response.data); // Check the structure of the response
             setDiscountList(response.data);
         });
         axios.get('get-addresses-list').then(response => {
             setAddresses(response.data);
             if (queryAddressId) {
                 setSelectedAddress(parseInt(queryAddressId));
+                fetchAndFilterSelectedServices(parseInt(queryAddressId));
             }
         });
 
-        axios.get('get-payment-methods/') // Replace with the actual endpoint to fetch payment options
+        axios.get('get-payment-methods/')
             .then(response => {
                 setPaymentOptions(response.data);
-                console.log(paymentOptions)
+                console.log(response.data)
             })
             .catch(error => {
                 console.error('Error fetching payment options:', error);
             });
 
-        const storedServices = JSON.parse(localStorage.getItem('selectedServices')) || [];
+        const storedServices = JSON.parse(localStorage.getItem('selectedServices'));
+        // || [];
         setSelectedServices(storedServices);
         setIsLoading(false);
-    }, [useLocation]);
+    }, [location]);
+
+    useEffect(() => {
+        const totalPrice = calculateTotalPrice();
+        setTotalPrice(totalPrice);
+    }, [selectedServices, selectedPaymentOption]);
+
+    useEffect(() => {
+        if (paymentOptions.length > 0) {
+            setSelectedPaymentOption(paymentOptions[0].id);
+        }
+    }, [paymentOptions]);
+
+    useEffect(() => {
+        fetchAndFilterSelectedServices();
+    }, [selectedAddress, setAddressChangeCounter]);
 
 
     useEffect(() => {
@@ -99,10 +138,9 @@ export const OrderPage = ( ) => {
     }, [selectedAddress, selectedDate, selectedTime, selectedServices]);
 
 
-
     const handleGoToCatalog = () => {
-        if (!selectedAddress) { // Check if an address is selected
-            setButtonClicked(true); // Set the buttonClicked state to true
+        if (!selectedAddress) {
+            setButtonClicked(true);
         } else {
             setShowPopup(true);
         }
@@ -115,7 +153,6 @@ export const OrderPage = ( ) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Check if the form is fully filled before submitting
         if (isFormFilled) {
             await assembleFinalResult()
         } else {
@@ -131,31 +168,50 @@ export const OrderPage = ( ) => {
         }
     }
 
-
     const handleServiceChange = (updatedServices) => {
         setSelectedServices(updatedServices);
         localStorage.setItem('selectedServices', JSON.stringify(updatedServices));
     };
-    //
-    const renderedServices = selectedServices.map((service, index) => (
+
+    const renderedServices = selectedServices.map((service) => (
         <Service
-            key={index}
+            key={`${service.id}-${addressChangeCounter}`} // Use a unique key here
             service={service}
             selectedServices={selectedServices}
             setSelectedServices={handleServiceChange}
+            addressChangeCounter={addressChangeCounter}
         />
     ));
 
+
+    const calculateTotalPrice = () => {
+        let totalPrice = selectedServices.reduce((total, service) => total + parseFloat(service.price), 0);
+
+        if (selectedPaymentOption === 'discount') {
+            totalPrice -= totalPrice * 0.05;
+        }
+
+        return totalPrice;
+    };
+
+
     const assembleFinalResult = async () => {
         try {
-            const formattedDate = format(selectedDate, 'yyyy-MM-dd', { timeZone: 'UTC' });
+            const formattedDate = format(selectedDate, 'yyyy-MM-dd', {timeZone: 'UTC'});
             const formattedTime = selectedTime ? `${selectedTime.value}:00` : '';
             const selectedPaymentOptionObj = paymentOptions.find(option => option.id === selectedPaymentOption);
+            // const servicesList = selectedServices.map((service) => ({
+            //     [service.id]: { price: service.price },
+            // }));
+
+
             const finalResult = {
                 address: selectedAddress,
                 time: formattedDate + ' ' + formattedTime,
                 paymentType: selectedPaymentOptionObj.id,
-                servicesList: selectedServices.map(service => (service.id))
+                // servicesList,
+                servicesList: selectedServices.map(service => service.id),
+                // ServicePrice: totalPrice
             };
 
             console.log('newOrder: ', finalResult);
@@ -165,30 +221,27 @@ export const OrderPage = ( ) => {
 
             if (response.status === 200) {
                 console.log('Order created successfully:', response.data);
-                // Handle success, e.g. redirect to a success page or show a confirmation message
             } else {
                 console.error('Failed to create order:', response.data.message);
-                // Handle failure, e.g. display an error message to the user
             }
         } catch (error) {
             console.error('Error creating order:', error);
-            // Handle error, e.g. display an error message to the user
         }
     };
 
-    // const paymentOptions = [
-    //     { value: 'discount', label: 'Онлайн со скидкой 5%' },
-    //     { value: 'regular', label: 'Оплатить позже онлайн или при посещении' },
-    // ];
-
     const handleAddressChange = option => {
+        console.log('Selected Address Before:', selectedAddress); // Log before
         setSelectedAddress(option.value);
+        console.log('Selected Address After:', option.value); // Log after
         navigate(`/makeorder?address=${option.value}`);
         setButtonClicked(false);
+        setAddressChangeCounter(prevCounter => prevCounter + 1); // Increment the counter
+        fetchAndFilterSelectedServices(option.value);
     };
 
+
     const options = (addresses) => (
-        addresses.map(address => ({ value: address.id, label: address.address }))
+        addresses.map(address => ({value: address.id, label: address.address}))
     );
 
     const customStyles = {
@@ -199,8 +252,6 @@ export const OrderPage = ( ) => {
     }
     registerLocale('ru', ru)
 
-    console.log('ешьу: ', selectedTime)
-
     return (
         <>
             <Header gobackto='/' title='Записаться'/>
@@ -208,7 +259,10 @@ export const OrderPage = ( ) => {
                 <h1 className='OrderFormTitle'>Адрес</h1>
                 <Select
                     classNamePrefix={`custom-select${buttonClicked && !selectedAddress ? 'invalid-select' : ''}`} // Step 2
-                    value={selectedAddress ? { value: selectedAddress, label: addresses.find(address => address.id === selectedAddress)?.address } : selectedAddress}
+                    value={selectedAddress ? {
+                        value: selectedAddress,
+                        label: addresses.find(address => address.id === selectedAddress)?.address
+                    } : selectedAddress}
                     options={options(addresses)}
                     onChange={handleAddressChange}
                     placeholder='Выберите адрес'
@@ -216,14 +270,18 @@ export const OrderPage = ( ) => {
                     styles={customStyles}
 
                 />
-                <NavLink to="/address"><button className='OrderPage_button'>Выбрать на карте</button></NavLink>
+                <NavLink to="/address">
+                    <button className='OrderPage_button'>Выбрать на карте</button>
+                </NavLink>
                 <h1 className='OrderFormTitle'>Услуги</h1>
                 <div>
                     {renderedServices}
                 </div>
+
+
                 <button className='OrderPage_button' onClick={handleGoToCatalog}>Перейти в каталог</button>
                 <h1 className='OrderFormTitle'>Дата и время</h1>
-                <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                <div style={{display: 'flex', alignItems: 'flex-start'}}>
                     <DatePicker
                         locale="ru"
                         className='custom-date-input'
@@ -238,7 +296,7 @@ export const OrderPage = ( ) => {
                         value={selectedTime}
                         label={selectedTime}
                         onChange={option => setSelectedTime(option)}
-                        options={timeIntervals.map(time => ({ value: time, label: time }))}
+                        options={timeIntervals.map(time => ({value: time, label: time}))}
                         placeholder={timeIntervals[0]}
                         styles={customStyles}
                         isSearchable={false}
@@ -250,7 +308,7 @@ export const OrderPage = ( ) => {
                 ) : (
                     discountList.length > 0 ? (
                         <div>
-                            <DiscountCarousel discount={discountList} />
+                            <DiscountCarousel discount={discountList}/>
                         </div>
                     ) : (
                         <p id='discountNotification'>Скидок пока нет</p>
@@ -259,8 +317,11 @@ export const OrderPage = ( ) => {
                 <h1 className='OrderFormTitle'>Способ оплаты</h1>
                 <Select
                     classNamePrefix='custom-select'
-                    value={{ value: selectedPaymentOption, label: paymentOptions.find(option => option.id === selectedPaymentOption)?.title }}
-                    options={paymentOptions.map(option => ({ value: option.id, label: option.title }))}
+                    value={{
+                        value: selectedPaymentOption,
+                        label: paymentOptions.find(option => option.id === selectedPaymentOption)?.title
+                    }}
+                    options={paymentOptions.map(option => ({value: option.id, label: option.title}))}
                     onChange={option => setSelectedPaymentOption(option.value)}
                     placeholder='Выберите способ оплаты'
                     styles={customStyles}
@@ -268,7 +329,11 @@ export const OrderPage = ( ) => {
                 />
                 <p id='paymentNotification'>При неявке по записи оплата не возвращается</p>
                 <div>
-                    <OrderPosition selectedServices={selectedServices} selectedPaymentOption={selectedPaymentOption}/>
+                    <OrderPosition
+                        selectedServices={selectedServices}
+                        selectedPaymentOption={selectedPaymentOption}
+                        calculateTotalPrice={calculateTotalPrice}
+                    />
                 </div>
                 {showPopup && (
                     <ServicePopup
@@ -278,10 +343,7 @@ export const OrderPage = ( ) => {
                         onClose={closePopup}
                     />
                 )}
-                {/*<NavLink to="/pay" className="nav-link" disabled={!isFormFilled}>*/}
-                {/*    <input type="submit" value="Оплатить" disabled={!isFormFilled} />*/}
-                {/*</NavLink>*/}
-                <input type="submit" value="Оплатить" disabled={!isFormFilled} />
+                <input type="submit" value="Оплатить" disabled={!isFormFilled}/>
             </form>
         </>
 

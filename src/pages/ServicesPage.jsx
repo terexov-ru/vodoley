@@ -1,28 +1,33 @@
 import React, {useEffect, useState} from 'react'
 import '../pageStyles/ServicesPage.css'
-import { Header } from '../components/Header/Header';
-import { Service } from '../components/Services/Service';
+import {Header} from '../components/Header/Header';
+import {Service} from '../components/Services/Service';
 import CloseCross from '../media/ServiceCloseCross.png'
-import { MainButton } from '../components/mainButton/MainButton';
+import {MainButton} from '../components/mainButton/MainButton';
 import axios from '../utils/axios'
-import { useQuery } from 'react-query';
+import {useQuery} from 'react-query';
 import Select from "react-select";
 
 async function fetchServicesForAddress(addressID) {
-    const { data } = await axios.post('get-services-for-address/', { addressID: addressID });
+    const {data} = await axios.post('get-services-for-address/', {addressID: addressID});
     return data;
 }
 
+
 const options = (addresses) =>
-    addresses.map((address) => ({ value: address.id, label: address.address }));
+    addresses.map((address) => ({value: address.id, label: address.address}));
 const customStyles = {
     dropdownIndicator: (provided, state) => ({
         ...provided,
         transform: state.selectProps.menuIsOpen && 'rotate(180deg)',
     }),
+    container: (provided) => ({
+        ...provided,
+        margin: '15px 20px',
+    }),
 };
 
-export const ServicesPage = ({ showHeader, selectedAddressId, showButton, showAddress }) => {
+export const ServicesPage = ({showHeader, selectedAddressId, showButton, showAddress}) => {
     const [addressID, setAddressID] = useState(null);
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [addresses, setAddresses] = useState([]);
@@ -40,29 +45,19 @@ export const ServicesPage = ({ showHeader, selectedAddressId, showButton, showAd
                 list.classList.add("hiddenServiceList");
             }
         });
-        console.log('actvieTab',activeTab)
     };
     const [selectedServices, setSelectedServices] = useState(() => {
         const storedServices = JSON.parse(localStorage.getItem('selectedServices')) || [];
         return storedServices;
     });
-    const { data: servicesData } = useQuery(['services', addressID], () =>
+    const {data: servicesData} = useQuery(['services', addressID], () =>
         fetchServicesForAddress(addressID)
     );
 
     useEffect(() => {
-        console.log('selAddId', selectedAddressId);
         setAddressID(selectedAddressId); // Set addressID for fetching services
-        console.log('setAddressId', addressID);
     }, [selectedAddressId]);
 
-
-
-    useEffect(() => {
-        if (addressID !== null) {
-            localStorage.setItem('selectedServices', JSON.stringify([]));
-        }
-    }, [addressID]);
 
     useEffect(() => {
         localStorage.setItem('selectedServices', JSON.stringify(selectedServices));
@@ -70,18 +65,17 @@ export const ServicesPage = ({ showHeader, selectedAddressId, showButton, showAd
 
     useEffect(() => {
         async function fetchAddresses() {
-            const { data: addressData } = await axios.get('get-addresses-list');
+            const {data: addressData} = await axios.get('get-addresses-list');
             setAddresses(addressData);
         }
+
         fetchAddresses();
     }, []);
 
 
-    // console.log(data)
 
     const mainServices = servicesData && servicesData.filter(service => service.type === false);
     const specialServices = servicesData && servicesData.filter(service => service.type === true);
-
 
 
     //скрыть подсказку
@@ -97,15 +91,13 @@ export const ServicesPage = ({ showHeader, selectedAddressId, showButton, showAd
     };
 
 
-
-
     return (
         <div className='ServicesPage'>
             {showHeader && <Header title="Услуги" gobackto="/"/>}
-            {showAddress &&    <div className='AddressSelector'>
+            {showAddress && <div className='AddressSelector'>
                 <Select
                     classNamePrefix='custom-select'
-                    value={selectedAddress ? { value: selectedAddress.value, label: selectedAddress.label } : null}
+                    value={selectedAddress ? {value: selectedAddress.value, label: selectedAddress.label} : null}
                     options={options(addresses)} // Use the 'options' function here
                     onChange={handleAddressChange}
                     placeholder='Выберите адрес'
@@ -129,10 +121,10 @@ export const ServicesPage = ({ showHeader, selectedAddressId, showButton, showAd
                 </a>
             </div>
             <div id='ServiceHelp' style={{display: 'block',}}>
-                <div className='ServiceHelp' >
+                <div className='ServiceHelp'>
                     <p>Выберете интересующие вас услуги.</p>
                     <button className='ServiceCloseCross' onClick={closeHelp}>
-                        <img src={CloseCross} />
+                        <img src={CloseCross}/>
                     </button>
                 </div>
             </div>
@@ -149,7 +141,6 @@ export const ServicesPage = ({ showHeader, selectedAddressId, showButton, showAd
                     ))}
                 </div>
             )}
-            {console.log(servicesData)}
             {servicesData && (
                 <div id='specialServiceList' className='hiddenServiceList'>
                     {specialServices.map((service, ind) => (
@@ -163,9 +154,10 @@ export const ServicesPage = ({ showHeader, selectedAddressId, showButton, showAd
             )}
             {showButton &&
                 <div className='hiddenButton'>
-                    <MainButton title='Записаться' goto='/makeorder' />
+                    <MainButton title='Записаться' goto={`/makeorder?address=${addressID}`}/>
                 </div>
             }
+
         </div>
     )
 }

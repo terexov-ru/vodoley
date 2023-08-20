@@ -29,7 +29,6 @@ export const ServicePopup = ({ selectedAddressId, selectedServices, setSelectedS
                     <h1 className='headerTitle'>Услуги</h1>
                     <button className='close-button' onClick={handleSave}><img src={check}/></button>
                 </div>
-                {console.log("address", selectedAddressId)}
                 <div className="service-list-container"> {/* Add a scrollable container */}
                     <ServicesPage
                         showHeader={false}

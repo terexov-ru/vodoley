@@ -16,7 +16,6 @@ export const TipsPage = (props) => {
 
     const handleTipsClick = (e) => {
         let tipsButtonList = document.querySelectorAll('#tipsbutton')
-        console.log(tipsButtonList)
         //tipsButtonList.push(inputTips)
         for(let i = 0; i < tipsButtonList.length; i++) {
             tipsButtonList[i].classList.remove('activeTip')
