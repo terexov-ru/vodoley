@@ -16,17 +16,23 @@ async function getMyOrders() {
 
 export const MyOrdersPage = () => {
 
-    const{data, isLoading, isError} = useQuery('MyOrders', getMyOrders)
+    const {data, isLoading, isError} = useQuery('MyOrders', getMyOrders)
     const [selectedOrderType, setSelectedOrderType] = useState('current');
-    const [orderDetailsVisible, setOrderDetailsVisible] = useState(false);
+    const [orderDetailsVisibleId, setOrderDetailsVisibleId] = useState(null);
 
-    if(isLoading) {
+    const calculateTotalPrice = (servicesList) => {
+        const totalPrice = servicesList.reduce((total, service) => total + parseFloat(service.price), 0);
+        return totalPrice;
+    };
+
+
+    if (isLoading) {
         return <h1>Идет загрузка...</h1>
     }
-    if(isError) {
+    if (isError) {
         return <h1>Ошибка</h1>
     }
-    if(!data) {
+    if (!data) {
         return <h1>Нет заказов</h1>
     }
     // if(data.length === 0) {
@@ -48,8 +54,8 @@ export const MyOrdersPage = () => {
         setSelectedOrderType(type);
     };
 
-    const toggleOrderDetails = () => {
-        setOrderDetailsVisible(!orderDetailsVisible);
+    const toggleOrderDetails = (orderId) => {
+        setOrderDetailsVisibleId((prevId) => (prevId === orderId ? null : orderId));
     };
 
     const currentOrderCount = data.filter(order => order.status === 'current').length;
@@ -73,11 +79,36 @@ export const MyOrdersPage = () => {
                     Прошедшие {pastOrderCount}
                 </a>
             </div>
-            <div id='currentOrderList' className={selectedOrderType === 'current' ? 'ActiveOrderList' : 'HiddenOrderList'}>
-                <Order data={data} showDetails={orderDetailsVisible} toggleDetails={toggleOrderDetails} />
+            <div id='OrdersHelp' style={{display: 'block',}}>
+                <div className='OrdersHelp'>
+                    <p>Если вы задерживаетесь на запись, предупредите нас об этом, нажав на кнопку “+15 минут”</p>
+                    <button className='OrdersCloseCross' onClick={closeHelp}>
+                        <img src={CloseCross}/>
+                    </button>
+                </div>
+            </div>
+            <div id='currentOrderList'
+                 className={selectedOrderType === 'current' ? 'ActiveOrderList' : 'HiddenOrderList'}>
+                {data.map(order => (
+                    <Order
+                        key={order.id}
+                        data={order}
+                        showDetails={orderDetailsVisibleId === order.id}
+                        toggleDetails={() => toggleOrderDetails(order.id)}
+                        calculateTotalPrice={() => calculateTotalPrice(order.servicesList)}
+                    />
+                ))}
             </div>
             <div id='pastOrderList' className={selectedOrderType === 'past' ? 'ActiveOrderList' : 'HiddenOrderList'}>
-                <PastOrder data={data} showDetails={orderDetailsVisible} toggleDetails={toggleOrderDetails} />
+                {data.map(order => (
+                    <PastOrder
+                        key={order.id}
+                        data={order}
+                        showDetails={orderDetailsVisibleId === order.id}
+                        toggleDetails={() => toggleOrderDetails(order.id)}
+                        calculateTotalPrice={() => calculateTotalPrice(order.servicesList)}
+                    />
+                ))}
             </div>
         </div>
     )

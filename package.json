@@ -1,7 +1,7 @@
 {
   "name": "vodoley",
   "version": "0.1.0",
-  "homepage": "https://github.com/iRoman8614/vodoley",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@pbe/react-yandex-maps": "^1.2.4",

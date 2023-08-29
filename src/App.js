@@ -17,10 +17,7 @@ import axios from "./utils/axios";
 import { useMutation} from "react-query";
 import Redirect from "./pages/Redirect";
 
-
-
 function App() {
-
   const LoginUserName = async (code) => {
     const navigate = useNavigate()
     try {
@@ -49,6 +46,8 @@ function App() {
     user.mutate(data)
     console.log('Отправка данных:', data);
   };
+
+
   return (
       <HashRouter>
         <main>
@@ -65,7 +64,7 @@ function App() {
             <Route path='/register' element={<RegisterPage />} /> {/* Страница регистрации */}
             <Route path='/pay' element={<PaymentPage />} /> {/* Страница оплаты */}
             <Route path='/profile' element={<ProfilePage />} /> {/* Профиль */}
-            <Route path='/tips' element={<TipsPage />} /> {/*  */}
+            <Route path='/tips/:orderId' element={<TipsPage />} /> {/*  */}
             <Route path='/myorders' element={<MyOrdersPage />} /> {/* Мои записи  */}
             <Route path='/makeorder' element={<OrderPage />} /> {/* Записаться  */}
           </Routes>

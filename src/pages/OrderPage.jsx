@@ -43,7 +43,7 @@ export const OrderPage = () => {
 
     const [addresses, setAddresses] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState('');
-    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedDate, setSelectedDate] = useState(Date.now());
     const [selectedTime, setSelectedTime] = useState('');
     const [selectedServices, setSelectedServices] = useState([]);
     const [selectedPaymentOption, setSelectedPaymentOption] = useState('');
@@ -55,6 +55,55 @@ export const OrderPage = () => {
     const [buttonClicked, setButtonClicked] = useState(false);
     const [addressChangeCounter, setAddressChangeCounter] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [timeIntervals, setTimeIntervals] = useState([]);
+    const [currentTime, setCurrentTime] = useState(new Date());
+    const selectedAddressData = addresses.find(address => address.id === selectedAddress);
+
+    useEffect(() => {
+        const roundedTime = new Date(currentTime);
+        roundedTime.setMinutes(15 * Math.ceil(roundedTime.getMinutes() / 15));
+        setCurrentTime(roundedTime);
+    }, []);
+
+    useEffect(() => {
+        if (selectedDate && selectedAddressData) {
+            const [startTime, endTime] = selectedAddressData.time.split(' - ');
+            const [startHour, startMinute] = startTime.split(':');
+            const [endHour, endMinute] = endTime.split(':');
+
+            const intervals = [];
+            let currentDate = new Date(selectedDate);
+            currentDate.setHours(startHour, startMinute, 0, 0); // Set to starting time
+
+            if (currentDate < currentTime) {
+                currentDate = new Date(currentTime); // Use the rounded current time as the starting point
+            }
+
+            const endDate = new Date(selectedDate);
+            endDate.setHours(endHour, endMinute, 0, 0); // Set to ending time
+
+            const maxAvailableTime = new Date(selectedDate);
+            maxAvailableTime.setHours(endHour, endMinute, 0, 0); // Set maximum available time to 21:45 for all days
+
+            while (currentDate <= endDate && currentDate <= maxAvailableTime) {
+                intervals.push(
+                    currentDate.toLocaleTimeString('ru-RU', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    })
+                );
+                currentDate = new Date(currentDate.getTime() + 15 * 60000); // Increment by 15 minutes
+            }
+
+            const intervalsWithoutLast = intervals.filter(time => time !== "22:00");
+            setTimeIntervals(intervalsWithoutLast);
+            setSelectedTime(intervalsWithoutLast[0]);
+        }
+    }, [selectedDate, selectedAddressData, currentTime]);
+
+
+
 
 
     const fetchAndFilterSelectedServices = async (addressID) => {
@@ -155,18 +204,11 @@ export const OrderPage = () => {
 
         if (isFormFilled) {
             await assembleFinalResult()
+            localStorage.removeItem('selectedServices');
         } else {
             console.log("Please fill in all required fields.");
         }
     };
-
-    const timeIntervals = [];
-    for (let hour = 9; hour < 22; hour++) {
-        for (let minute = 0; minute < 60; minute += 15) {
-            const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-            timeIntervals.push(time);
-        }
-    }
 
     const handleServiceChange = (updatedServices) => {
         setSelectedServices(updatedServices);
@@ -230,12 +272,10 @@ export const OrderPage = () => {
     };
 
     const handleAddressChange = option => {
-        console.log('Selected Address Before:', selectedAddress); // Log before
         setSelectedAddress(option.value);
-        console.log('Selected Address After:', option.value); // Log after
         navigate(`/makeorder?address=${option.value}`);
         setButtonClicked(false);
-        setAddressChangeCounter(prevCounter => prevCounter + 1); // Increment the counter
+        setAddressChangeCounter(prevCounter => prevCounter + 1);
         fetchAndFilterSelectedServices(option.value);
     };
 
@@ -251,6 +291,8 @@ export const OrderPage = () => {
         })
     }
     registerLocale('ru', ru)
+
+
 
     return (
         <>
@@ -289,6 +331,7 @@ export const OrderPage = () => {
                         selected={selectedDate}
                         onChange={date => setSelectedDate(date)}
                         placeholderText='Выберите дату'
+                        minDate={new Date()}
 
                     />
                     <Select
@@ -296,8 +339,9 @@ export const OrderPage = () => {
                         value={selectedTime}
                         label={selectedTime}
                         onChange={option => setSelectedTime(option)}
-                        options={timeIntervals.map(time => ({value: time, label: time}))}
+                        options={timeIntervals.map(time => ({ value: time, label: time }))}
                         placeholder={timeIntervals[0]}
+                        noOptionsMessage={() => "На выбранный день, нет доступного времени"}
                         styles={customStyles}
                         isSearchable={false}
                     />
@@ -328,7 +372,7 @@ export const OrderPage = () => {
                     isSearchable={false}
                 />
                 <p id='paymentNotification'>При неявке по записи оплата не возвращается</p>
-                <div>
+                <div style={{"margin-bottom": "40px"}}>
                     <OrderPosition
                         selectedServices={selectedServices}
                         selectedPaymentOption={selectedPaymentOption}

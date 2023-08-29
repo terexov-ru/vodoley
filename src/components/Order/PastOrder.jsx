@@ -7,25 +7,13 @@ import Coins from "../../media/Coins.png"
 import Reviews from "../../media/Reviews.png"
 import { NavLink } from 'react-router-dom'
 
-export const PastOrder = ({ data, showDetails, toggleDetails }) => {
+export const PastOrder = ({data, showDetails, toggleDetails, calculateTotalPrice}) => {
     if (!data || !data.servicesList) {
         // Return some fallback UI or message here
         return <div>Нет прошедших заказов</div>;
     }
 
-    // const showMoreHandler = async () => {
-    //     let profileBlocks = document.querySelectorAll('[id="interactiveOrder"]')
-    //     for (let j = 0; j < profileBlocks.length; j=j+1) {
-    //         if(profileBlocks[j].classList.contains('orderActive')){
-    //             profileBlocks[j].classList.remove("orderActive")
-    //             profileBlocks[j].classList.add("orderHidden")
-    //         } else if(profileBlocks[j].classList.contains('orderHidden')) {
-    //             profileBlocks[j].classList.remove("orderHidden")
-    //             profileBlocks[j].classList.add("orderActive")
-    //         }
-    //     }
-    // }
-
+    const buttonWidth = "191px";
 
     return (
         <>
@@ -39,51 +27,46 @@ export const PastOrder = ({ data, showDetails, toggleDetails }) => {
                 </div>
 
                 <div className='OrderButtonSet'>
-                    <div className={showDetails ? 'orderActive' : 'orderHidden'} id='interactiveOrder'>
+                    <div className={showDetails ? 'orderHidden' : 'orderActive'} id='interactiveOrder'>
                         <div id='shortbuttonset'>
-                            <button id='moreButton' onClick={toggleDetails}>Подробнее</button>
-                            <button id='tipsButton'>
-                                <NavLink to="/tips"><img src={Coins} /></NavLink>
-                            </button>
-                            <button id='rewiesButton'><img src={Reviews} /></button>
+                            <button id='moreButton' style={{width: buttonWidth}} onClick={toggleDetails}>Подробнее</button>
+                            <div className="rightButtons">
+                                <button id='tipsButton'>
+                                    <NavLink to={`/tips/${data.id}`}><img src={Coins} /></NavLink>
+                                </button>
+                                <button id='rewiesButton'><img src={Reviews} /></button>
+                            </div>
                         </div>
                     </div>
-                    <div className={!showDetails ? 'orderActive' : 'orderHidden'} id='interactiveOrder'>
+                    <div className={!showDetails ? 'orderHidden' : 'orderActive'} id='interactiveOrder'>
                         <button className='closeDetails' onClick={toggleDetails}>Скрыть</button>
                     </div>
                 </div>
 
-                <div className={showDetails ? 'orderHidden' : 'orderActive'} id='interactiveOrder'>
+
+                <div className={showDetails ? 'orderActive' : 'orderHidden'} id='interactiveOrder'>
                     <table className='orderTable'>
                         <tbody>
-                        {data.servicesList.map((positions, ind) => (
-                            <OrderPosition positions={positions} key={ind} />
-                        ))}
+                        <OrderPosition
+                            // key={ind}
+                            selectedServices={data.servicesList}
+                            // selectedPaymentOption={positions.id} // Передача значения
+                            calculateTotalPrice={calculateTotalPrice} // Передача функции
+                        />
                         </tbody>
                     </table>
-                    <table className='orderInfo'>
-                        <tbody>
-                        <tr className='positionElement'>
-                            <td className='positionElementName'>Сумма</td>
-                            <td className='positionElementPrice'>1400 ₽</td>
-                        </tr>
-                        <tr className='positionElement'>
-                            <td className='positionElementName'>Оплата</td>
-                            <td className='positionElementPrice'>При посещении</td>
-                        </tr>
-                        </tbody>
-                    </table>
+
                 </div>
-            </div>
-
-
-            <div className='bottomButtons'>
-                <div className='orderHidden' id='interactiveOrder'>
-                    <NavLink to="/tips">
-                        <button>Оставить чаевые</button>
-                    </NavLink>
-                    <div>
-                        <button>Оставить отзыв</button>
+                <div className='bottomButtons'>
+                    <div className={showDetails ? 'orderActive' : 'orderHidden'} id='interactiveOrder'>
+                        <div>
+                            <NavLink to={`/tips/${data.id}`}>
+                                <button>Оставить чаевые</button>
+                            </NavLink>
+                        </div>
+                        <div>
+                            <button>Оставить отзыв</button>
+                        </div>
                     </div>
                 </div>
             </div>

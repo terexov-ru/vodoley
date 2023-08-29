@@ -1,46 +1,109 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Header } from '../components/Header/Header';
 import '../pageStyles/TipsPage.css'
 import {MainButton} from '../components/mainButton/MainButton'
 import { TipsOrder } from '../components/TipsOrder/TipsOrder';
+import {useParams} from "react-router-dom";
+import axios from "../utils/axios";
 
-export const TipsPage = (props) => {
-    //if (!props.currentUser)
-    //  return (
-    //    <>
-    //      <Header title="Чаевые" gobackto='/' />
-    //      <div className='emptyTipList'>У Вас пока нет завершенных записей</div>
-    //    </>
-    //  )
-    //else
+export const TipsPage = () => {
+    const { orderId } = useParams();
+    const [orderData, setOrderData] = React.useState(null);
+    const [selectedPercent, setSelectedPercent] = useState(5); // Изначально выбран 5%
+    const [customAmount, setCustomAmount] = useState('');
 
-    const handleTipsClick = (e) => {
-        let tipsButtonList = document.querySelectorAll('#tipsbutton')
-        //tipsButtonList.push(inputTips)
-        for(let i = 0; i < tipsButtonList.length; i++) {
-            tipsButtonList[i].classList.remove('activeTip')
-        }
-        e.currentTarget.classList.add("activeTip");
+
+    React.useEffect(() => {
+        // Загрузка всех заказов
+        axios.get('get-user-checkouts/')
+            .then(response => {
+                const filteredOrder = response.data.find(order => order.id === parseInt(orderId));
+                if (filteredOrder) {
+                    setOrderData(filteredOrder);
+                } else {
+                    console.error('Order not found');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching orders:', error);
+            });
+    }, [orderId]);
+
+    if (!orderData) {
+        return <div>Loading...</div>;
     }
 
+    const calculateTotalPrice = (orderData) => {
+        const totalPrice = orderData.servicesList.reduce((total, service) => total + parseFloat(service.price), 0);
+        return totalPrice;
+    };
+
+    const totalAmount = calculateTotalPrice(orderData);
+
+    const handleTipsClick = (e, percent) => {
+        let tipsButtonList = document.querySelectorAll('#tipsbutton');
+        for (let i = 0; i < tipsButtonList.length; i++) {
+            tipsButtonList[i].classList.remove('activeTip');
+        }
+        setSelectedPercent(percent);
+        setCustomAmount(''); // Очищаем введенную сумму при выборе процента
+        e.currentTarget.classList.add('activeTip');
+    };
+
+    const handleCustomAmountChange = (e) => {
+        setSelectedPercent(null); // Очищаем выбранный процент при вводе своей суммы
+        setCustomAmount(e.target.value);
+    };
+
+    const tipsAmount = selectedPercent ? (totalAmount * selectedPercent) / 100 : parseFloat(customAmount);
+
     return (
-        <div className='TipsPage'>
-            <Header title="Чаевые" gobackto='/myorders' />
-            <TipsOrder />
-            <h1 className='tipsAmount'>Размер чаевых</h1>
-            <div className='tipsButtonset'>
-                <a id='tipsbutton' className='activeTip' onClick={handleTipsClick} >5%</a>
-                <a id='tipsbutton' onClick={handleTipsClick}>10%</a>
-                <a id='tipsbutton' onClick={handleTipsClick}>15%</a>
-                <a id='tipsbutton' onClick={handleTipsClick}>20%</a>
+        <div className="TipsPage">
+            <Header title="Чаевые" gobackto="/myorders" />
+            <TipsOrder orderData={orderData} />
+            <h1 className="tipsAmount">Размер чаевых</h1>
+            <div className="tipsButtonset">
+                <a
+                    id="tipsbutton"
+                    className={selectedPercent === 5 ? 'activeTip' : ''}
+                    onClick={(e) => handleTipsClick(e, 5)}
+                >
+                    5%
+                </a>
+                <a
+                    id='tipsbutton'
+                    className={selectedPercent === 10 ? 'activeTip' : ''}
+                    onClick={(e) => handleTipsClick(e, 10)}
+                >
+                    10%
+                </a>
+                <a id='tipsbutton'
+                   className={selectedPercent === 15 ? 'activeTip' : ''}
+                   onClick={(e) => handleTipsClick(e, 15)}
+                >
+                    15%
+                </a>
+                <a id='tipsbutton'
+                   className={selectedPercent === 20 ? 'activeTip' : ''}
+                   onClick={(e) => handleTipsClick(e, 20)}
+                >
+                    20%
+                </a>
             </div>
-            <h1 className='anotherSumTitle'>Своя сумма:</h1>
-            <input id='tipsbutton' type='number' className='SumInput' onClick={handleTipsClick}></input>
-            <div className='finalSum'>
+            <h1 className="anotherSumTitle">Своя сумма:</h1>
+            <input
+                id="customAmountInput"
+                type="number"
+                className="SumInput"
+                placeholder="Введите сумму"
+                value={customAmount}
+                onChange={handleCustomAmountChange}
+            />
+            <div className="finalSum">
                 <a>Итого</a>
-                <a>210 ₽</a>
+                <a>{tipsAmount.toFixed(2)} ₽</a>
             </div>
             <MainButton goto="/pay" title="Оплатить" />
         </div>
-    )
-}
+    );
+};

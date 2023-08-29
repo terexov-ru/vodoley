@@ -1,43 +1,40 @@
-import React from 'react'
-import './TipsOrder.css'
-import { OrderPosition } from '../Order/OrderPosition'
-import BlueClock from '../../media/ClockBlue.png'
-import mapPin from '../../media/Map_Pin.png'
+import React from 'react';
+import './TipsOrder.css';
+import { OrderPosition } from '../Order/OrderPosition';
+import BlueClock from '../../media/ClockBlue.png';
+import mapPin from '../../media/Map_Pin.png';
 
-export const TipsOrder = () => {
-    const orderDataSet = JSON.parse(localStorage.getItem('services'))
-    console.log(orderDataSet)
+export const TipsOrder = ({ orderData }) => {
+    if (!orderData) {
+        return <div>Loading...</div>;
+    }
+
+    const calculateTotalPrice = (servicesList) => {
+        const totalPrice = servicesList.reduce((total, service) => total + parseFloat(service.price), 0);
+        return totalPrice;
+    };
 
     return (
-        <>
-            <div className='Order'>
-                <div className='TipsOrderDetails'>
-                    <div className='TipsOrderAdress'>
-                        <img src={mapPin} />
-                        <span>Санкт-Петербург, Кондратьевский пр-т, 31</span>
-                    </div>
-                    <div className='TipsOrderDate'>
-                        <img src={BlueClock} />
-                        <span>15 апреля, 15:00</span>
-                    </div>
+        <div className='Order'>
+            <div className='orderHeader'>
+                <div className='iconAndText'>
+                    <img src={mapPin} alt='Map Pin' className='icon' />
+                    <p className='address'>{orderData.address}</p>
                 </div>
-                <table className='orderTable'>
-                    <tbody>
-                    {orderDataSet.special.map((positions, ind) => (
-                        <OrderPosition positions={positions} key={ind} />
-                    ))}
-                    </tbody>
-                </table>
-                <table className='orderInfo'>
-                    <tbody>
-                    <tr className='positionElement'>
-                        <td className='positionElementName'>Сумма</td>
-                        <td className='positionElementPrice'>1400 ₽</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div className='iconAndText'>
+                    <img src={BlueClock} alt='Blue Clock' className='icon' />
+                    <p className='dateTime'>{orderData.time}</p>
+                </div>
             </div>
-        </>
-
-    )
-}
+            <table className='orderTable'>
+                {console.log(orderData)}
+                <tbody>
+                <OrderPosition
+                    selectedServices={orderData.servicesList}
+                    calculateTotalPrice={() => calculateTotalPrice(orderData.servicesList)}
+                ></OrderPosition>
+                </tbody>
+            </table>
+        </div>
+    );
+};
