@@ -51,24 +51,6 @@
     line-height: 24px;
 }
 
-input[type=date] {
-    width: 164px;
-    height: 24px;
-    border-radius: 8px;
-    border: none;
-    background-color: #F6F7F8;
-    padding: 12px 16px 12px 16px;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    margin-bottom: 40px;
-}
-input[type=date]::-webkit-calendar-picker-indicator {
-    background: url('../media/Calendar_Days.png') no-repeat;
-    width: 24px;
-    height: 24px;
-}
-
 select{
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -165,6 +147,7 @@ tfoot {
     background-image: url('../media/Calendar_Days.png');
     background-position: calc(100% - 10px) center;
     background-repeat: no-repeat;
+    background-size: 24px;
 }
 
 

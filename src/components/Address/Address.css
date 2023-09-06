@@ -12,8 +12,9 @@
 .location {
     margin: 0px 16px 0 16px;
     display: flex;
-    height: 48px;
+    max-height: 48px;
     font-size: 16px;
+    align-items: center;
 }
 
 #MapPin {
@@ -31,6 +32,7 @@
     margin: 12px auto 0 16px;
     display: flex;
     font-size: 16px;
+    align-items: center;
 }
 
 #Clock {

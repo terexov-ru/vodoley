@@ -17,7 +17,7 @@ export const ServicePopup = ({ selectedAddressId, selectedServices, setSelectedS
 
     const handleSave = () => {
         onClose();
-        window.location.reload(); // Перезагрузка страницы
+        window.location.reload();
     };
 
 
@@ -25,9 +25,9 @@ export const ServicePopup = ({ selectedAddressId, selectedServices, setSelectedS
         <div className='ServicePopup'>
             <div className='ServicePopupContent'>
                 <div className='header'>
-                    <button className='close-button' onClick={handleCancel}><img src={arrow}/></button>
+                    <button className='close-button' onClick={handleCancel}><img style={{width: '24px'}} src={arrow}/></button>
                     <h1 className='headerTitle'>Услуги</h1>
-                    <button className='close-button' onClick={handleSave}><img src={check}/></button>
+                    <button className='close-button' onClick={handleSave}><img style={{width: '24px'}} src={check}/></button>
                 </div>
                 <div className="service-list-container"> {/* Add a scrollable container */}
                     <ServicesPage

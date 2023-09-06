@@ -3,17 +3,12 @@ import '../pageStyles/ProfilePage.css'
 import { Header } from '../components/Header/Header';
 import { NavLink } from 'react-router-dom';
 import axios from '../utils/axios'
-import { QueryClient, useMutation, useQuery } from 'react-query';
-import queryString from "query-string";
-
 
 async function updateUser(data) {
     await axios.post('edit-user/', data)
 }
 
-
 export const ProfilePage = () => {
-    const queryClient = new QueryClient
     const[userData, setUserData] = useState(null)
     const[userName, setUserName] = useState('');
     const[userNumber, setUserNumber] = useState('')
@@ -32,7 +27,7 @@ export const ProfilePage = () => {
             setUserName(response.data.userName);
             setUserNumber(response.data.userNumber);
             setMark(response.data.mark);
-            setModel(response.data.model); // Remove the comma from the model
+            setModel(response.data.model);
             setCarNumber(response.data.carNumber);
             setUserTG(response.data.userTG);
             setCompleted(response.data.completed);
@@ -192,3 +187,4 @@ export const ProfilePage = () => {
         </div>
     )
 }
+

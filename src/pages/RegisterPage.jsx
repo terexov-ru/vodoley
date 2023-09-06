@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Header } from '../components/Header/Header';
 import BlueArrowRight from '../media/Arrow_Left_S.png'
 import '../pageStyles/RegisterPage.css'
-import {NavLink, useNavigate} from 'react-router-dom';
+import {NavLink, useLocation, useNavigate} from 'react-router-dom';
 import axios from '../utils/axios';
 import { QueryClient, useMutation } from 'react-query';
 import {useForm} from "react-hook-form";
@@ -10,6 +10,9 @@ import {useForm} from "react-hook-form";
 export const RegisterPage = () => {
     const navigate = useNavigate();
     const [message, setMessage] = useState('')
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const username = queryParams.get('username');
     async function registrationUser(data) {
         await axios.post('auth-register/', data)
             .then((res) => {
@@ -71,6 +74,7 @@ export const RegisterPage = () => {
                         required
                         className='registerInput'
                         placeholder='@tg'
+                        value={`@${username}`}
                         {...register('userTG')}
                         name='userTG'
                     />

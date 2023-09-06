@@ -9,8 +9,11 @@ export const TipsOrder = ({ orderData }) => {
         return <div>Loading...</div>;
     }
 
-    const calculateTotalPrice = (servicesList) => {
+    const calculateTotalPrice = (servicesList, paymentMethod) => {
         const totalPrice = servicesList.reduce((total, service) => total + parseFloat(service.price), 0);
+        if (paymentMethod === "На сайте со скидкой 5%") {
+            return totalPrice - totalPrice * 0.05;
+        }
         return totalPrice;
     };
 
@@ -27,11 +30,10 @@ export const TipsOrder = ({ orderData }) => {
                 </div>
             </div>
             <table className='orderTable'>
-                {console.log(orderData)}
                 <tbody>
                 <OrderPosition
                     selectedServices={orderData.servicesList}
-                    calculateTotalPrice={() => calculateTotalPrice(orderData.servicesList)}
+                    calculateTotalPrice={() => calculateTotalPrice(orderData.servicesList, orderData.paymentMethod)}
                 ></OrderPosition>
                 </tbody>
             </table>

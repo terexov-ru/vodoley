@@ -1,16 +1,26 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { Header } from '../components/Header/Header';
-import { MainButton } from '../components/mainButton/MainButton';
 import '../pageStyles/LoginPage.css'
-import { useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import axios from "../utils/axios";
 import {QueryClient, useMutation} from "react-query";
 import {useForm} from "react-hook-form";
 
+//Telegram WebApp Get User
+// const search = window.Telegram.WebApp.initData
+// const urlParams = new URLSearchParams(search);
+// const userParam = urlParams.get('user');
+// const decodedUserParam = decodeURIComponent(userParam);
+// const userObject = JSON.parse(decodedUserParam);
+// const userTG = userObject.username;
 
-export const LoginPage = () => {
+export const LoginPage = (props) => {
     const{ register, handleSubmit, reset } = useForm()
     const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const userTG = queryParams.get('username');
+
     const loginUserName = async (username) => {
         try {
             const { data } = await axios.post('auth-login/', username)
@@ -28,7 +38,7 @@ export const LoginPage = () => {
                 window.localStorage.setItem('VodoleyToken', token)
                 const mytoken = window.localStorage.getItem('VodoleyToken')
                 if(mytoken !== null) {
-                    navigate('/login/verify');
+                    navigate('/main');
                 }
             }
         } catch (error) {
@@ -57,10 +67,11 @@ export const LoginPage = () => {
                     required
                     className='LoginInput'
                     placeholder='Телефон/ник tg'
+                    value={`@${userTG}`}
                     {...register('username')}
                 />
                 <div>
-                    <input className='verifyButtonSubmit' type='submit' title="Продолжить" />
+                    <input className='verifyButtonSubmit' type='submit' value="Продолжить" />
                 </div>
             </form>
         </>

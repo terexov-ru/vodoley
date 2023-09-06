@@ -2,8 +2,6 @@ import React, {useState} from 'react'
 import '../pageStyles/AddressesPage.css'
 import { Header } from '../components/Header/Header';
 import { Address } from '../components/Address/Address';
-//import zoom from '../media/Screen_Shrink_Arrow.png'
-//import globalMap from '../media/Frame18.png'
 import SimpleMap from '../components/map'
 import axios from '../utils/axios'
 import {useQuery} from 'react-query'
@@ -51,4 +49,3 @@ export const AddressesPage = () => {
         </div>
     )
 }
-

@@ -152,7 +152,7 @@
 #CarConfirm {
     display: block;
     width: 196px;
-    height: 20px;
+    min-height: 20px;
     background-color: #F6F7F8;
     color: #40444F;
     text-align: center;

@@ -2,7 +2,7 @@ import './Service.css'
 
 import React, {useEffect, useState} from 'react'
 
-export const Service = ({service, selectedServices, setSelectedServices, addressChangeCounter}) => {
+export const Service = ({service, selectedServices, setSelectedServices, addressChangeCounter, showDisplayServiceButton}) => {
     const [addedToBasket, setAddedToBasket] = useState(false);
 
     useEffect(() => {
@@ -15,7 +15,7 @@ export const Service = ({service, selectedServices, setSelectedServices, address
             ? selectedServices.filter(selectedService => selectedService.id !== service.id)
             : [...selectedServices, service];
 
-        setSelectedServices(updatedSelectedServices); // Update selected services here
+        setSelectedServices(updatedSelectedServices);
     };
 
 
@@ -27,10 +27,12 @@ export const Service = ({service, selectedServices, setSelectedServices, address
                 <div className='ServiceTitle'>{service.title}</div>
                 <div className='ServicePrice'>{service.price}₽</div>
             </div>
-            <div className='ServiceButton'>
-                <button className={buttonClassName} id={service.id} onClick={handleAddToFavorite}/>
-                <label className='labelServices' htmlFor={service.id}/>
-            </div>
+            {showDisplayServiceButton && (
+                <div className='ServiceButton'>
+                    <button className={buttonClassName} id={service.id} onClick={handleAddToFavorite} />
+                    <label className='labelServices' htmlFor={service.id} />
+                </div>
+            )}
 
         </div>
     )

@@ -20,8 +20,11 @@ export const MyOrdersPage = () => {
     const [selectedOrderType, setSelectedOrderType] = useState('current');
     const [orderDetailsVisibleId, setOrderDetailsVisibleId] = useState(null);
 
-    const calculateTotalPrice = (servicesList) => {
+    const calculateTotalPrice = (servicesList, paymentMethod) => {
         const totalPrice = servicesList.reduce((total, service) => total + parseFloat(service.price), 0);
+        if (paymentMethod === "На сайте со скидкой 5%") {
+            return totalPrice - totalPrice * 0.05;
+        }
         return totalPrice;
     };
 
@@ -35,14 +38,6 @@ export const MyOrdersPage = () => {
     if (!data) {
         return <h1>Нет заказов</h1>
     }
-    // if(data.length === 0) {
-    //     return (
-    //         <div>
-    //             <Header title="Мои записи" gobackto='/'/>
-    //             <h1>Нет заказов</h1>
-    //         </div>
-    //     )
-    // }
 
     //скрыть подсказку
     const closeHelp = () => {
@@ -58,8 +53,11 @@ export const MyOrdersPage = () => {
         setOrderDetailsVisibleId((prevId) => (prevId === orderId ? null : orderId));
     };
 
-    const currentOrderCount = data.filter(order => order.status === 'current').length;
-    const pastOrderCount = data.filter(order => order.status === 'past').length;
+    const currentOrderCount = data.filter(order => order.status === false).length;
+    const pastOrderCount = data.filter(order => order.status === !false).length;
+
+    const currentOrders = data.filter(order => order.status === false);
+    const pastOrders = data.filter(order => order.status !== false);
 
 
     return (
@@ -83,30 +81,30 @@ export const MyOrdersPage = () => {
                 <div className='OrdersHelp'>
                     <p>Если вы задерживаетесь на запись, предупредите нас об этом, нажав на кнопку “+15 минут”</p>
                     <button className='OrdersCloseCross' onClick={closeHelp}>
-                        <img src={CloseCross}/>
+                        <img style={{width: '24px'}} src={CloseCross}/>
                     </button>
                 </div>
             </div>
             <div id='currentOrderList'
                  className={selectedOrderType === 'current' ? 'ActiveOrderList' : 'HiddenOrderList'}>
-                {data.map(order => (
+                {currentOrders.map(order => (
                     <Order
                         key={order.id}
                         data={order}
                         showDetails={orderDetailsVisibleId === order.id}
                         toggleDetails={() => toggleOrderDetails(order.id)}
-                        calculateTotalPrice={() => calculateTotalPrice(order.servicesList)}
+                        calculateTotalPrice={() => calculateTotalPrice(order.servicesList, order.paymentMethod)}
                     />
                 ))}
             </div>
             <div id='pastOrderList' className={selectedOrderType === 'past' ? 'ActiveOrderList' : 'HiddenOrderList'}>
-                {data.map(order => (
+                {pastOrders.map(order => (
                     <PastOrder
                         key={order.id}
                         data={order}
                         showDetails={orderDetailsVisibleId === order.id}
                         toggleDetails={() => toggleOrderDetails(order.id)}
-                        calculateTotalPrice={() => calculateTotalPrice(order.servicesList)}
+                        calculateTotalPrice={() => calculateTotalPrice(order.servicesList, order.paymentMethod)}
                     />
                 ))}
             </div>

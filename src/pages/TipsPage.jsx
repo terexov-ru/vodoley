@@ -9,12 +9,11 @@ import axios from "../utils/axios";
 export const TipsPage = () => {
     const { orderId } = useParams();
     const [orderData, setOrderData] = React.useState(null);
-    const [selectedPercent, setSelectedPercent] = useState(5); // Изначально выбран 5%
+    const [selectedPercent, setSelectedPercent] = useState(5);
     const [customAmount, setCustomAmount] = useState('');
 
 
     React.useEffect(() => {
-        // Загрузка всех заказов
         axios.get('get-user-checkouts/')
             .then(response => {
                 const filteredOrder = response.data.find(order => order.id === parseInt(orderId));
@@ -35,6 +34,9 @@ export const TipsPage = () => {
 
     const calculateTotalPrice = (orderData) => {
         const totalPrice = orderData.servicesList.reduce((total, service) => total + parseFloat(service.price), 0);
+        if (orderData.paymentMethod === "На сайте со скидкой 5%") {
+            return totalPrice - totalPrice * 0.05;
+        }
         return totalPrice;
     };
 
@@ -46,17 +48,16 @@ export const TipsPage = () => {
             tipsButtonList[i].classList.remove('activeTip');
         }
         setSelectedPercent(percent);
-        setCustomAmount(''); // Очищаем введенную сумму при выборе процента
+        setCustomAmount('');
         e.currentTarget.classList.add('activeTip');
     };
 
     const handleCustomAmountChange = (e) => {
-        setSelectedPercent(null); // Очищаем выбранный процент при вводе своей суммы
+        setSelectedPercent(null);
         setCustomAmount(e.target.value);
     };
 
     const tipsAmount = selectedPercent ? (totalAmount * selectedPercent) / 100 : parseFloat(customAmount);
-
     return (
         <div className="TipsPage">
             <Header title="Чаевые" gobackto="/myorders" />

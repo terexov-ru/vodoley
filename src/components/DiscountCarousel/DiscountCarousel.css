@@ -79,6 +79,10 @@
     font-weight: bold;
 }
 
+.Options > a > img{
+    width: 24px;
+}
+
 .WhichOption {
     font-size: 14px;
     max-width: 185px;
@@ -90,7 +94,7 @@
 .DiscountCarouselTitle {
     font-size: 20px;
     line-height: 24px;
-    margin-left: 16px;
+    margin-left: 6px;
     font-weight: bold;
 }
 

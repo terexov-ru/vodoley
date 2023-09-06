@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import '../pageStyles/MainPage.css'
 import { MainButton } from '../components/mainButton/MainButton';
 import MainLogo from '../media/MainLogo.png'
@@ -10,20 +10,41 @@ import Services from '../media/Tag.png'
 import Locate from '../media/Locate.png'
 import Percent from '../media/percent.png'
 import { DiscountCarousel } from '../components/DiscountCarousel/DiscountCarousel';
-import { NavLink, Navigate } from 'react-router-dom';
+import {NavLink, Navigate, useLocation, useNavigate} from 'react-router-dom';
 import axios from '../utils/axios'
 import {useQuery} from 'react-query'
 
 async function getMain() {
     const {data} = await axios.get('get-main-page/')
-    //const {data} = await axios.get('')
     return data
 }
-// discounts
 
 export const MainPage = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const token = queryParams.get('token');
+    const [redirected, setRedirected] = useState(false);
 
     const{data, isLoading, isError} = useQuery('Main', getMain)
+
+    useEffect(() => {
+        if (!redirected) {
+            const storedToken = window.localStorage.getItem('VodoleyToken');
+            if (token) {
+                if (token === storedToken) {
+                } else if (token !== storedToken) {
+                    window.localStorage.setItem('VodoleyToken', token);
+                    window.location.reload();
+                }
+            } else {
+                // Do nothing
+            }
+            setRedirected(true);
+        }
+    }, [navigate]);
+
+
     if(isLoading) {
         return <h1>Идет загрузка...</h1>
     }

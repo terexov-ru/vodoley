@@ -9,7 +9,6 @@ import { NavLink } from 'react-router-dom'
 
 export const PastOrder = ({data, showDetails, toggleDetails, calculateTotalPrice}) => {
     if (!data || !data.servicesList) {
-        // Return some fallback UI or message here
         return <div>Нет прошедших заказов</div>;
     }
 
@@ -21,7 +20,7 @@ export const PastOrder = ({data, showDetails, toggleDetails, calculateTotalPrice
                 <div>
                     <h1 className='OrderAdress'>{data.address}</h1>
                     <div className='OrderDate' id='OldOrder'>
-                        <img id='clockSimbol' src={GrayGreen} /><span>{data.time}</span>
+                        <img id='clockSimbol' style={{width: '24px'}} src={GrayGreen} /><span>{data.time}</span>
                     </div>
                     <div className='OrderStatusSign' id='OldOrderSign'>Завершена</div>
                 </div>
@@ -32,9 +31,9 @@ export const PastOrder = ({data, showDetails, toggleDetails, calculateTotalPrice
                             <button id='moreButton' style={{width: buttonWidth}} onClick={toggleDetails}>Подробнее</button>
                             <div className="rightButtons">
                                 <button id='tipsButton'>
-                                    <NavLink to={`/tips/${data.id}`}><img src={Coins} /></NavLink>
+                                    <NavLink to={`/tips/${data.id}`}><img style={{width: '25px'}} src={Coins} /></NavLink>
                                 </button>
-                                <button id='rewiesButton'><img src={Reviews} /></button>
+                                <button id='rewiesButton'><img style={{width: '40px'}} src={Reviews} /></button>
                             </div>
                         </div>
                     </div>
@@ -48,10 +47,9 @@ export const PastOrder = ({data, showDetails, toggleDetails, calculateTotalPrice
                     <table className='orderTable'>
                         <tbody>
                         <OrderPosition
-                            // key={ind}
                             selectedServices={data.servicesList}
-                            // selectedPaymentOption={positions.id} // Передача значения
-                            calculateTotalPrice={calculateTotalPrice} // Передача функции
+                            selectedPaymentOption={data.paymentMethod}
+                            calculateTotalPrice={calculateTotalPrice}
                         />
                         </tbody>
                     </table>

@@ -2,8 +2,10 @@ import React from 'react'
 import '../pageStyles/authPage.css'
 import {MainButton} from '../components/mainButton/MainButton'
 import { Header } from '../components/Header/Header';
+import {useLocation} from "react-router-dom";
 
 export const AuthPage = () => {
+
     return (
         <>
             <Header title="Профиль" gobackto="/"/>

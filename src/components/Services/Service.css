@@ -94,6 +94,7 @@
     background: url(../../media/added.png) no-repeat;
     background-color: #F6F7F8;
     background-position: center;
+    background-size: 24px;
     position: absolute;
 }
 

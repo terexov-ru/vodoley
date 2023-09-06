@@ -1,4 +1,4 @@
-import {HashRouter, Routes, Route, useNavigate} from 'react-router-dom';
+import {HashRouter, Routes, Route, useNavigate, useLocation} from 'react-router-dom';
 import { AddressesPage } from './pages/AddressesPage';
 import { AuthPage } from './pages/AuthPage';
 import { DiscountInfoPage } from './pages/DiscountInfoPage';
@@ -15,7 +15,9 @@ import { ServicesPage } from './pages/ServicesPage';
 import { TipsPage } from './pages/TipsPage';
 import axios from "./utils/axios";
 import { useMutation} from "react-query";
+import "./App.css"
 import Redirect from "./pages/Redirect";
+import {ChangeOrderPage} from "./pages/ChangeOrderPage";
 
 function App() {
   const LoginUserName = async (code) => {
@@ -42,15 +44,13 @@ function App() {
   })
 
   const handleSubmit = data => {
-    // Здесь вы можете выполнить отправку данных, используя значение `data`
     user.mutate(data)
-    console.log('Отправка данных:', data);
   };
-
 
   return (
       <HashRouter>
         <main>
+          {/*<div>Username: {username}</div>*/}
           <Routes>
             <Route path='/' element={<Redirect />} />
             <Route path='/main' element={<MainPage />} /> {/* Главная  страница */}
@@ -67,6 +67,7 @@ function App() {
             <Route path='/tips/:orderId' element={<TipsPage />} /> {/*  */}
             <Route path='/myorders' element={<MyOrdersPage />} /> {/* Мои записи  */}
             <Route path='/makeorder' element={<OrderPage />} /> {/* Записаться  */}
+            <Route path='/changeorder/:id' element={<ChangeOrderPage />} /> {/* Изменить заказ */}
           </Routes>
         </main>
       </HashRouter>

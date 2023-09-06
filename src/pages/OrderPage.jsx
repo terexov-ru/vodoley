@@ -32,13 +32,14 @@ async function newOrder(data) {
 }
 
 export const OrderPage = () => {
-    console.log('OrderPage rendering');
     const queryClient = new QueryClient()
     const location = useLocation();
     const order = useMutation(order => newOrder(order), {
         onSuccess: () => queryClient.invalideteQueries(['order'])
     })
     const navigate = useNavigate();
+    const queryParams = new URLSearchParams(location.search);
+    const token = queryParams.get('token');
 
 
     const [addresses, setAddresses] = useState([]);
@@ -54,10 +55,29 @@ export const OrderPage = () => {
     const [isFormFilled, setIsFormFilled] = useState(false);
     const [buttonClicked, setButtonClicked] = useState(false);
     const [addressChangeCounter, setAddressChangeCounter] = useState(0);
-    const [totalPrice, setTotalPrice] = useState(0);
+    // const [totalPrice, setTotalPrice] = useState(0);
     const [timeIntervals, setTimeIntervals] = useState([]);
     const [currentTime, setCurrentTime] = useState(new Date());
     const selectedAddressData = addresses.find(address => address.id === selectedAddress);
+    const [selectedDiscount, setSelectedDiscount] = useState('');
+    const [discountOptions, setDiscountOptions] = useState([]);
+    const [redirected, setRedirected] = useState(false);
+
+    useEffect(() => {
+        if (!redirected) {
+            const storedToken = window.localStorage.getItem('VodoleyToken');
+            if (token) {
+                if (token === storedToken) {
+                } else if (token !== storedToken) {
+                    window.localStorage.setItem('VodoleyToken', token);
+                    window.location.reload();
+                }
+            } else {
+            }
+            setRedirected(true);
+        }
+    }, [navigate]);
+
 
     useEffect(() => {
         const roundedTime = new Date(currentTime);
@@ -73,55 +93,35 @@ export const OrderPage = () => {
 
             const intervals = [];
             let currentDate = new Date(selectedDate);
-            currentDate.setHours(startHour, startMinute, 0, 0); // Set to starting time
+            currentDate.setHours(startHour, startMinute, 0, 0);
 
             if (currentDate < currentTime) {
-                currentDate = new Date(currentTime); // Use the rounded current time as the starting point
+                currentDate = new Date(currentTime);
             }
 
             const endDate = new Date(selectedDate);
-            endDate.setHours(endHour, endMinute, 0, 0); // Set to ending time
+            endDate.setHours(endHour, endMinute, 0, 0);
 
-            const maxAvailableTime = new Date(selectedDate);
-            maxAvailableTime.setHours(endHour, endMinute, 0, 0); // Set maximum available time to 21:45 for all days
+            while (currentDate <= endDate) {
+                const timeString = currentDate.toLocaleTimeString('ru-RU', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                });
 
-            while (currentDate <= endDate && currentDate <= maxAvailableTime) {
-                intervals.push(
-                    currentDate.toLocaleTimeString('ru-RU', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false
-                    })
-                );
-                currentDate = new Date(currentDate.getTime() + 15 * 60000); // Increment by 15 minutes
+                intervals.push(timeString);
+
+                currentDate = new Date(currentDate.getTime() + 15 * 60000);
             }
 
-            const intervalsWithoutLast = intervals.filter(time => time !== "22:00");
-            setTimeIntervals(intervalsWithoutLast);
-            setSelectedTime(intervalsWithoutLast[0]);
+            if (selectedDate > new Date()) {
+                intervals.pop();
+            }
+
+            setTimeIntervals(intervals);
+            setSelectedTime(intervals[0]);
         }
     }, [selectedDate, selectedAddressData, currentTime]);
-
-
-
-
-
-    const fetchAndFilterSelectedServices = async (addressID) => {
-        if (addressID) {
-            try {
-                const response = await axios.post('get-services-for-address/', {addressID});
-                const servicesForSelectedAddress = response.data;
-                setSelectedServices(prevSelectedServices => {
-                    const updatedSelectedServices = prevSelectedServices.filter(service =>
-                        servicesForSelectedAddress.some(selectedService => selectedService.id === service.id)
-                    );
-                    return updatedSelectedServices;
-                });
-            } catch (error) {
-                console.error('Error fetching services for the address:', error);
-            }
-        }
-    };
 
 
     useEffect(() => {
@@ -135,6 +135,10 @@ export const OrderPage = () => {
 
         axios.get('get-user-discounts/').then(response => {
             setDiscountList(response.data);
+            setDiscountOptions(response.data.map(discount => ({
+                value: discount.id,
+                label: discount.title
+            })));
         });
         axios.get('get-addresses-list').then(response => {
             setAddresses(response.data);
@@ -147,22 +151,23 @@ export const OrderPage = () => {
         axios.get('get-payment-methods/')
             .then(response => {
                 setPaymentOptions(response.data);
-                console.log(response.data)
             })
             .catch(error => {
                 console.error('Error fetching payment options:', error);
             });
-
         const storedServices = JSON.parse(localStorage.getItem('selectedServices'));
-        // || [];
+        if (storedServices === null || storedServices === undefined) {
+            localStorage.setItem('selectedServices', JSON.stringify([]));
+        }
+        // const storedServices = JSON.parse(localStorage.getItem('selectedServices'));
         setSelectedServices(storedServices);
         setIsLoading(false);
     }, [location]);
 
-    useEffect(() => {
-        const totalPrice = calculateTotalPrice();
-        setTotalPrice(totalPrice);
-    }, [selectedServices, selectedPaymentOption]);
+    // useEffect(() => {
+    //     const totalPrice = calculateTotalPrice();
+    //     setTotalPrice(totalPrice);
+    // }, [selectedServices, selectedPaymentOption]);
 
     useEffect(() => {
         if (paymentOptions.length > 0) {
@@ -180,11 +185,32 @@ export const OrderPage = () => {
             selectedAddress !== '' &&
             selectedDate !== '' &&
             selectedTime !== '' &&
-            selectedServices.length > 0
+            (selectedServices && selectedServices.length > 0)
         );
 
         setIsFormFilled(areRequiredFieldsFilled);
     }, [selectedAddress, selectedDate, selectedTime, selectedServices]);
+
+    const fetchAndFilterSelectedServices = async (addressID) => {
+        if (addressID) {
+            try {
+                const response = await axios.post('get-services-for-address/', {addressID});
+                const servicesForSelectedAddress = response.data;
+                setSelectedServices(prevSelectedServices => {
+                    if (prevSelectedServices === null) {
+                        return servicesForSelectedAddress;
+                    }
+
+                    const updatedSelectedServices = prevSelectedServices.filter(service =>
+                        servicesForSelectedAddress.some(selectedService => selectedService.id === service.id)
+                    );
+                    return updatedSelectedServices;
+                });
+            } catch (error) {
+                console.error('Error fetching services for the address:', error);
+            }
+        }
+    };
 
 
     const handleGoToCatalog = () => {
@@ -204,7 +230,8 @@ export const OrderPage = () => {
 
         if (isFormFilled) {
             await assembleFinalResult()
-            localStorage.removeItem('selectedServices');
+            localStorage.setItem('selectedServices', JSON.stringify([]));
+            navigate('/myorders');
         } else {
             console.log("Please fill in all required fields.");
         }
@@ -215,32 +242,89 @@ export const OrderPage = () => {
         localStorage.setItem('selectedServices', JSON.stringify(updatedServices));
     };
 
-    const renderedServices = selectedServices.map((service) => (
-        <Service
-            key={`${service.id}-${addressChangeCounter}`} // Use a unique key here
-            service={service}
-            selectedServices={selectedServices}
-            setSelectedServices={handleServiceChange}
-            addressChangeCounter={addressChangeCounter}
-        />
-    ));
+    const renderedServices = selectedServices && selectedServices.length > 0
+        ? selectedServices.map((service) => (
+            <Service
+                key={`${service.id}-${addressChangeCounter}`}
+                service={service}
+                selectedServices={selectedServices}
+                setSelectedServices={handleServiceChange}
+                addressChangeCounter={addressChangeCounter}
+                showDisplayServiceButton={true}
+            />
+        ))
+        : null; // Or any fallback content you want
 
+    const calculateDiscountPercentage = (visits) => {
+        if (visits === 0) {
+            return 0;
+        } else if (visits % 3 === 1) {
+            return 5;
+        } else if (visits % 3 === 2) {
+            return 10;
+        } else if (visits % 3 === 0) {
+            return 15;
+        }
+    };
+
+    // const discountPercentage = calculateDiscountPercentage(discounts.visits);
+
+    const calculateServicePrice = (service) => {
+        let servicePrice = parseFloat(service.price);
+
+        if (selectedDiscount) {
+            const selectedDiscountVisits = discountList.find(discount => discount.id === selectedDiscount.value)?.visits || 0;
+            const discountPercentage = calculateDiscountPercentage(selectedDiscountVisits);
+
+            // Apply the discount only to the service with a matching title
+            if (service.title === selectedDiscount.label) {
+                servicePrice -= servicePrice * (discountPercentage / 100);
+            }
+        }
+
+        if (selectedPaymentOption === 2) {
+            servicePrice -= servicePrice * 0.05;
+        }
+
+        return servicePrice;
+    };
 
     const calculateTotalPrice = () => {
-        let totalPrice = selectedServices.reduce((total, service) => total + parseFloat(service.price), 0);
+        if (!selectedServices || selectedServices.length === 0) {
+            return 0;
+        }
 
-        if (selectedPaymentOption === 'discount') {
-            totalPrice -= totalPrice * 0.05;
+        const totalPrice = selectedServices.reduce((total, service) => {
+            const servicePrice = calculateServicePrice(service);
+            return total + servicePrice;
+        }, 0);
+
+        if (selectedPaymentOption.title === 'На сайте со скидкой 5%') {
+            return totalPrice - totalPrice * 0.05;
         }
 
         return totalPrice;
     };
 
 
+    const serviceHasDiscount = (service) => {
+        if (!selectedDiscount) {
+            return false;
+        }
+
+        const selectedDiscountVisits = discountList.find(discount => discount.id === selectedDiscount.value)?.visits || 0;
+
+        return (
+            service.title === selectedDiscount.label &&
+            calculateDiscountPercentage(selectedDiscountVisits) > 0
+        );
+    };
+
+
     const assembleFinalResult = async () => {
         try {
             const formattedDate = format(selectedDate, 'yyyy-MM-dd', {timeZone: 'UTC'});
-            const formattedTime = selectedTime ? `${selectedTime.value}:00` : '';
+            const formattedTime = `${selectedTime.value}:00`;
             const selectedPaymentOptionObj = paymentOptions.find(option => option.id === selectedPaymentOption);
             // const servicesList = selectedServices.map((service) => ({
             //     [service.id]: { price: service.price },
@@ -253,6 +337,7 @@ export const OrderPage = () => {
                 paymentType: selectedPaymentOptionObj.id,
                 // servicesList,
                 servicesList: selectedServices.map(service => service.id),
+                discount: selectedDiscount.value,
                 // ServicePrice: totalPrice
             };
 
@@ -291,8 +376,6 @@ export const OrderPage = () => {
         })
     }
     registerLocale('ru', ru)
-
-
 
     return (
         <>
@@ -347,11 +430,28 @@ export const OrderPage = () => {
                     />
                 </div>
                 <h1 className='OrderFormTitle'>Скидки</h1>
+                {discountList.length > 0 && selectedServices && selectedServices.some(service => discountList.some(discount => discount.title === service.title)) ? (
+                    <Select
+                        classNamePrefix='custom-select'
+                        value={selectedDiscount}
+                        options={discountOptions.filter(option =>
+                            selectedServices.some(service =>
+                                discountList.some(discount => discount.title === service.title && discount.id === option.value)
+                            )
+                        )}
+                        onChange={option => setSelectedDiscount(option)}
+                        placeholder='Выберите скидку'
+                        styles={customStyles}
+                        isSearchable={false}
+                    />
+                ) : (
+                    <p id='discountNotification'>Скидок пока нет</p>
+                )}
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
                     discountList.length > 0 ? (
-                        <div>
+                        <div style={{"margin-right": "-16px", "margin-left": "-6px"}}>
                             <DiscountCarousel discount={discountList}/>
                         </div>
                     ) : (
@@ -377,6 +477,8 @@ export const OrderPage = () => {
                         selectedServices={selectedServices}
                         selectedPaymentOption={selectedPaymentOption}
                         calculateTotalPrice={calculateTotalPrice}
+                        calculateServicePrice={calculateServicePrice}
+                        serviceHasDiscount={serviceHasDiscount}
                     />
                 </div>
                 {showPopup && (

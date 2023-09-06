@@ -38,12 +38,6 @@
     text-decoration: none;
 }
 
-#discountsMainButton > div > img {
-    width: 42px !important;
-    height: 38px !important;
-    margin-top: 10px;
-}
-
 #servicesMainButton > div > img {
     margin-top: 3px;
 }

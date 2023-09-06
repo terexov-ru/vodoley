@@ -5,10 +5,9 @@
 }
 
 .userAvatar {
-    width: 80px;
-    height: 88px;
-    margin-top: -20px;
-    margin-right: -8px;
+    width: 48px;
+    height: 48px;
+    margin-right: 16px;
 }
 
 .userMainInfo > p {

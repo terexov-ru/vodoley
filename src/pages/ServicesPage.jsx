@@ -55,7 +55,7 @@ export const ServicesPage = ({showHeader, selectedAddressId, showButton, showAdd
     );
 
     useEffect(() => {
-        setAddressID(selectedAddressId); // Set addressID for fetching services
+        setAddressID(selectedAddressId);
     }, [selectedAddressId]);
 
 
@@ -98,11 +98,11 @@ export const ServicesPage = ({showHeader, selectedAddressId, showButton, showAdd
                 <Select
                     classNamePrefix='custom-select'
                     value={selectedAddress ? {value: selectedAddress.value, label: selectedAddress.label} : null}
-                    options={options(addresses)} // Use the 'options' function here
+                    options={options(addresses)}
                     onChange={handleAddressChange}
                     placeholder='Выберите адрес'
                     isSearchable={false}
-                    styles={customStyles} // Use the 'customStyles' object here
+                    styles={customStyles}
                 />
             </div>}
 
@@ -124,7 +124,7 @@ export const ServicesPage = ({showHeader, selectedAddressId, showButton, showAdd
                 <div className='ServiceHelp'>
                     <p>Выберете интересующие вас услуги.</p>
                     <button className='ServiceCloseCross' onClick={closeHelp}>
-                        <img src={CloseCross}/>
+                        <img style={{width: '24px'}} src={CloseCross}/>
                     </button>
                 </div>
             </div>
@@ -136,6 +136,7 @@ export const ServicesPage = ({showHeader, selectedAddressId, showButton, showAdd
                         <Service service={service}
                                  selectedServices={selectedServices}
                                  setSelectedServices={setSelectedServices}
+                                 showDisplayServiceButton={true}
                                  key={ind}
                         />
                     ))}
@@ -147,7 +148,9 @@ export const ServicesPage = ({showHeader, selectedAddressId, showButton, showAdd
                         <Service service={service}
                                  selectedServices={selectedServices}
                                  setSelectedServices={setSelectedServices}
+                                 showDisplayServiceButton={true}
                                  key={ind}
+                                 showDisplayServiceButton={true}
                         />
                     ))}
                 </div>

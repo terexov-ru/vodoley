@@ -3,24 +3,35 @@ import './Order.css'
 import React from 'react'
 import {useLocation} from "react-router-dom";
 
-export const OrderPosition = ({selectedServices, selectedPaymentOption, calculateTotalPrice}) => {
+
+
+export const OrderPosition = ({selectedServices, selectedPaymentOption, calculateTotalPrice, calculateServicePrice, serviceHasDiscount}) => {
     const isMyOrdersPage = window.location.hash === '#/myorders';
     const location = useLocation();
 
     const isOrderPage = location.pathname === '/makeorder';
+    const isChangeOrderPage = location.pathname.includes('/changeorder/');
 
-    const totalPriceClassName = isOrderPage ? 'totalPrice withShadow' : 'totalPrice';
+    if (!selectedServices || selectedServices.length === 0) {
+        return null;
+    }
+
+    const totalPriceClassName = isOrderPage || isChangeOrderPage ? 'totalPrice withShadow' : 'totalPrice';
+
+
+
     return (
         <table className={totalPriceClassName}>
             <tbody>
-            {console.log("selectedServices", selectedServices)}
             {selectedServices.map((service, index) => (
                 <tr key={index}>
                     <td>{service.title}</td>
-                    <td>{service.price}₽</td>
+                    <td className={serviceHasDiscount ? serviceHasDiscount(service) ? 'discountedPrice' : '' : ''}>
+                        {calculateServicePrice ? calculateServicePrice(service) : service.price}₽
+                    </td>
                 </tr>
             ))}
-            {selectedPaymentOption === 'discount' && (
+            {selectedPaymentOption === 2 && (
                 <tr>
                     <td>Скидка</td>
                     <td>5%</td>
@@ -33,12 +44,10 @@ export const OrderPosition = ({selectedServices, selectedPaymentOption, calculat
                 <td>{calculateTotalPrice()}₽</td>
             </tr>
             {isMyOrdersPage && (
-                // {selectedServices.map((service) => (
                 <tr>
                     <td>Оплата</td>
-                    <td>Тип оплаты</td>
+                    <td>{selectedPaymentOption}</td>
                 </tr>
-                // ))}
             )}
             </tfoot>
         </table>
