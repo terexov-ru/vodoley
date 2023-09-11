@@ -7,19 +7,19 @@ import {QueryClient, useMutation} from "react-query";
 import {useForm} from "react-hook-form";
 
 //Telegram WebApp Get User
-// const search = window.Telegram.WebApp.initData
-// const urlParams = new URLSearchParams(search);
-// const userParam = urlParams.get('user');
-// const decodedUserParam = decodeURIComponent(userParam);
-// const userObject = JSON.parse(decodedUserParam);
-// const userTG = userObject.username;
+const search = window.Telegram.WebApp.initData
+const urlParams = new URLSearchParams(search);
+const userParam = urlParams.get('user');
+const decodedUserParam = decodeURIComponent(userParam);
+const userObject = JSON.parse(decodedUserParam);
+const userTG = userObject.username;
 
 export const LoginPage = (props) => {
     const{ register, handleSubmit, reset } = useForm()
     const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const userTG = queryParams.get('username');
+    // const userTG = queryParams.get('username');
 
     const loginUserName = async (username) => {
         try {
