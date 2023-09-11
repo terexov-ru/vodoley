@@ -17,26 +17,9 @@ import ru from 'date-fns/locale/ru';
 import {format} from "date-fns";
 
 
-async function newOrder(data) {
-
-    await axios.post('create-checkout/', data)
-        .then((res) => {
-            if (res.status === 200) {
-                return (
-                    <Navigate to='/'/>
-                )
-            } else {
-                return <h1>{res.message}</h1>
-            }
-        })
-}
-
 export const OrderPage = () => {
     const queryClient = new QueryClient()
     const location = useLocation();
-    const order = useMutation(order => newOrder(order), {
-        onSuccess: () => queryClient.invalideteQueries(['order'])
-    })
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get('token');
@@ -62,6 +45,7 @@ export const OrderPage = () => {
     const [selectedDiscount, setSelectedDiscount] = useState('');
     const [discountOptions, setDiscountOptions] = useState([]);
     const [redirected, setRedirected] = useState(false);
+
 
     useEffect(() => {
         if (!redirected) {
@@ -144,7 +128,7 @@ export const OrderPage = () => {
             setAddresses(response.data);
             if (queryAddressId) {
                 setSelectedAddress(parseInt(queryAddressId));
-                fetchAndFilterSelectedServices(parseInt(queryAddressId));
+                // fetchAndFilterSelectedServices(parseInt(queryAddressId));
             }
         });
 
@@ -175,12 +159,28 @@ export const OrderPage = () => {
         }
     }, [paymentOptions]);
 
-    useEffect(() => {
-        fetchAndFilterSelectedServices();
-    }, [selectedAddress, setAddressChangeCounter]);
+    // useEffect(() => {
+    //     fetchAndFilterSelectedServices();
+    // }, [selectedAddress, setAddressChangeCounter]);
+
+    // useEffect(() => {
+    //     if (selectedAddress) {
+    //         fetchAndFilterSelectedServices(selectedAddress);
+    //     }
+    // }, [selectedAddress]);
 
 
     useEffect(() => {
+        // Проверьте, есть ли в локальном хранилище сохраненные выбранные услуги.
+        const storedServices = JSON.parse(localStorage.getItem('selectedServices'));
+        if (storedServices === null || storedServices === undefined) {
+            localStorage.setItem('selectedServices', JSON.stringify([]));
+        }
+
+        // Установите выбранные услуги из локального хранилища.
+        setSelectedServices(storedServices);
+
+        // Убедитесь, что isFormFilled устанавливается правильно при открытии формы.
         const areRequiredFieldsFilled = (
             selectedAddress !== '' &&
             selectedDate !== '' &&
@@ -189,53 +189,93 @@ export const OrderPage = () => {
         );
 
         setIsFormFilled(areRequiredFieldsFilled);
+    }, [location]);
+
+
+    useEffect(() => {
+        const areRequiredFieldsFilled = (
+            selectedAddress !== '' &&
+            selectedDate !== null &&
+            selectedTime !== '' &&
+            selectedServices.length > 0
+        );
+
+        setIsFormFilled(areRequiredFieldsFilled);
     }, [selectedAddress, selectedDate, selectedTime, selectedServices]);
 
-    const fetchAndFilterSelectedServices = async (addressID) => {
-        if (addressID) {
-            try {
-                const response = await axios.post('get-services-for-address/', {addressID});
-                const servicesForSelectedAddress = response.data;
-                setSelectedServices(prevSelectedServices => {
-                    if (prevSelectedServices === null) {
-                        return servicesForSelectedAddress;
-                    }
 
-                    const updatedSelectedServices = prevSelectedServices.filter(service =>
-                        servicesForSelectedAddress.some(selectedService => selectedService.id === service.id)
-                    );
-                    return updatedSelectedServices;
-                });
-            } catch (error) {
-                console.error('Error fetching services for the address:', error);
-            }
-        }
-    };
+
+    // const fetchAndFilterSelectedServices = async (addressID) => {
+    //     if (addressID) {
+    //         try {
+    //             const response = await axios.post('get-services-for-address/', {addressID});
+    //         } catch (error) {
+    //             console.error('Error fetching services for the address:', error);
+    //         }
+    //     }
+    // };
 
 
     const handleGoToCatalog = () => {
         if (!selectedAddress) {
             setButtonClicked(true);
-        } else {
+        } else if (!showPopup) { // Добавьте это условие
             setShowPopup(true);
         }
     };
 
     const closePopup = () => {
-        setShowPopup(false);
+        const storedServices = JSON.parse(localStorage.getItem('selectedServices'));
+        setSelectedServices(storedServices);
+        setShowPopup(false); // Закрываем попап
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (isFormFilled) {
-            await assembleFinalResult()
-            localStorage.setItem('selectedServices', JSON.stringify([]));
-            navigate('/myorders');
+            const selectedDateObject = new Date(selectedDate); // Преобразование метки времени в объект Date
+            const selectedTimeParts = selectedTime.split(':'); // Разбиение времени на часы и минуты
+            const selectedHour = parseInt(selectedTimeParts[0]);
+            const selectedMinute = parseInt(selectedTimeParts[1]);
+
+// Установка часов и минут в объекте Date
+            selectedDateObject.setHours(selectedHour);
+            selectedDateObject.setMinutes(selectedMinute);
+
+// Теперь selectedDateObject содержит дату и время
+            const data = {
+                address: selectedAddress,
+                discount: selectedDiscount ? selectedDiscount.value : undefined,
+                paymentType: selectedPaymentOption,
+                servicesList: selectedServices.map(service => service.id),
+                time: format(selectedDateObject, "yyyy-MM-dd HH:mm:00")
+            };
+
+            try {
+                // Send the POST request with the data
+                const response = await axios.post('create-checkout/', data);
+
+                if (response.status === 200) {
+                    // Handle success, you can navigate or show a success message here
+                    localStorage.setItem('selectedServices', JSON.stringify([]));
+                    navigate('/myorders');
+                } else {
+                    // Handle other success cases if needed
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 500) {
+                    console.error('Internal Server Error:', error);
+                } else {
+                    console.error('Error:', error);
+                }
+            }
         } else {
             console.log("Please fill in all required fields.");
+            return false; // Prevent form submission
         }
     };
+
 
     const handleServiceChange = (updatedServices) => {
         setSelectedServices(updatedServices);
@@ -321,47 +361,14 @@ export const OrderPage = () => {
     };
 
 
-    const assembleFinalResult = async () => {
-        try {
-            const formattedDate = format(selectedDate, 'yyyy-MM-dd', {timeZone: 'UTC'});
-            const formattedTime = `${selectedTime.value}:00`;
-            const selectedPaymentOptionObj = paymentOptions.find(option => option.id === selectedPaymentOption);
-            // const servicesList = selectedServices.map((service) => ({
-            //     [service.id]: { price: service.price },
-            // }));
-
-
-            const finalResult = {
-                address: selectedAddress,
-                time: formattedDate + ' ' + formattedTime,
-                paymentType: selectedPaymentOptionObj.id,
-                // servicesList,
-                servicesList: selectedServices.map(service => service.id),
-                discount: selectedDiscount.value,
-                // ServicePrice: totalPrice
-            };
-
-            console.log('newOrder: ', finalResult);
-
-            // Send the data to the server
-            const response = await axios.post('create-checkout/', finalResult);
-
-            if (response.status === 200) {
-                console.log('Order created successfully:', response.data);
-            } else {
-                console.error('Failed to create order:', response.data.message);
-            }
-        } catch (error) {
-            console.error('Error creating order:', error);
-        }
-    };
-
     const handleAddressChange = option => {
         setSelectedAddress(option.value);
         navigate(`/makeorder?address=${option.value}`);
         setButtonClicked(false);
         setAddressChangeCounter(prevCounter => prevCounter + 1);
-        fetchAndFilterSelectedServices(option.value);
+        // fetchAndFilterSelectedServices(option.value);
+        localStorage.setItem('selectedServices', JSON.stringify([]));
+        setSelectedServices([]);
     };
 
 
@@ -377,10 +384,12 @@ export const OrderPage = () => {
     }
     registerLocale('ru', ru)
 
+
+
     return (
         <>
             <Header gobackto='/' title='Записаться'/>
-            <form className='OrderPage' onSubmit={handleSubmit}>
+            <form className='OrderPage'>
                 <h1 className='OrderFormTitle'>Адрес</h1>
                 <Select
                     classNamePrefix={`custom-select${buttonClicked && !selectedAddress ? 'invalid-select' : ''}`} // Step 2
@@ -489,7 +498,9 @@ export const OrderPage = () => {
                         onClose={closePopup}
                     />
                 )}
-                <input type="submit" value="Оплатить" disabled={!isFormFilled}/>
+                <button className='OrderPage_button' type="button" onClick={handleSubmit} disabled={!isFormFilled}>Оплатить</button>
+
+
             </form>
         </>
 

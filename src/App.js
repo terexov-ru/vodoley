@@ -17,7 +17,10 @@ import axios from "./utils/axios";
 import { useMutation} from "react-query";
 import "./App.css"
 import Redirect from "./pages/Redirect";
+import {useEffect} from "react";
 import {ChangeOrderPage} from "./pages/ChangeOrderPage";
+
+
 
 function App() {
   const LoginUserName = async (code) => {
@@ -47,6 +50,7 @@ function App() {
     user.mutate(data)
   };
 
+
   return (
       <HashRouter>
         <main>
@@ -75,4 +79,3 @@ function App() {
 }
 
 export default App;
-

@@ -17,7 +17,6 @@ export const ServicePopup = ({ selectedAddressId, selectedServices, setSelectedS
 
     const handleSave = () => {
         onClose();
-        window.location.reload();
     };
 
 

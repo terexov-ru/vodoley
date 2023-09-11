@@ -21,7 +21,7 @@ export const RegisterPage = () => {
                     localStorage.setItem('VodoleyToken', token)
                     const mytoken = window.localStorage.getItem('VodoleyToken')
                     if(mytoken !== null) {
-                        navigate('/');
+                        navigate('/main');
                     }
                 } else {
                     setMessage(res.message)
@@ -79,10 +79,10 @@ export const RegisterPage = () => {
                         name='userTG'
                     />
                 </div>
-                <NavLink className='tgHelpBlock' to='/'>
-                    <a className='helpLink' href='/'>Как узнать свой ник в Телеграме?</a>
-                    <img className='BlueArrowRight' alt='BlueArrowRight' src={BlueArrowRight} />
-                </NavLink>
+                {/*<NavLink className='tgHelpBlock' to='/'>*/}
+                {/*    <a className='helpLink' href='/'>Как узнать свой ник в Телеграме?</a>*/}
+                {/*    <img className='BlueArrowRight' alt='BlueArrowRight' src={BlueArrowRight} />*/}
+                {/*</NavLink>*/}
                 <div className='RegisterPoint'>
                     <h1 className='formPoint'>Марка автомобиля</h1>
                     <input
