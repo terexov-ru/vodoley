@@ -7,6 +7,7 @@ import {MainButton} from '../components/mainButton/MainButton';
 import axios from '../utils/axios'
 import {useQuery} from 'react-query';
 import Select from "react-select";
+import {NoContent} from "../components/NoContent/NoContent";
 
 async function fetchServicesForAddress(addressID) {
     const {data} = await axios.post('get-services-for-address/', {addressID: addressID});
@@ -74,8 +75,12 @@ export const ServicesPage = ({showHeader, selectedAddressId, showButton, showAdd
 
 
 
-    const mainServices = servicesData && servicesData.filter(service => service.type === false);
-    const specialServices = servicesData && servicesData.filter(service => service.type === true);
+    const mainServices = Array.isArray(servicesData)
+        ? servicesData.filter((service) => service.type === false)
+        : [];
+    const specialServices = Array.isArray(servicesData)
+        ? servicesData.filter((service) => service.type === true)
+        : [];
 
 
     //скрыть подсказку
@@ -105,61 +110,58 @@ export const ServicesPage = ({showHeader, selectedAddressId, showButton, showAdd
                     styles={customStyles}
                 />
             </div>}
-
             <div className='ServiceButtonSet'>
                 <a
                     className={activeTab === 'base' ? 'active' : ''}
                     onClick={() => handleTabClick('base')}
                 >
-                    Основные {servicesData ? mainServices.length : 0}
+                    Основные {mainServices.length}
                 </a>
                 <a
                     className={activeTab === 'special' ? 'active' : ''}
                     onClick={() => handleTabClick('special')}
                 >
-                    Специальные {servicesData ? specialServices.length : 0}
+                    Специальные {specialServices.length}
                 </a>
             </div>
-            <div id='ServiceHelp' style={{display: 'block',}}>
-                <div className='ServiceHelp'>
-                    <p>Выберете интересующие вас услуги.</p>
-                    <button className='ServiceCloseCross' onClick={closeHelp}>
-                        <img style={{width: '24px'}} src={CloseCross}/>
-                    </button>
-                </div>
-            </div>
-
-            {servicesData && (
-
-                <div id='baseServiceList' className='activeServiceList'>
-                    {mainServices.map((service, ind) => (
-                        <Service service={service}
-                                 selectedServices={selectedServices}
-                                 setSelectedServices={setSelectedServices}
-                                 showDisplayServiceButton={true}
-                                 key={ind}
-                        />
-                    ))}
+            {Array.isArray(servicesData) ? ( // Проверка, что servicesData является массивом
+                <>
+                    <div id='ServiceHelp' style={{ display: 'block' }}>
+                        {/* Ваша подсказка */}
+                    </div>
+                    <div id='baseServiceList' className='activeServiceList'>
+                        {mainServices.map((service, ind) => (
+                            <Service
+                                service={service}
+                                selectedServices={selectedServices}
+                                setSelectedServices={setSelectedServices}
+                                showDisplayServiceButton={true}
+                                key={ind}
+                            />
+                        ))}
+                    </div>
+                    <div id='specialServiceList' className='hiddenServiceList'>
+                        {specialServices.map((service, ind) => (
+                            <Service
+                                service={service}
+                                selectedServices={selectedServices}
+                                setSelectedServices={setSelectedServices}
+                                showDisplayServiceButton={true}
+                                key={ind}
+                            />
+                        ))}
+                    </div>
+                    {showButton && (
+                        <div className='hiddenButton'>
+                            <MainButton title='Записаться' goto={`/makeorder?address=${addressID}`} />
+                        </div>
+                    )}
+                </>
+            ) : (
+                <div className="centeredNoContent">
+                    <NoContent/>
                 </div>
             )}
-            {servicesData && (
-                <div id='specialServiceList' className='hiddenServiceList'>
-                    {specialServices.map((service, ind) => (
-                        <Service service={service}
-                                 selectedServices={selectedServices}
-                                 setSelectedServices={setSelectedServices}
-                                 showDisplayServiceButton={true}
-                                 key={ind}
-                                 showDisplayServiceButton={true}
-                        />
-                    ))}
-                </div>
-            )}
-            {showButton &&
-                <div className='hiddenButton'>
-                    <MainButton title='Записаться' goto={`/makeorder?address=${addressID}`}/>
-                </div>
-            }
 
         </div>
     )

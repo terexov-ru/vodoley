@@ -27,6 +27,19 @@ export const Order = ({data, showDetails, toggleDetails, calculateTotalPrice}) =
         }
     };
 
+    const handleCancelOrder = () => {
+        axios
+            .post('/cancel-checkout/', { id: data.id })
+            .then((response) => {
+                // Обработка успешной отмены заказа
+                console.log('Заказ успешно отменен');
+            })
+            .catch((error) => {
+                console.error('Error cancelling order:', error);
+            });
+    };
+
+
     return (
         <>
             <div className='Order'>
@@ -67,21 +80,20 @@ export const Order = ({data, showDetails, toggleDetails, calculateTotalPrice}) =
                 </div>
                 <div className='bottomButtons'>
                     <div className={showDetails ? 'orderActive' : 'orderHidden'} id='interactiveOrder'>
-                        <div>
-                            <button   className={isPostponed ? 'grayButton' : 'bottomLate'} disabled={isPostponed} onClick={handleAddFifteenMinutes}>{isPostponed? ("Уже отложено") :
-                                ('Опоздаю на 15 минут')}</button>
-                        </div>
+                        {/*<div>*/}
+                        {/*    <button   className={isPostponed ? 'grayButton' : 'bottomLate'} disabled={isPostponed} onClick={handleAddFifteenMinutes}>{isPostponed? ("Уже отложено") :*/}
+                        {/*        ('Опоздаю на 15 минут')}</button>*/}
+                        {/*</div>*/}
                         <div className='buttonChangeOrder'>
                             <Link to={{ pathname: `/changeorder/${data.id}`, state: { orderData: data } }}>
                                 <button>Изменить запись</button>
                             </Link>
                         </div>
+                        <div>
+                            <button className='bottomLate' onClick={handleCancelOrder}>Отменить запись</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div className='hiddenOrderButton'>
-                <MainButton title='Записаться' />
             </div>
         </>
 

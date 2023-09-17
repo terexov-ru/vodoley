@@ -19,3 +19,24 @@
     color: #FFFFFF;
     text-decoration: none;
 }
+
+.mainButton_ChangeOrder {
+    background-color: #40444F;
+    width: 304px;
+    height: 24px;
+    border-radius: 8px;
+    color: #FFFFFF;
+    padding: 12px;
+    font-family: "InterNormal";
+    font-size: 16px;
+}
+
+.mainButton_ChangeOrder > * {
+    display: block;
+    padding-top: 3px;
+    height: 24px;
+    font-size: 16px;
+    text-align: center;
+    color: #FFFFFF;
+    text-decoration: none;
+}

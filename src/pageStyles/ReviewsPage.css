@@ -1,0 +1,62 @@
+.ReviewForm{
+    margin: 8px 16px 0 16px;
+}
+
+.ReviewInput {
+    width: 296px;
+    height: 96px;
+    resize: none;
+    border: none;
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 500;
+    line-height: 24px;
+    word-wrap: break-word;
+    padding: 12px 16px;
+    background: #F6F7F8;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.textLength {
+    text-align: end;
+    color: #9DA2AF;
+    font-size: 14px;
+    font-family: Inter;
+    font-weight: 500;
+    line-height: 20px;
+
+}
+
+.buttonContainer {
+    position: fixed;
+    bottom: 16px;
+    width: 100%;
+    text-align: center;
+}
+
+.headerWithMargin {
+    margin-top: 24px;
+}
+
+.centeredReviews {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.centeredReviews .buttonContainer {
+    margin-top: 20px;
+}
+
+.link-button {
+    text-decoration: none; /* Убрать подчеркивание ссылки */
+    color: inherit; /* Унаследовать цвет текста */
+    cursor: pointer; /* Сделать курсор похожим на указатель при наведении */
+    background: none; /* Убрать фон */
+    border: none; /* Убрать границу */
+    padding: 0; /* Убрать внутренний отступ */
+    font: inherit; /* Унаследовать шрифт */
+}

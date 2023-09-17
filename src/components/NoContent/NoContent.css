@@ -1,0 +1,36 @@
+.NoContent{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.NoContentImage{
+    width: 110px;
+    height: 110px;
+    margin-bottom: 16px;
+}
+
+.NoContentText{
+    color: #9DA2AF;
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 500;
+    line-height: 24px;
+    word-wrap: break-word;
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+.NoContentButton{
+    color: #25282E;
+    font-size: 16px;
+    font-family: Inter;
+    font-weight: 500;
+    line-height: 24px;
+    padding: 8px 16px;
+    background: #F6F7F8;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}

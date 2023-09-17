@@ -19,6 +19,7 @@ import "./App.css"
 import Redirect from "./pages/Redirect";
 import {useEffect} from "react";
 import {ChangeOrderPage} from "./pages/ChangeOrderPage";
+import {ReviewsPage} from "./pages/ReviewsPage";
 
 
 
@@ -72,6 +73,7 @@ function App() {
             <Route path='/myorders' element={<MyOrdersPage />} /> {/* Мои записи  */}
             <Route path='/makeorder' element={<OrderPage />} /> {/* Записаться  */}
             <Route path='/changeorder/:id' element={<ChangeOrderPage />} /> {/* Изменить заказ */}
+            <Route path='/review/:id' element={<ReviewsPage />} /> {/* Отзывы */}
           </Routes>
         </main>
       </HashRouter>

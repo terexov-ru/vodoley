@@ -6,7 +6,7 @@ import axios from "../../utils/axios";
 import {useQuery} from "react-query";
 
 
-export const DiscountCarousel = ({ discount }) => {
+export const DiscountCarousel = ({showDiscount ,discount }) => {
     const location = useLocation();
     const isMainPage = location.pathname === '/main';
 
@@ -16,13 +16,13 @@ export const DiscountCarousel = ({ discount }) => {
                 className="DiscountCarouselTitle"
                 style={isMainPage ? { marginLeft: '16px' } : {}}
             >Ближайшие скидки</h1>
-            <NavLink to="/discounts">
+            {showDiscount && <NavLink to="/discounts">
                 <div className='Carousel'>
                     {discount.map((discounts, ind) => (
                         <CarouselElement discounts={discounts} key={ind} />
                     ))}
                 </div>
-            </NavLink>
+            </NavLink>}
         </div>
     )
 }

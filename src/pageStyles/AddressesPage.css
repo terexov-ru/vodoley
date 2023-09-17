@@ -34,3 +34,15 @@
     margin-top: -48px;
     z-index: 2;
 }
+
+.AddressPage2 {
+    min-height: 800px;
+}
+
+.centeredNoContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;
+}

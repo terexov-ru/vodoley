@@ -6,6 +6,7 @@ import { Order } from '../components/Order/Order';
 import { PastOrder } from '../components/Order/PastOrder';
 import axios from '../utils/axios'
 import {useQuery} from 'react-query'
+import {MainButton} from "../components/mainButton/MainButton";
 
 
 async function getMyOrders() {
@@ -107,6 +108,9 @@ export const MyOrdersPage = () => {
                         calculateTotalPrice={() => calculateTotalPrice(order.servicesList, order.paymentMethod)}
                     />
                 ))}
+            </div>
+            <div className='hiddenOrderButton'>
+                <MainButton title='Записаться' goto='/makeorder'/>
             </div>
         </div>
     )

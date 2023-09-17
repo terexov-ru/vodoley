@@ -11,6 +11,7 @@ import {Service} from "../components/Services/Service";
 import { parse, format } from 'date-fns';
 import ru from "date-fns/locale/ru";
 import queryString from "query-string";
+import {MainButton} from "../components/mainButton/MainButton";
 
 export const ChangeOrderPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -22,6 +23,8 @@ export const ChangeOrderPage = () => {
     const [currentTime, setCurrentTime] = useState(new Date());
     const [orderData, setOrderData] = useState(null);
     const [addresses, setAddresses] = useState([])
+    const [selectedAddressId, setSelectedAddressId] = useState(null);
+
 
     const { id } = useParams();
 
@@ -84,6 +87,7 @@ export const ChangeOrderPage = () => {
                 const selectedAddressData = response.data.find(address => address.address === orderData.address);
 
                 if (selectedAddressData) {
+                    setSelectedAddressId(selectedAddressData.id);
                     const [startTime, endTime] = selectedAddressData.time.split(' - ');
                     const [startHour, startMinute] = startTime.split(':');
                     const [endHour, endMinute] = endTime.split(':');
@@ -163,6 +167,40 @@ export const ChangeOrderPage = () => {
         return totalPrice;
     };
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const formattedDate = format(selectedDate, 'yyyy-MM-dd', {timeZone: 'UTC'});
+        const formattedTime = `${selectedTime.value || selectedTime}:00`;
+        const data = {
+            id: orderData.id,
+            address: selectedAddressId, // Здесь замените на адрес, если требуется изменение
+            time: formattedDate + ' ' + formattedTime,
+        };
+
+        try {
+            const response = await axios.post('edit-checkout/', data);
+
+            if (response.status === 200) {
+                // Обработка успешного изменения заказа
+                console.log('Заказ успешно изменен');
+                navigate('/myorders');
+
+            } else {
+                // Обработка ошибки, если не удалось изменить заказ
+                console.error('Не удалось изменить заказ');
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 500) {
+                console.error('Internal Server Error:', error);
+                console.log('data',data)
+            } else {
+                console.error('Error:', error);
+            }
+        }
+    };
+
+
     return (
         <>
             <Header gobackto='/' title='Изменение заказа'/>
@@ -231,7 +269,7 @@ export const ChangeOrderPage = () => {
                         calculateTotalPrice={calculateTotalPrice} // Передача функции
                     />
                 </div>
-                <input type="submit" value="Изменить" disabled={!isFormFilled}/>
+                <MainButton onClick={handleSubmit} title="Изменить" />
             </form>
         </>
 

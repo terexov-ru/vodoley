@@ -69,3 +69,11 @@ a.active {
 .activeServiceList {
     display: block;
 }
+
+.centeredNoContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;
+}

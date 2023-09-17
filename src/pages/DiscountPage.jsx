@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { Discount } from '../components/Discount/Discount';
 import axios from '../utils/axios'
 import { useQuery } from 'react-query';
+import {NoContent} from "../components/NoContent/NoContent";
 
 async function getAllDiscounts() {
     const {data} = await axios.get('get-user-discounts/')
@@ -26,6 +27,23 @@ export const DiscountPage = () => {
         return <h1>no data</h1>
     }
 
+    if (!data || data.length === 0) {
+        return (
+            <div className='DiscountPage'>
+                <Header title="Скидки" gobackto="/" />
+                <div className='AdBanner'>
+                    <h1 className='AdTitle'>2 посещения для получения скидки 15% на “Мойка Люкс”</h1>
+                    <p className='AdArticle'>Пользуйся нашими услугами и копи скидки для следующих посещений</p>
+                    <NavLink className='AdLink' to='/info'>О системе лояльности</NavLink>
+                </div>
+                <h1 className='DiscountListTitle'>Мои скидки</h1>
+                <div style={{marginTop: '60px'}}>
+                    <NoContent />
+                </div>
+
+            </div>
+        );
+    }
 
     return (
         <div className='DiscountPage'>

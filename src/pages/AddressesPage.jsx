@@ -5,6 +5,7 @@ import { Address } from '../components/Address/Address';
 import SimpleMap from '../components/map'
 import axios from '../utils/axios'
 import {useQuery} from 'react-query'
+import {NoContent} from "../components/NoContent/NoContent";
 
 async function getAllAddresses() {
     const {data} = await axios.get('get-addresses-list/')
@@ -20,11 +21,26 @@ export const AddressesPage = () => {
     }
 
     if(isError) {
-        return <h1>error</h1>
+        return (
+            <div className='AddressPage2'>
+                <Header title="Адреса моек" gobackto="/"/>
+                <div className='centeredNoContent'>
+                    <NoContent/>
+                </div>
+            </div>
+        )
     }
 
     if(!data) {
-        return <h1>Нет доступных адрессов</h1>
+        return (
+            <div className='AddressPage'>
+                <Header title="Адреса моек" gobackto="/"/>
+                <div className='centeredNoContent'>
+                    <NoContent/>
+                </div>
+            </div>
+        )
+
     }
 
     const handleShowOnMap = (address) => {

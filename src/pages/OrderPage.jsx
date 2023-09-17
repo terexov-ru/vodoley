@@ -38,7 +38,6 @@ export const OrderPage = () => {
     const [isFormFilled, setIsFormFilled] = useState(false);
     const [buttonClicked, setButtonClicked] = useState(false);
     const [addressChangeCounter, setAddressChangeCounter] = useState(0);
-    // const [totalPrice, setTotalPrice] = useState(0);
     const [timeIntervals, setTimeIntervals] = useState([]);
     const [currentTime, setCurrentTime] = useState(new Date());
     const selectedAddressData = addresses.find(address => address.id === selectedAddress);
@@ -128,7 +127,6 @@ export const OrderPage = () => {
             setAddresses(response.data);
             if (queryAddressId) {
                 setSelectedAddress(parseInt(queryAddressId));
-                // fetchAndFilterSelectedServices(parseInt(queryAddressId));
             }
         });
 
@@ -143,31 +141,17 @@ export const OrderPage = () => {
         if (storedServices === null || storedServices === undefined) {
             localStorage.setItem('selectedServices', JSON.stringify([]));
         }
-        // const storedServices = JSON.parse(localStorage.getItem('selectedServices'));
+
         setSelectedServices(storedServices);
         setIsLoading(false);
     }, [location]);
 
-    // useEffect(() => {
-    //     const totalPrice = calculateTotalPrice();
-    //     setTotalPrice(totalPrice);
-    // }, [selectedServices, selectedPaymentOption]);
 
     useEffect(() => {
         if (paymentOptions.length > 0) {
             setSelectedPaymentOption(paymentOptions[0].id);
         }
     }, [paymentOptions]);
-
-    // useEffect(() => {
-    //     fetchAndFilterSelectedServices();
-    // }, [selectedAddress, setAddressChangeCounter]);
-
-    // useEffect(() => {
-    //     if (selectedAddress) {
-    //         fetchAndFilterSelectedServices(selectedAddress);
-    //     }
-    // }, [selectedAddress]);
 
 
     useEffect(() => {
@@ -204,18 +188,6 @@ export const OrderPage = () => {
     }, [selectedAddress, selectedDate, selectedTime, selectedServices]);
 
 
-
-    // const fetchAndFilterSelectedServices = async (addressID) => {
-    //     if (addressID) {
-    //         try {
-    //             const response = await axios.post('get-services-for-address/', {addressID});
-    //         } catch (error) {
-    //             console.error('Error fetching services for the address:', error);
-    //         }
-    //     }
-    // };
-
-
     const handleGoToCatalog = () => {
         if (!selectedAddress) {
             setButtonClicked(true);
@@ -234,34 +206,24 @@ export const OrderPage = () => {
         event.preventDefault();
 
         if (isFormFilled) {
-            const selectedDateObject = new Date(selectedDate); // Преобразование метки времени в объект Date
-            const selectedTimeParts = selectedTime.split(':'); // Разбиение времени на часы и минуты
-            const selectedHour = parseInt(selectedTimeParts[0]);
-            const selectedMinute = parseInt(selectedTimeParts[1]);
+            const formattedDate = format(selectedDate, 'yyyy-MM-dd', {timeZone: 'UTC'});
+            const formattedTime = `${selectedTime.value || selectedTime}:00`;
 
-// Установка часов и минут в объекте Date
-            selectedDateObject.setHours(selectedHour);
-            selectedDateObject.setMinutes(selectedMinute);
-
-// Теперь selectedDateObject содержит дату и время
             const data = {
                 address: selectedAddress,
                 discount: selectedDiscount ? selectedDiscount.value : undefined,
                 paymentType: selectedPaymentOption,
                 servicesList: selectedServices.map(service => service.id),
-                time: format(selectedDateObject, "yyyy-MM-dd HH:mm:00")
+                time: formattedDate + ' ' + formattedTime,
             };
 
             try {
-                // Send the POST request with the data
                 const response = await axios.post('create-checkout/', data);
 
                 if (response.status === 200) {
-                    // Handle success, you can navigate or show a success message here
                     localStorage.setItem('selectedServices', JSON.stringify([]));
                     navigate('/myorders');
                 } else {
-                    // Handle other success cases if needed
                 }
             } catch (error) {
                 if (error.response && error.response.status === 500) {
@@ -385,7 +347,6 @@ export const OrderPage = () => {
     registerLocale('ru', ru)
 
 
-
     return (
         <>
             <Header gobackto='/' title='Записаться'/>
@@ -424,7 +385,8 @@ export const OrderPage = () => {
                         onChange={date => setSelectedDate(date)}
                         placeholderText='Выберите дату'
                         minDate={new Date()}
-
+                        disabledKeyboardNavigation
+                        onFocus={e => e.target.blur()} // <--- Adding this
                     />
                     <Select
                         classNamePrefix='custom-select_time'
@@ -454,17 +416,20 @@ export const OrderPage = () => {
                         isSearchable={false}
                     />
                 ) : (
-                    <p id='discountNotification'>Скидок пока нет</p>
+                    <p id='discountNotification'>Текущих скидок пока нет</p>
                 )}
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
                     discountList.length > 0 ? (
                         <div style={{"margin-right": "-16px", "margin-left": "-6px"}}>
-                            <DiscountCarousel discount={discountList}/>
+                            <DiscountCarousel showDiscount={true} discount={discountList}/>
                         </div>
                     ) : (
-                        <p id='discountNotification'>Скидок пока нет</p>
+                        <div style={{"margin-right": "-16px", "margin-left": "-6px"}}>
+                            <DiscountCarousel/>
+                            <p style={{'margin-top': '0px', "margin-left": "6px" }} id='discountNotification'>Скидок пока нет</p>
+                        </div>
                     )
                 )}
                 <h1 className='OrderFormTitle'>Способ оплаты</h1>

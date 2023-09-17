@@ -71,7 +71,7 @@ export const MainPage = () => {
                 </NavLink>
             </div>
             <div className='mainBlock'>
-                {data.discountsList.length > 0 && <DiscountCarousel discount={data.discountsList} />}
+                {data.discountsList.length > 0 && <DiscountCarousel showDiscount={true} discount={data.discountsList} />}
                 <div className='mainButtonSet'>
                     <MainPageButtons pict={MyOrders} title="Мои записи" goto="/myorders"/>
                     <MainPageButtons id="servicesMainButton" pict={Services} title="Услуги" goto="/services" />
