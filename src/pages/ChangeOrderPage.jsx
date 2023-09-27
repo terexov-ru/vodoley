@@ -16,7 +16,6 @@ import {MainButton} from "../components/mainButton/MainButton";
 export const ChangeOrderPage = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedTime, setSelectedTime] = useState('');
-    const [isFormFilled, setIsFormFilled] = useState(false);
     const [buttonClicked, setButtonClicked] = useState(false);
     const [addressChangeCounter, setAddressChangeCounter] = useState(0);
     const [timeIntervals, setTimeIntervals] = useState([]);
@@ -24,6 +23,8 @@ export const ChangeOrderPage = () => {
     const [orderData, setOrderData] = useState(null);
     const [addresses, setAddresses] = useState([])
     const [selectedAddressId, setSelectedAddressId] = useState(null);
+    const [serverTimeIntervals, setServerTimeIntervals] = useState([]);
+    const [timeIntervalsFetched, setTimeIntervalsFetched] = useState(false);
 
 
     const { id } = useParams();
@@ -33,6 +34,25 @@ export const ChangeOrderPage = () => {
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get('token');
     const [redirected, setRedirected] = useState(false);
+
+    const fetchServerTimeIntervals = async () => {
+        try {
+            const response = await axios.post('/get-address-timings/', {
+                id: selectedAddressId,
+                date: format(selectedDate, 'yyyy-MM-dd'),
+            });
+
+            if (response.status === 200) {
+                setServerTimeIntervals(response.data);
+                setTimeIntervalsFetched(true);
+            } else {
+                console.error('Ошибка при получении временных интервалов с сервера');
+            }
+        } catch (error) {
+            console.error('Ошибка при запросе к серверу:', error);
+        }
+    };
+
 
     useEffect(() => {
         if (!redirected) {
@@ -72,15 +92,10 @@ export const ChangeOrderPage = () => {
             );
     }, [id]);
 
-
     useEffect(() => {
-        const roundedTime = new Date(currentTime);
-        roundedTime.setMinutes(15 * Math.ceil(roundedTime.getMinutes() / 15));
-        setCurrentTime(roundedTime);
-    }, []);
+        // Вызываем функцию fetchServerTimeIntervals сразу при монтировании компонента
+        fetchServerTimeIntervals();
 
-
-    useEffect(() => {
         axios.get('get-addresses-list')
             .then(response => {
                 setAddresses(response.data);
@@ -88,46 +103,12 @@ export const ChangeOrderPage = () => {
 
                 if (selectedAddressData) {
                     setSelectedAddressId(selectedAddressData.id);
-                    const [startTime, endTime] = selectedAddressData.time.split(' - ');
-                    const [startHour, startMinute] = startTime.split(':');
-                    const [endHour, endMinute] = endTime.split(':');
-
-                    const intervals = [];
-                    let currentDate = new Date(selectedDate);
-                    currentDate.setHours(startHour, startMinute, 0, 0);
-
-                    if (currentDate < currentTime) {
-                        currentDate = new Date(currentTime);
-                    }
-
-                    const endDate = new Date(selectedDate);
-                    endDate.setHours(endHour, endMinute, 0, 0);
-
-                    while (currentDate <= endDate) {
-                        const timeString = currentDate.toLocaleTimeString('ru-RU', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: false
-                        });
-
-                        intervals.push(timeString);
-
-                        currentDate = new Date(currentDate.getTime() + 15 * 60000);
-                    }
-
-                    if (selectedDate > new Date()) {
-                        intervals.pop();
-                    }
-
-                    setTimeIntervals(intervals);
-                    setSelectedTime(intervals[0]);
                 }
             })
             .catch(error => {
                 console.error('Error fetching addresses:', error);
             });
-    }, [selectedDate, currentTime]);
-
+    }, [selectedDate, selectedAddressId]);
 
     if (!orderData) {
         return <div>Loading...</div>; // Render loading UI while fetching data
@@ -150,13 +131,6 @@ export const ChangeOrderPage = () => {
     }
     registerLocale('ru', ru)
 
-    // const calculateTotalPrice = (servicesList, paymentMethod) => {
-    //     const totalPrice = servicesList.reduce((total, service) => total + parseFloat(service.price), 0);
-    //     if (paymentMethod === "На сайте со скидкой 5%") {
-    //         return totalPrice - totalPrice * 0.05;
-    //     }
-    //     return totalPrice;
-    // };
 
 
     const calculateTotalPrice = () => {
@@ -200,6 +174,15 @@ export const ChangeOrderPage = () => {
         }
     };
 
+    const filteredTimeIntervals = serverTimeIntervals.filter(time => {
+        const currentTime = new Date();
+        const timeParts = time.split(':');
+        const timeDate = new Date(selectedDate);
+        timeDate.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
+
+        return timeDate >= currentTime;
+    });
+
 
     return (
         <>
@@ -234,7 +217,7 @@ export const ChangeOrderPage = () => {
                         classNamePrefix='custom-select_time'
                         value={selectedTime}
                         onChange={option => setSelectedTime(option)}
-                        options={timeIntervals.map(time => ({ value: time, label: time }))}
+                        options={filteredTimeIntervals.map(time => ({ value: time, label: time }))}
                         placeholder={selectedTime}
                         noOptionsMessage={() => "На выбранный день, нет доступного времени"}
                         styles={customStyles}

@@ -38,13 +38,35 @@ export const OrderPage = () => {
     const [isFormFilled, setIsFormFilled] = useState(false);
     const [buttonClicked, setButtonClicked] = useState(false);
     const [addressChangeCounter, setAddressChangeCounter] = useState(0);
-    const [timeIntervals, setTimeIntervals] = useState([]);
-    const [currentTime, setCurrentTime] = useState(new Date());
     const selectedAddressData = addresses.find(address => address.id === selectedAddress);
     const [selectedDiscount, setSelectedDiscount] = useState('');
     const [discountOptions, setDiscountOptions] = useState([]);
     const [redirected, setRedirected] = useState(false);
+    const [serverTimeIntervals, setServerTimeIntervals] = useState([]);
 
+    const fetchServerTimeIntervals = async () => {
+        if (selectedDate && selectedAddress) {
+            try {
+                const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+
+                const response = await axios.post('/get-address-timings/', {
+                    id: selectedAddress,
+                    date: formattedDate,
+                });
+
+                if (response.status === 200) {
+                    setServerTimeIntervals(response.data);
+                } else {
+                    console.error('Ошибка при получении временных интервалов с сервера');
+                }
+            } catch (error) {
+                console.error('Ошибка при запросе к серверу:', error);
+            }
+        }
+    };
+    useEffect(() => {
+        fetchServerTimeIntervals();
+    }, [selectedDate, selectedAddress]);
 
     useEffect(() => {
         if (!redirected) {
@@ -60,51 +82,6 @@ export const OrderPage = () => {
             setRedirected(true);
         }
     }, [navigate]);
-
-
-    useEffect(() => {
-        const roundedTime = new Date(currentTime);
-        roundedTime.setMinutes(15 * Math.ceil(roundedTime.getMinutes() / 15));
-        setCurrentTime(roundedTime);
-    }, []);
-
-    useEffect(() => {
-        if (selectedDate && selectedAddressData) {
-            const [startTime, endTime] = selectedAddressData.time.split(' - ');
-            const [startHour, startMinute] = startTime.split(':');
-            const [endHour, endMinute] = endTime.split(':');
-
-            const intervals = [];
-            let currentDate = new Date(selectedDate);
-            currentDate.setHours(startHour, startMinute, 0, 0);
-
-            if (currentDate < currentTime) {
-                currentDate = new Date(currentTime);
-            }
-
-            const endDate = new Date(selectedDate);
-            endDate.setHours(endHour, endMinute, 0, 0);
-
-            while (currentDate <= endDate) {
-                const timeString = currentDate.toLocaleTimeString('ru-RU', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                });
-
-                intervals.push(timeString);
-
-                currentDate = new Date(currentDate.getTime() + 15 * 60000);
-            }
-
-            if (selectedDate > new Date()) {
-                intervals.pop();
-            }
-
-            setTimeIntervals(intervals);
-            setSelectedTime(intervals[0]);
-        }
-    }, [selectedDate, selectedAddressData, currentTime]);
 
 
     useEffect(() => {
@@ -278,7 +255,6 @@ export const OrderPage = () => {
             const selectedDiscountVisits = discountList.find(discount => discount.id === selectedDiscount.value)?.visits || 0;
             const discountPercentage = calculateDiscountPercentage(selectedDiscountVisits);
 
-            // Apply the discount only to the service with a matching title
             if (service.title === selectedDiscount.label) {
                 servicePrice -= servicePrice * (discountPercentage / 100);
             }
@@ -328,7 +304,6 @@ export const OrderPage = () => {
         navigate(`/makeorder?address=${option.value}`);
         setButtonClicked(false);
         setAddressChangeCounter(prevCounter => prevCounter + 1);
-        // fetchAndFilterSelectedServices(option.value);
         localStorage.setItem('selectedServices', JSON.stringify([]));
         setSelectedServices([]);
     };
@@ -345,6 +320,15 @@ export const OrderPage = () => {
         })
     }
     registerLocale('ru', ru)
+
+    const filteredTimeIntervals = serverTimeIntervals.filter(time => {
+        const currentTime = new Date();
+        const timeParts = time.split(':');
+        const timeDate = new Date(selectedDate);
+        timeDate.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
+
+        return timeDate >= currentTime;
+    });
 
 
     return (
@@ -386,15 +370,15 @@ export const OrderPage = () => {
                         placeholderText='Выберите дату'
                         minDate={new Date()}
                         disabledKeyboardNavigation
-                        onFocus={e => e.target.blur()} // <--- Adding this
+                        onFocus={e => e.target.blur()}
                     />
                     <Select
                         classNamePrefix='custom-select_time'
                         value={selectedTime}
                         label={selectedTime}
                         onChange={option => setSelectedTime(option)}
-                        options={timeIntervals.map(time => ({ value: time, label: time }))}
-                        placeholder={timeIntervals[0]}
+                        options={filteredTimeIntervals.map(time => ({ value: time, label: time }))}
+                        placeholder={filteredTimeIntervals[0]}
                         noOptionsMessage={() => "На выбранный день, нет доступного времени"}
                         styles={customStyles}
                         isSearchable={false}
@@ -464,8 +448,6 @@ export const OrderPage = () => {
                     />
                 )}
                 <button className='OrderPage_button' type="button" onClick={handleSubmit} disabled={!isFormFilled}>Оплатить</button>
-
-
             </form>
         </>
 
