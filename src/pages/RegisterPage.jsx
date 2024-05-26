@@ -8,12 +8,12 @@ import { QueryClient, useMutation } from 'react-query';
 import {useForm} from "react-hook-form";
 
 //Telegram WebApp Get User
-const search = window.Telegram.WebApp.initData
-const urlParams = new URLSearchParams(search);
-const userParam = urlParams.get('user');
-const decodedUserParam = decodeURIComponent(userParam);
-const userObject = JSON.parse(decodedUserParam);
-const userTG = userObject.username;
+//const search = window.Telegram.WebApp.initData
+//const urlParams = new URLSearchParams(search);
+//const userParam = urlParams.get('user');
+//const decodedUserParam = decodeURIComponent(userParam);
+//const userObject = JSON.parse(decodedUserParam);
+//const userTG = userObject.username;
 
 export const RegisterPage = () => {
     const navigate = useNavigate();
@@ -82,7 +82,7 @@ export const RegisterPage = () => {
                         required
                         className='registerInput'
                         placeholder='@tg'
-                        value={`@${userTG}`}
+                        //value={`@${userTG}`}
                         {...register('userTG')}
                         name='userTG'
                     />

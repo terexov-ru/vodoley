@@ -4,7 +4,9 @@ import axios from "axios"
 // стандартный путь для отправки запросов 
 const instance = axios.create({
     //url
-    baseURL: "https://admin-vodoley.terexov.ru/api/"
+    //baseURL: "https://admin-vodoley.terexov.ru/api/"
+    //baseURL: "http://127.0.0.1:8000/api/"
+    baseURL: "http://localhost:5000/"
 })
 
 // добавляет токен в хедер запросов 
