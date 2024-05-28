@@ -8,19 +8,19 @@ import { QueryClient, useMutation } from 'react-query';
 import {useForm} from "react-hook-form";
 
 //Telegram WebApp Get User
-//const search = window.Telegram.WebApp.initData
-//const urlParams = new URLSearchParams(search);
-//const userParam = urlParams.get('user');
-//const decodedUserParam = decodeURIComponent(userParam);
-//const userObject = JSON.parse(decodedUserParam);
-//const userTG = userObject.username;
+const search = window.Telegram.WebApp.initData
+const urlParams = new URLSearchParams(search);
+const userParam = urlParams.get('user');
+const decodedUserParam = decodeURIComponent(userParam);
+const userObject = JSON.parse(decodedUserParam);
+const userTG = userObject.username;
 
 export const RegisterPage = () => {
     const navigate = useNavigate();
     const [message, setMessage] = useState('')
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    // const userTG = queryParams.get('username');
+    const userTG = queryParams.get('username');
     async function registrationUser(data) {
         await axios.post('auth-register/', data)
             .then((res) => {
@@ -82,7 +82,7 @@ export const RegisterPage = () => {
                         required
                         className='registerInput'
                         placeholder='@tg'
-                        //value={`@${userTG}`}
+                        value={`@${userTG}`}
                         {...register('userTG')}
                         name='userTG'
                     />
