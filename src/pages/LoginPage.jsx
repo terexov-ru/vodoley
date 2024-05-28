@@ -19,7 +19,7 @@ export const LoginPage = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const userTG = queryParams.get('username');
+    //const userTG = queryParams.get('username');
 
     const loginUserName = async (username) => {
         try {

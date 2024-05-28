@@ -20,7 +20,7 @@ export const RegisterPage = () => {
     const [message, setMessage] = useState('')
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const userTG = queryParams.get('username');
+    //const userTG = queryParams.get('username');
     async function registrationUser(data) {
         await axios.post('auth-register/', data)
             .then((res) => {

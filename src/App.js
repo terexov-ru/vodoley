@@ -54,8 +54,7 @@ function App() {
       <HashRouter>
         <main>
           <Routes>
-            {/*<Route path='/' element={<Redirect />} />*/}
-            <Route path='/' element={<AuthPage />} />
+            <Route path='/' element={<Redirect />} />
             <Route path='/main' element={<MainPage />} /> {/* Главная  страница */}
             <Route path='/address' element={<AddressesPage />} /> {/* Список адресов */}
             <Route path='/services' element={<ServicesPage showAddress={true} showButton={true} showHeader={true} />} /> {/* Услуги */}
