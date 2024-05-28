@@ -1,4 +1,6 @@
-import {HashRouter, Routes, Route, useNavigate, useLocation} from 'react-router-dom';
+import {HashRouter, Routes, Route, useNavigate} from 'react-router-dom';
+import { useMutation} from "react-query";
+import axios from "./utils/axios";
 import { AddressesPage } from './pages/AddressesPage';
 import { AuthPage } from './pages/AuthPage';
 import { DiscountInfoPage } from './pages/DiscountInfoPage';
@@ -13,14 +15,11 @@ import { ProfilePage } from './pages/ProfilePage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ServicesPage } from './pages/ServicesPage';
 import { TipsPage } from './pages/TipsPage';
-import axios from "./utils/axios";
-import { useMutation} from "react-query";
-import "./App.css"
 import Redirect from "./pages/Redirect";
-import {useEffect} from "react";
 import {ChangeOrderPage} from "./pages/ChangeOrderPage";
 import {ReviewsPage} from "./pages/ReviewsPage";
 
+import "./App.css"
 
 
 function App() {
@@ -55,14 +54,13 @@ function App() {
   return (
       <HashRouter>
         <main>
-          {/*<div>Username: {username}</div>*/}
           <Routes>
-            <Route path='/' element={<Redirect />} />
+            {/*<Route path='/' element={<Redirect/>}/> */}
             <Route path='/main' element={<MainPage />} /> {/* Главная  страница */}
             <Route path='/address' element={<AddressesPage />} /> {/* Список адресов */}
             <Route path='/services' element={<ServicesPage showAddress={true} showButton={true} showHeader={true} />} /> {/* Услуги */}
             <Route path='/discounts' element={<DiscountPage />} /> {/* Список скидок */}
-            <Route path='/auth' element={<AuthPage />} /> {/* Страница перехода на логин или регистрацию */}
+            <Route path='/' element={<AuthPage />} /> {/* Страница перехода на логин или регистрацию */}
             <Route path='/info' element={<DiscountInfoPage />} /> {/* Программа скидок */}
             <Route path='/login' element={<LoginPage />} /> {/* Страница логининга */}
             <Route path='/login/verify' element={<LoginVerificationPage length={4} onSubmit={handleSubmit} />}/> {/* Код авторизации */}

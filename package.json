@@ -1,7 +1,6 @@
 {
   "name": "vodoley",
   "version": "0.1.0",
-  "homepage": ".",
   "private": true,
   "dependencies": {
     "@pbe/react-yandex-maps": "^1.2.4",
