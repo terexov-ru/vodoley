@@ -12,7 +12,7 @@ const urlParams = new URLSearchParams(search);
 const userParam = urlParams.get('user');
 const decodedUserParam = decodeURIComponent(userParam);
 const userObject = JSON.parse(decodedUserParam);
-const userTG = userObject.username;
+const userTG = userObject.username || '';
 
 export const LoginPage = (props) => {
     const{ register, handleSubmit, reset } = useForm()
