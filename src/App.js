@@ -42,7 +42,7 @@ function App() {
   }
 
   const user = useMutation(user => LoginUserName(user), {
-    onSuccess: () => console.log('loged in')
+    onSuccess: () => console.log('logged in')
   })
 
   const handleSubmit = data => {
