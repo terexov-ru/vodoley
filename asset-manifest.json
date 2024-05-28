@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/vodoley/static/css/main.b21c107a.css",
-    "main.js": "/vodoley/static/js/main.e484695c.js",
+    "main.js": "/vodoley/static/js/main.a1cc9302.js",
     "static/media/Inter-SemiBold.ttf": "/vodoley/static/media/Inter-SemiBold.4d56bb21f2399db8ad48.ttf",
     "static/media/Inter-Regular.ttf": "/vodoley/static/media/Inter-Regular.e89cb19905e7db5591b0.ttf",
     "index.html": "/vodoley/index.html",
     "main.b21c107a.css.map": "/vodoley/static/css/main.b21c107a.css.map",
-    "main.e484695c.js.map": "/vodoley/static/js/main.e484695c.js.map"
+    "main.a1cc9302.js.map": "/vodoley/static/js/main.a1cc9302.js.map"
   },
   "entrypoints": [
     "static/css/main.b21c107a.css",
-    "static/js/main.e484695c.js"
+    "static/js/main.a1cc9302.js"
   ]
 }
