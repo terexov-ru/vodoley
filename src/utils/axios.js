@@ -6,7 +6,8 @@ const instance = axios.create({
     //url
     //baseURL: "https://admin-vodoley.terexov.ru/api/"
     //baseURL: "http://127.0.0.1:8000/api/"
-    baseURL: "http://localhost:5000/"
+    //baseURL: "http://localhost:5000/"
+    baseURL: "http://94.26.250.179:8000/api/"
 })
 
 // добавляет токен в хедер запросов 
