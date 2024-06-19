@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/vodoley/static/css/main.b21c107a.css",
-    "main.js": "/vodoley/static/js/main.10187f34.js",
-    "static/media/Inter-SemiBold.ttf": "/vodoley/static/media/Inter-SemiBold.4d56bb21f2399db8ad48.ttf",
-    "static/media/Inter-Regular.ttf": "/vodoley/static/media/Inter-Regular.e89cb19905e7db5591b0.ttf",
-    "index.html": "/vodoley/index.html",
-    "main.b21c107a.css.map": "/vodoley/static/css/main.b21c107a.css.map",
-    "main.10187f34.js.map": "/vodoley/static/js/main.10187f34.js.map"
+    "main.css": "./static/css/main.3d54e04e.css",
+    "main.js": "./static/js/main.ac3ebcaf.js",
+    "static/media/Inter-SemiBold.ttf": "./static/media/Inter-SemiBold.4d56bb21f2399db8ad48.ttf",
+    "static/media/Inter-Regular.ttf": "./static/media/Inter-Regular.e89cb19905e7db5591b0.ttf",
+    "index.html": "./index.html",
+    "main.3d54e04e.css.map": "./static/css/main.3d54e04e.css.map",
+    "main.ac3ebcaf.js.map": "./static/js/main.ac3ebcaf.js.map"
   },
   "entrypoints": [
-    "static/css/main.b21c107a.css",
-    "static/js/main.10187f34.js"
+    "static/css/main.3d54e04e.css",
+    "static/js/main.ac3ebcaf.js"
   ]
 }
