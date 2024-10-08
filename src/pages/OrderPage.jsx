@@ -197,8 +197,18 @@ export const OrderPage = () => {
 
         if (response.status === 200) {
           localStorage.setItem("selectedServices", JSON.stringify([]));
-          navigate("/myorders");
-        } else {
+
+          if (selectedPaymentOption == 0) {
+            const paymentLink = response.data.payment_link;
+
+            if (paymentLink) {
+              window.location.href = paymentLink;
+            } else {
+              navigate("/myorders");
+            }
+          } else {
+            navigate("/myorders");
+          }
         }
       } catch (error) {
         if (error.response && error.response.status === 500) {
